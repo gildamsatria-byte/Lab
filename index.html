@@ -1,0 +1,2251 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pusat Pengetahuan Proyek</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>html{color-scheme:light}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<style>
+/* Layout: bar atas (nama + pengguna aktif), tab, lalu satu area kerja. Daftar di kiri, detail bergaya title block gambar kerja di kanan. */
+:root{
+  --bg:#EDF0F1; --surface:#FFFFFF; --surface-2:#F4F6F7; --ink:#16252A; --ink-2:#47585E; --line:#D3DBDE;
+  --accent:#0D6770; --accent-ink:#FFFFFF; --accent-soft:#D9EEF0;
+  --ok:#1D6A39; --ok-bg:#DCF0E2; --warn:#7F5000; --warn-bg:#FBEBC8; --bad:#A12E1C; --bad-bg:#F8DCD5;
+  --info:#294CA6; --info-bg:#E0E7F8; --mute:#51626A; --mute-bg:#E4E9EB;
+  --f-display:'IBM Plex Sans Condensed','Arial Narrow',system-ui,sans-serif;
+  --f-body:'IBM Plex Sans',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --f-mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0E1618; --surface:#162124; --surface-2:#1C2A2E; --ink:#E5EDEF; --ink-2:#9DB0B6; --line:#2C3B40;
+    --accent:#4FC1CC; --accent-ink:#06191B; --accent-soft:#133B40;
+    --ok:#7FD39A; --ok-bg:#16301F; --warn:#F0C265; --warn-bg:#3A2D0E; --bad:#F29A88; --bad-bg:#40201A;
+    --info:#9DB8F5; --info-bg:#1B2848; --mute:#A6B6BB; --mute-bg:#243136; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0E1618; --surface:#162124; --surface-2:#1C2A2E; --ink:#E5EDEF; --ink-2:#9DB0B6; --line:#2C3B40;
+  --accent:#4FC1CC; --accent-ink:#06191B; --accent-soft:#133B40;
+  --ok:#7FD39A; --ok-bg:#16301F; --warn:#F0C265; --warn-bg:#3A2D0E; --bad:#F29A88; --bad-bg:#40201A;
+  --info:#9DB8F5; --info-bg:#1B2848; --mute:#A6B6BB; --mute-bg:#243136; color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:14px;line-height:1.5}
+button,select,input,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1200px;margin-inline:auto;padding-inline:16px;padding-block:0 48px}
+.mono{font-family:var(--f-mono);font-size:12px;letter-spacing:.02em}
+
+/* bar atas */
+.top{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:center;justify-content:space-between;padding-block:16px 12px}
+.brand h1{font-family:var(--f-display);font-weight:600;font-size:24px;line-height:1.15;margin:0;text-wrap:balance}
+.brand small{display:block;color:var(--ink-2);font-family:var(--f-mono);font-size:11px;letter-spacing:.04em;text-transform:uppercase;margin-top:2px}
+.who{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center}
+.who label{font-size:12px;color:var(--ink-2)}
+.who select{padding:7px 10px;border:1px solid var(--line);background:var(--surface);border-radius:6px;min-width:0;max-width:100%}
+.who .id{font-size:12px;color:var(--ink-2)}
+.secure{display:flex;flex-wrap:wrap;gap:6px}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:11px;padding:3px 8px;border:1px solid var(--line);border-radius:99px;color:var(--ink-2);background:var(--surface)}
+.pill b{color:var(--ok);font-weight:600}
+
+.banner{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:10px 14px;border-radius:6px;margin-block:0 10px;font-size:13px}
+.banner.bad{background:var(--bad-bg);color:var(--bad)}
+.banner.warn{background:var(--warn-bg);color:var(--warn)}
+.banner.info{background:var(--info-bg);color:var(--info)}
+.banner.ok{background:var(--ok-bg);color:var(--ok)}
+
+nav.tabs{display:flex;gap:2px;overflow-x:auto;border-bottom:1px solid var(--line);margin-bottom:18px}
+nav.tabs button{background:none;border:0;border-bottom:2px solid transparent;padding:10px 14px;cursor:pointer;color:var(--ink-2);white-space:nowrap;font-weight:500}
+nav.tabs button[aria-current="page"]{color:var(--ink);border-bottom-color:var(--accent)}
+nav.tabs button:hover{color:var(--ink)}
+nav.tabs .adm{font-size:10px;font-family:var(--f-mono);text-transform:uppercase;letter-spacing:.05em;margin-left:6px;color:var(--accent)}
+.cnt{display:inline-block;min-width:18px;padding:0 5px;margin-left:6px;border-radius:9px;background:var(--warn-bg);color:var(--warn);font-size:11px;text-align:center}
+
+h2{font-family:var(--f-display);font-weight:600;font-size:20px;margin:0 0 4px}
+h3{font-family:var(--f-display);font-weight:600;font-size:15px;margin:18px 0 6px;letter-spacing:.01em}
+p{margin:0 0 8px}
+.lead{color:var(--ink-2);margin-bottom:14px;max-width:70ch}
+.hint{font-size:12px;color:var(--ink-2);margin:6px 0 0}
+
+/* ringkasan angka */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));border:1px solid var(--line);background:var(--surface);border-radius:6px;margin:0 0 14px}
+.stats div{padding:10px 14px;border-right:1px solid var(--line)}
+.stats div:last-child{border-right:0}
+.stats dt{font-size:11px;color:var(--ink-2);text-transform:uppercase;letter-spacing:.05em}
+.stats dd{margin:0;font-family:var(--f-display);font-size:24px;font-weight:600;font-variant-numeric:tabular-nums}
+.stats dd small{font-family:var(--f-mono);font-size:11px;font-weight:400;color:var(--ink-2)}
+
+.toolbar{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:8px;margin-bottom:10px}
+.toolbar input,.toolbar select,.field select,.field input,.askbox input,.panel textarea{padding:9px 11px;border:1px solid var(--line);background:var(--surface);border-radius:6px;min-width:0;width:100%}
+@media (max-width:640px){.toolbar{grid-template-columns:1fr 1fr}.toolbar input{grid-column:1/-1}}
+
+.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:18px;align-items:start}
+.list{display:flex;flex-direction:column;gap:8px;min-width:0}
+.row{display:flex;flex-direction:column;gap:4px;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:12px 14px;cursor:pointer;width:100%}
+.row:hover{border-color:var(--ink-2)}
+.row.sel{background:var(--accent-soft);border-color:var(--accent)}
+.row .meta{display:flex;gap:10px;color:var(--ink-2);font-size:12px}
+.row .rt{font-weight:600;font-size:14.5px;line-height:1.35}
+.row .rs{color:var(--ink-2);font-size:12.5px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.chips{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;margin-top:2px}
+.empty{padding:28px 16px;border:1px dashed var(--line);border-radius:6px;color:var(--ink-2);text-align:center}
+
+.st{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:500;padding:2px 8px;border-radius:99px;white-space:nowrap}
+.st b{font-weight:600}
+.st-ok{background:var(--ok-bg);color:var(--ok)}.st-warn{background:var(--warn-bg);color:var(--warn)}
+.st-bad{background:var(--bad-bg);color:var(--bad)}.st-info{background:var(--info-bg);color:var(--info)}
+.st-mute{background:var(--mute-bg);color:var(--mute)}
+.lv{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-2)}
+.meter{display:inline-flex;gap:2px}
+.meter i{display:block;width:9px;height:9px;background:var(--line)}
+.meter i.on{background:var(--ink)}
+.lv4 .meter i.on{background:var(--bad)}
+
+/* detail */
+.doc{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:20px;overflow:hidden;min-width:0}
+.doc>*{position:relative}
+.doc .wmk{position:absolute;inset:0;display:flex;flex-wrap:wrap;align-content:flex-start;gap:34px 26px;transform:rotate(-18deg) scale(1.5);opacity:.07;pointer-events:none;user-select:none;font-family:var(--f-mono);font-size:11px;white-space:nowrap;z-index:0}
+.doc h2.dt{font-size:24px;line-height:1.2;margin:6px 0 10px;text-wrap:balance}
+.doc .kick{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;color:var(--ink-2);font-size:12px}
+.btn.back{display:none;margin-bottom:12px}
+.tb{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));border-top:1px solid var(--ink-2);border-left:1px solid var(--ink-2);margin:12px 0 16px}
+.tb div{padding:6px 10px;border-right:1px solid var(--ink-2);border-bottom:1px solid var(--ink-2);min-width:0;overflow-wrap:anywhere}
+.tb dt{font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-2)}
+.tb dd{margin:0;font-size:13px}
+.doc ol,.doc ul{margin:0 0 8px;padding-left:20px}
+.doc li{margin-bottom:3px}
+.rel{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--line);background:var(--surface-2);border-radius:6px;padding:4px 9px;font-size:12px;cursor:pointer;text-align:left}
+.chip:hover{border-color:var(--accent)}
+.chip.lock{cursor:not-allowed;color:var(--ink-2);border-style:dashed;background:transparent}
+.actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:6px;border:1px solid var(--line);background:var(--surface);cursor:pointer;font-weight:500}
+.btn:hover:not(:disabled){border-color:var(--ink-2)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.ok{background:var(--ok-bg);border-color:var(--ok);color:var(--ok)}
+.btn.ghost{background:none}
+.btn.sm{padding:3px 9px;font-size:12px}
+.btn:disabled{opacity:.55;cursor:not-allowed}
+.stamp{margin-top:12px;border:1px dashed var(--ink-2);border-radius:6px;padding:10px 12px;font-family:var(--f-mono);font-size:11.5px;background:var(--surface-2);overflow-wrap:anywhere}
+.stamp strong{display:block;font-family:var(--f-body);font-size:12px;margin-bottom:4px}
+.placeholder{padding:40px 20px;border:1px dashed var(--line);border-radius:6px;color:var(--ink-2);text-align:center}
+
+@media (max-width:900px){
+  .split{grid-template-columns:minmax(0,1fr)}
+  .split.has-detail .list,.split.no-detail .detail{display:none}
+  .btn.back{display:inline-flex}
+}
+
+/* form dan panel */
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:16px;min-width:0}
+.panel h2{font-size:17px}
+.fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:12px}
+.field label{display:block;font-size:12px;color:var(--ink-2);margin-bottom:4px}
+.toggles{display:flex;flex-wrap:wrap;gap:6px}
+.toggle{border:1px solid var(--line);background:var(--surface);border-radius:99px;padding:5px 12px;cursor:pointer;font-size:12.5px}
+.toggle[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px;align-items:start}
+.grid2{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:18px;align-items:start;margin-bottom:18px}
+@media (max-width:900px){.cols,.grid2{grid-template-columns:minmax(0,1fr)}}
+.match{display:flex;flex-direction:column;gap:6px}
+.opt{display:flex;gap:10px;align-items:flex-start;background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:12px 14px;cursor:pointer;text-align:left;width:100%}
+.opt.sel{border-color:var(--accent);background:var(--accent-soft)}
+.opt .score{font-family:var(--f-display);font-weight:600;font-size:20px;min-width:42px;font-variant-numeric:tabular-nums}
+.opt .why{font-size:12px;color:var(--ink-2)}
+pre.draft{white-space:pre-wrap;font-family:var(--f-mono);font-size:12px;line-height:1.55;background:var(--surface-2);border:1px solid var(--line);border-radius:6px;padding:12px;margin:8px 0;max-height:420px;overflow:auto;overflow-wrap:anywhere}
+
+/* tanya AI */
+.askbox{display:flex;gap:8px;margin-bottom:10px}
+.askbox .btn{flex:none}
+.sugg{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+.sugg button{border:1px solid var(--line);background:var(--surface);border-radius:99px;padding:5px 12px;font-size:12.5px;cursor:pointer;text-align:left}
+.sugg button:hover{border-color:var(--accent)}
+.ans{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:16px;margin-bottom:12px}
+.ans .q{font-family:var(--f-display);font-size:17px;font-weight:600;margin-bottom:8px}
+.pipe{display:flex;flex-wrap:wrap;gap:6px 10px;font-size:12px;color:var(--ink-2);margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid var(--line)}
+.pipe span{background:var(--surface-2);border-radius:4px;padding:2px 8px}
+.pipe .arrow{background:none;padding:0}
+.ans ul{padding-left:18px;margin:0 0 8px}
+.ans li{margin-bottom:8px}
+
+/* tabel */
+.scroll{overflow-x:auto;border:1px solid var(--line);border-radius:6px;background:var(--surface)}
+table.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl th,.tbl td{padding:8px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+.tbl th{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-2);font-weight:500;background:var(--surface-2);white-space:nowrap}
+.tbl tr:last-child td{border-bottom:0}
+.tbl .cur{background:var(--accent-soft)}
+.tbl td.n{color:var(--ink-2)}
+.tbl td.y{color:var(--ink)}
+.tbl td.a{color:var(--warn)}
+.tbl select{padding:5px 8px;border:1px solid var(--line);background:var(--surface);border-radius:4px;max-width:100%}
+.tbl .acts{display:flex;flex-wrap:wrap;gap:4px}
+.act{font-family:var(--f-mono);font-size:11px;padding:1px 6px;border-radius:4px;background:var(--mute-bg);color:var(--mute);white-space:nowrap}
+.act.bad{background:var(--bad-bg);color:var(--bad)}.act.ok{background:var(--ok-bg);color:var(--ok)}.act.warn{background:var(--warn-bg);color:var(--warn)}
+.sim{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 18px}
+.checks{list-style:none;padding:0!important;margin:8px 0}
+.checks li{display:flex;gap:8px;font-size:13px}
+.checks b{flex:none;width:16px}
+.checks .yes b{color:var(--ok)}.checks .no b{color:var(--bad)}
+.qcard{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:14px 16px;margin-bottom:10px}
+.qcard h3{margin:4px 0 2px;font-size:16px}
+.gap{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);font-size:13px}
+.gap:last-child{border-bottom:0}
+
+/* grafik batang */
+.br{display:grid;grid-template-columns:minmax(84px,140px) minmax(0,1fr) 34px;gap:10px;align-items:center;padding:5px 0;font-size:13px;width:100%;background:none;border:0;text-align:left;cursor:default}
+button.br{cursor:pointer}
+button.br:hover .bl{color:var(--accent);text-decoration:underline}
+.bl{min-width:0;overflow-wrap:anywhere}
+.bt{display:flex;height:20px;background:var(--surface-2);border-radius:3px;overflow:hidden}
+.bt i{display:flex;align-items:center;justify-content:center;font-style:normal;font-size:11px;font-weight:600;min-width:0;height:100%;font-variant-numeric:tabular-nums}
+.bt .s-ok,.sw.s-ok{background:var(--ok);color:var(--surface)}
+.bt .s-warn,.sw.s-warn{background:var(--warn);color:var(--surface)}
+.bt .s-info,.sw.s-info{background:var(--info);color:var(--surface)}
+.bt .s-acc{background:var(--accent);color:var(--accent-ink)}
+.bv{font-variant-numeric:tabular-nums;text-align:right;font-weight:600}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12px;color:var(--ink-2);margin:0 0 8px}
+.sw{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+.daily{display:flex;align-items:flex-end;gap:4px;height:124px;border-bottom:1px solid var(--line)}
+.daily div{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;min-width:0}
+.daily i{display:block;width:100%;background:var(--accent);border-radius:2px 2px 0 0;min-height:2px}
+.daily .now i{background:var(--ink)}
+.daily .dv{font-size:10px;color:var(--ink-2);font-variant-numeric:tabular-nums;line-height:1.3}
+.dlab{display:flex;gap:4px;font-size:10.5px;color:var(--ink-2);margin-top:4px}
+.dlab span{flex:1;text-align:center;min-width:0;overflow:hidden}
+.top5{list-style:none;margin:0;padding:0}
+.top5 li{display:flex;justify-content:space-between;gap:12px;padding:6px 0;border-bottom:1px solid var(--line);font-size:13px}
+.top5 li:last-child{border-bottom:0}
+.top5 .mono{color:var(--ink-2);white-space:nowrap}
+.secttl{margin:22px 0 8px}
+
+/* KAK */
+.kakgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));border-top:1px solid var(--ink-2);border-left:1px solid var(--ink-2);margin:10px 0 16px}
+.kakgrid div{padding:7px 10px;border-right:1px solid var(--ink-2);border-bottom:1px solid var(--ink-2);min-width:0}
+.kakgrid dt{font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-2)}
+.kakgrid dd{margin:0;font-size:13px;display:flex;flex-wrap:wrap;gap:4px}
+.tag{font-size:12px;padding:1px 8px;border-radius:4px;background:var(--surface-2);border:1px solid var(--line)}
+.quote{font-family:var(--f-mono);font-size:11.5px;color:var(--ink-2);overflow-wrap:anywhere}
+.cov{height:14px;display:flex;border-radius:3px;overflow:hidden;background:var(--surface-2);margin:6px 0 4px}
+.cov i{display:block;height:100%}
+.cov .c-ok{background:var(--ok)}.cov .c-warn{background:var(--warn)}.cov .c-lock{background:var(--info)}.cov .c-gap{background:var(--bad)}
+.fileline{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:10px}
+.fileline input[type=file]{padding:6px;max-width:100%}
+.switch{display:flex;gap:8px;align-items:flex-start;font-size:13px;margin-bottom:8px}
+.switch input{margin-top:3px}
+
+/* kontribusi dan verifikasi */
+.stepper{display:flex;flex-wrap:wrap;gap:6px 0;list-style:none;margin:12px 0;padding:0}
+.stepper li{flex:1 1 100px;font-size:12px;color:var(--ink-2);padding:6px 8px 0 0;border-top:3px solid var(--line);margin-right:6px}
+.stepper li.done{border-top-color:var(--ok);color:var(--ink)}
+.stepper li.cur{border-top-color:var(--accent);color:var(--ink);font-weight:600}
+.cm{border-left:3px solid var(--line);padding:6px 10px;margin:8px 0;background:var(--surface-2);border-radius:0 6px 6px 0;font-size:13px;overflow-wrap:anywhere}
+.cm.perbaikan{border-left-color:var(--warn)}.cm.setuju{border-left-color:var(--ok)}.cm.penulis{border-left-color:var(--info)}.cm.koordinator{border-left-color:var(--accent)}
+.cm .by{font-size:12px;color:var(--ink-2);margin-bottom:2px}
+.field textarea,.doc textarea,.panel textarea{width:100%;padding:9px 11px;border:1px solid var(--line);background:var(--surface);border-radius:6px;resize:vertical;min-width:0}
+textarea.monoarea{font-family:var(--f-mono);font-size:12px;line-height:1.5}
+.panel .banner{margin-top:0}
+.rank{list-style:none;margin:0;padding:0}
+.rank li{display:grid;grid-template-columns:22px minmax(0,1fr) 64px 84px;gap:8px;align-items:center;padding:6px 0;border-bottom:1px solid var(--line);font-size:13px}
+.rank li:last-child{border-bottom:0}
+.rank .n{font-family:var(--f-mono);font-size:12px;color:var(--ink-2)}
+.rank .m{height:8px;background:var(--surface-2);border-radius:2px;overflow:hidden}
+.rank .m i{display:block;height:100%;background:var(--accent)}
+.rank .v{text-align:right;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
+.rank .chip{max-width:100%;overflow-wrap:anywhere}
+.rank .sub{display:block;font-size:11.5px;color:var(--ink-2)}
+
+/* model 3D dan peta */
+.mgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px;align-items:start}
+@media (max-width:900px){.mgrid{grid-template-columns:minmax(0,1fr)}}
+.mapbox{height:420px;border:1px solid var(--line);border-radius:6px;background:var(--surface-2);overflow:hidden;position:relative;isolation:isolate}
+.mapmsg{padding:28px 20px;color:var(--ink-2);text-align:center;font-size:13px}
+.vwrap{position:relative;height:420px;border:1px solid var(--line);border-radius:6px;background:linear-gradient(var(--surface-2),var(--surface));overflow:hidden}
+.glc{width:100%;height:100%;display:block;touch-action:none;cursor:grab}
+.glc:active{cursor:grabbing}
+.vbar{position:absolute;top:8px;left:8px;display:flex;gap:6px;flex-wrap:wrap}
+.vhint{position:absolute;bottom:6px;left:10px;right:10px;font-size:11px;color:var(--ink-2);pointer-events:none}
+.mpin{background:none;border:0}
+.mpin span{display:flex;width:28px;height:28px;border-radius:50%;background:#0D6770;color:#fff;align-items:center;justify-content:center;font:600 12px var(--f-mono);border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.45)}
+.btn.rec{background:var(--bad-bg);border-color:var(--bad);color:var(--bad)}
+.ivbox{margin-top:12px;border:1px solid var(--accent);background:var(--accent-soft);border-radius:6px;padding:12px 14px}
+.ivbox .q{font-family:var(--f-display);font-size:16px;font-weight:600;margin:2px 0 8px}
+.files{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+
+.foot{margin-top:28px;padding-top:14px;border-top:1px solid var(--line);color:var(--ink-2);font-size:12px;max-width:80ch}
+#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:8px 16px;border-radius:6px;font-size:13px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:10;max-width:calc(100% - 32px)}
+#toast.on{opacity:1}
+@media (prefers-reduced-motion:reduce){#toast{transition:none}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <h1>Pusat Pengetahuan Proyek</h1>
+      <small>Prototipe v0.4 &middot; semua data adalah contoh fiktif</small>
+    </div>
+    <div class="who" id="who"></div>
+  </header>
+  <div id="banners"></div>
+  <nav class="tabs" id="tabs" aria-label="Menu utama"></nav>
+  <main id="main"></main>
+  <p class="foot">Prototipe untuk menguji alur kerja dan kontrol akses. Dokumen, nama, pengguna, dan angka di sini fiktif dan hilang saat halaman dimuat ulang. Pencarian memakai kata kunci dan sinonim; versi produksi memakai pencarian semantik. Jawaban AI, analisis KAK, draf artikel, wawancara AI, dan saran ahli disusun dengan aturan sederhana tanpa model bahasa, untuk memperlihatkan alurnya. Teks peraturan tetap harus dicocokkan dengan naskah resminya.</p>
+</div>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+'use strict';
+var $=function(s,r){return (r||document).querySelector(s)};
+var esc=function(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})};
+var NOW=new Date(), DAY=86400000;
+var addDays=function(n){return new Date(NOW.getTime()+n*DAY)};
+var fmtD=function(d){return d.toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'})};
+var p2=function(n){return String(n).padStart(2,'0')};
+var fmtT=function(d){return p2(d.getHours())+':'+p2(d.getMinutes())+':'+p2(d.getSeconds())};
+
+var TYPES={metode:'Metode kerja',lesson:'Lesson learned',inovasi:'Inovasi',prosedur:'Prosedur',peraturan:'Peraturan',pustaka:'Buku/artikel',model3d:'Model 3D (BIM)'};
+var LV=['','Umum internal','Terbatas','Sensitif','Rahasia'];
+var STATUS={verified:['Terverifikasi','ok','✓'],soon:['Segera kedaluwarsa','warn','!'],expired:['Perlu verifikasi ulang','bad','!'],review:['Dalam tinjauan','info','◐'],draft:['Draf','mute','○']};
+var UNITS=['Divisi Infrastruktur','Divisi Gedung','Divisi Komersial','Mutu dan K3','Manajemen','TI dan Keamanan Informasi','Keuangan'];
+
+/* hak akses per level: x tidak terlihat, v lihat saja, d lihat + unduh, a lihat + unduh dengan persetujuan */
+var ACC_LABEL={x:'Tidak terlihat',v:'Lihat saja',d:'Lihat + unduh',a:'Lihat + unduh dengan persetujuan'};
+function defaultRoles(){return {
+  karyawan:{name:'Karyawan',acc:{1:'d',2:'v',3:'x',4:'x'},verify:false},
+  insinyur:{name:'Insinyur Proyek',acc:{1:'d',2:'d',3:'v',4:'x'},verify:false},
+  tender:{name:'Tim Tender',acc:{1:'d',2:'d',3:'a',4:'a'},verify:false},
+  reviewer:{name:'Reviewer / QA',acc:{1:'d',2:'d',3:'v',4:'x'},verify:true},
+  manajemen:{name:'Manajemen',acc:{1:'d',2:'d',3:'a',4:'a'},verify:false,stats:true},
+  admin:{name:'Admin Sistem',acc:{1:'v',2:'v',3:'x',4:'x'},verify:false,stats:true,admin:true}
+}}
+var ROLES=defaultRoles();
+
+var PEK={pondasi:'Pondasi dalam','struktur-atas':'Struktur atas jembatan','beton-massa':'Beton massa',galian:'Galian dalam'};
+var KOND={'tanah-lunak':'Tanah lunak','tanah-keras':'Tanah keras','muka-air-tinggi':'Muka air tinggi','perkotaan-padat':'Perkotaan padat','curah-hujan-tinggi':'Curah hujan tinggi','cuaca-panas':'Cuaca panas'};
+var SKALA={kecil:'Kecil',menengah:'Menengah',besar:'Besar'};
+
+var SYN={'tiang pancang':['bored','pile'],pondasi:['pile','bored'],cor:['pengecoran','beton'],'mengecor':['pengecoran'],retak:['suhu','termal'],k3:['keselamatan','smkk','ketinggian'],keselamatan:['smkk','ketinggian'],girder:['gantry','erection'],hujan:['longsor','galian','drainase'],harga:['tender','penawaran'],terlambat:['pompa','keterlambatan'],undang:['jasa konstruksi'],bekisting:['modular'],suhu:['sensor','termal']};
+
+/* ---------- data contoh ---------- */
+var ITEMS=[
+{id:'KM-MK-014',type:'metode',title:'Pengecoran Bored Pile Ø1000 pada Tanah Lunak',level:2,status:'verified',exp:300,rev:'C',owner:'Rudi Hartono, Manajer Pelaksana',unit:'Divisi Infrastruktur',proyek:'Jembatan Kali Contoh, 2024',upd:40,
+ tags:['pondasi dalam','bored pile','tanah lunak','tremie','bentonit'],
+ ctx:{pek:'pondasi',kond:['tanah-lunak','muka-air-tinggi'],skala:'menengah'},
+ ringkasan:'Bored pile dengan casing sementara dan slurry bentonit untuk lempung lunak bermuka air tinggi, dengan pengecoran tremie berkelanjutan.',
+ isi:[{h:'Tahapan kerja',ol:true,list:['Survei titik dan pemasangan casing sementara sedalam 6 m','Pengeboran dengan slurry bentonit, berat jenis dan viskositas dicek tiap 2 jam','Pembersihan dasar lubang dan pemeriksaan kedalaman akhir','Penurunan sangkar tulangan dengan spacer','Pengecoran tremie berkelanjutan, ujung pipa terbenam minimal 2 m dalam beton','Pencabutan casing bertahap, lalu uji integritas tiang']},
+      {h:'Sumber daya',p:'Satu rig bor putar, crane 50 ton, pompa slurry, satu regu 9 orang (operator, pembantu bor, tukang besi, mandor mutu).'},
+      {h:'K3 dan mutu',p:'Area bor dipagari dan lubang terbuka ditutup saat tidak dikerjakan. Titik inspeksi: kedalaman, vertikalitas, slump 18 ± 2 cm, volume cor aktual dibanding teoritis.'}],
+ rel:['KM-DT-003','KM-LL-021','KM-PR-002','KM-PT-001','KM-IN-005'],
+ checks:[]},
+{id:'KM-MK-021',type:'metode',title:'Erection Girder Box dengan Launching Gantry',level:2,status:'review',exp:null,rev:'A',owner:'Agus Salim, Manajer Pelaksana',unit:'Divisi Infrastruktur',proyek:'Jalan Layang Contoh, 2025',upd:12,
+ tags:['struktur atas','girder','launching gantry','jembatan','perkotaan'],
+ ctx:{pek:'struktur-atas',kond:['perkotaan-padat'],skala:'besar'},
+ ringkasan:'Pemasangan girder box pratekan dengan launching gantry dari satu pangkal, dengan jendela kerja malam di area perkotaan padat.',
+ isi:[{h:'Tahapan kerja',ol:true,list:['Mobilisasi dan perakitan launching gantry di pangkal jembatan','Pengangkutan girder malam hari dengan pengawalan dan penutupan lajur','Peluncuran girder ke posisi, penyetelan bearing, pemasangan sementara','Pemasangan diafragma, stressing lanjutan, dan grouting tendon','Pemeriksaan elevasi dan lendutan sebelum pelat lantai']},
+      {h:'Sumber daya',p:'Satu launching gantry, dua trailer pengangkut, crane bantu 80 ton, regu 14 orang per shift.'},
+      {h:'K3 dan mutu',p:'Jendela kerja 22.00 sampai 05.00. Zona jatuh benda dipagari; pekerja di ketinggian memakai full body harness sesuai SOP Pekerjaan di Ketinggian.'}],
+ rel:['KM-PR-007','KM-PT-001','KM-LL-035'],
+ checks:[{ok:true,t:'Sumber proyek dan tahun tercantum'},{ok:true,t:'Konteks penerapan lengkap'},{ok:false,t:'Produktivitas aktual belum dilampirkan; tautkan ke data produktivitas'},{ok:true,t:'Tidak ada kontradiksi dengan SOP Pekerjaan di Ketinggian'}]},
+{id:'KM-MK-033',type:'metode',title:'Pile Cap Beton Massa dengan Pengendalian Suhu',level:2,status:'verified',exp:120,rev:'B',owner:'Rudi Hartono, Manajer Pelaksana',unit:'Divisi Infrastruktur',proyek:'Pelabuhan Contoh, 2023',upd:95,
+ tags:['beton massa','pile cap','suhu','retak termal','fly ash'],
+ ctx:{pek:'beton-massa',kond:['cuaca-panas'],skala:'menengah'},
+ ringkasan:'Pengecoran pile cap tebal dengan semen rendah panas, sensor suhu, dan isolasi perawatan untuk membatasi selisih suhu inti dan permukaan.',
+ isi:[{h:'Tahapan kerja',ol:true,list:['Rancang campuran semen rendah panas dengan pengganti semen (fly ash)','Pasang sensor suhu pada inti dan permukaan sebelum cor','Cor berlapis dengan jeda antar lapisan sesuai batas suhu','Perawatan dengan penutup isolasi dan pembasahan','Pantau selisih suhu, bongkar penutup bertahap']},
+      {h:'Sumber daya',p:'Dua pompa beton, pabrik es serpih bila suhu campuran melewati 30 °C, regu perawatan 6 orang.'},
+      {h:'K3 dan mutu',p:'Batas selisih suhu inti dan permukaan 20 °C. Pembacaan suhu dicatat dan ditandatangani pengawas mutu.'}],
+ rel:['KM-BA-004','KM-IN-009','KM-IN-005','KM-PR-002','KM-LL-021'],
+ checks:[]},
+{id:'KM-MK-040',type:'metode',title:'Galian Dalam dengan Secant Pile dan Strutting',level:2,status:'draft',exp:null,rev:'0',owner:'Tio Maulana, Insinyur Pelaksana',unit:'Divisi Gedung',proyek:'',upd:5,
+ tags:['galian dalam','secant pile','strutting','basement','dewatering'],
+ ctx:{pek:'galian',kond:['perkotaan-padat','muka-air-tinggi','curah-hujan-tinggi'],skala:'besar'},
+ ringkasan:'Galian basement dalam dengan dinding secant pile dan strutting baja bertahap di lahan kota yang padat.',
+ isi:[{h:'Tahapan kerja',ol:true,list:['Pemasangan secant pile primer dan sekunder','Galian bertahap per 2 m','Pemasangan strutting baja pada tiap level','Pemantauan deformasi dinding dan penurunan tanah sekitar']},
+      {h:'Sumber daya',p:'Rig secant pile, excavator long arm, crane 50 ton. Komposisi regu belum diisi.'},
+      {h:'K3 dan mutu',p:'Draf: pemantauan inklinometer mingguan dan tinjau ulang saat curah hujan tinggi.'}],
+ rel:['KM-LL-018','KM-PT-001','KM-PR-007'],
+ checks:[{ok:false,t:'Sumber proyek belum diisi'},{ok:false,t:'Tahapan kerja belum memuat urutan pencabutan strutting'},{ok:true,t:'Konteks penerapan lengkap'},{ok:false,t:'Perlu ditautkan ke lesson learned longsor galian (KM-LL-018)'}]},
+{id:'KM-DT-003',type:'metode',title:'Data Produktivitas Aktual Bored Pile, Tiga Proyek',level:3,status:'verified',exp:200,rev:'B',owner:'Rudi Hartono, Manajer Pelaksana',unit:'Divisi Infrastruktur',proyek:'Proyek A sampai C, 2022 sampai 2024',upd:60,
+ tags:['produktivitas','bored pile','data aktual','rencana vs realisasi'],
+ ctx:null,
+ ringkasan:'Produktivitas aktual bored pile Ø1000 pada tiga proyek dibandingkan rencana, beserta penyebab selisihnya.',
+ isi:[{h:'Ringkasan data',list:['Proyek A: 2,1 titik per hari per rig (rencana 2,5)','Proyek B: 2,4 titik per hari per rig (rencana 2,5)','Proyek C: 1,8 titik per hari per rig (rencana 2,2)']},
+      {h:'Penyebab selisih',p:'Penyetelan casing pada lapisan lanau, antrean truk readymix, dan hujan lebih dari 3 hari per bulan. Angka ini sensitif secara persaingan dan tidak otomatis masuk proposal.'}],
+ rel:['KM-MK-014'],checks:[]},
+{id:'KM-LL-021',type:'lesson',title:'Pengecoran Terlambat Akibat Pompa Beton Rusak',level:2,status:'verified',exp:250,rev:'A',owner:'Bagas Pratama, Insinyur Proyek',unit:'Divisi Infrastruktur',proyek:'Jembatan Kali Contoh, 2024',upd:70,
+ tags:['pengecoran','pompa beton','cold joint','alat cadangan'],ctx:null,
+ ringkasan:'Pompa beton utama rusak saat pengecoran pile cap 280 m³; pengecoran tertunda 6 jam dan terbentuk cold joint.',
+ rekom:'Sediakan pompa cadangan atau perjanjian siaga untuk pengecoran di atas 200 m³.',
+ isi:[{h:'Kejadian',p:'Pompa utama rusak di tengah pengecoran pile cap 280 m³. Pengecoran tertunda 6 jam dan terbentuk cold joint.'},
+      {h:'Akar masalah',p:'Tidak ada pompa cadangan di lokasi dan perawatan berkala pompa tidak tercatat.'},
+      {h:'Tindakan',p:'Pengecoran dilanjutkan dengan pompa sewa; cold joint diperiksa dan diperbaiki dengan persetujuan konsultan.'},
+      {h:'Rekomendasi',p:'Sediakan pompa cadangan atau perjanjian siaga untuk pengecoran di atas 200 m³, dan catat pemeliharaan pompa.'}],
+ rel:['KM-MK-014','KM-MK-033','KM-PR-002'],checks:[]},
+{id:'KM-LL-018',type:'lesson',title:'Longsor Kecil pada Galian saat Hujan Ekstrem',level:2,status:'verified',exp:-20,rev:'A',owner:'Tio Maulana, Insinyur Pelaksana',unit:'Divisi Gedung',proyek:'Gedung Perkantoran Contoh, 2023',upd:400,
+ tags:['galian','longsor','hujan','drainase','lereng'],ctx:null,
+ ringkasan:'Tebing galian longsor kecil setelah hujan dua hari berturut-turut; tidak ada korban.',
+ rekom:'Pasang drainase tepi dan penutup lereng sebelum musim hujan; hentikan galian saat hujan melewati batas yang ditetapkan.',
+ isi:[{h:'Kejadian',p:'Tebing galian longsor kecil setelah hujan dua hari berturut-turut. Tidak ada korban.'},
+      {h:'Akar masalah',p:'Lereng tidak diberi lapisan pelindung dan drainase tepi galian belum terpasang.'},
+      {h:'Tindakan',p:'Galian dihentikan, lereng dilandaikan, parit tepi dipasang.'},
+      {h:'Rekomendasi',p:'Pasang drainase tepi dan penutup lereng sebelum musim hujan; hentikan galian saat hujan melewati batas yang ditetapkan.'}],
+ rel:['KM-MK-040'],
+ checks:[{ok:false,t:'Masa berlaku terlewati; pemilik perlu memverifikasi ulang'},{ok:true,t:'Templat lesson learned terisi lengkap'},{ok:false,t:'Periksa apakah rekomendasi masih sesuai dengan SMKK terbaru'}]},
+{id:'KM-LL-027',type:'lesson',title:'Klaim Variasi Ditolak karena Perubahan Gambar Tanpa Addendum',level:3,status:'review',exp:null,rev:'A',owner:'Maya Kusuma, Tim Tender',unit:'Divisi Komersial',proyek:'Proyek D, 2024',upd:20,
+ tags:['klaim','variasi','addendum','kontrak'],ctx:null,
+ ringkasan:'Perubahan gambar kerja menimbulkan pekerjaan tambahan tanpa addendum tertulis, sehingga klaim sebagian ditolak.',
+ rekom:'Wajibkan instruksi tertulis dan addendum sebelum pekerjaan variasi dimulai.',
+ isi:[{h:'Kejadian',p:'Perubahan gambar kerja saat pelaksanaan menimbulkan pekerjaan tambahan tanpa addendum tertulis.'},
+      {h:'Akar masalah',p:'Instruksi lisan di lapangan tidak didokumentasikan.'},
+      {h:'Tindakan',p:'Klaim diajukan terlambat dan sebagian ditolak.'},
+      {h:'Rekomendasi',p:'Wajibkan instruksi tertulis dan addendum sebelum pekerjaan variasi dimulai.'}],
+ rel:['KM-PT-002'],
+ checks:[{ok:true,t:'Templat lesson learned terisi lengkap'},{ok:true,t:'Klasifikasi Sensitif sudah sesuai (memuat isi kontrak)'},{ok:false,t:'Rekomendasi belum ditautkan ke prosedur manajemen perubahan'}]},
+{id:'KM-LL-035',type:'lesson',title:'Evaluasi Kekalahan Tender Jembatan Bentang Panjang',level:4,status:'verified',exp:400,rev:'A',owner:'Ir. Sari Nugraha, Direktur Operasi',unit:'Manajemen',proyek:'Tender E, 2025',upd:90,
+ tags:['tender','harga','penawaran','analisis harga','jembatan'],ctx:null,
+ ringkasan:'Penawaran kalah 3,2% dari pemenang; selisih utama pada biaya mobilisasi gantry dan asumsi produktivitas.',
+ rekom:'Gunakan produktivitas aktual terverifikasi dan tinjau skema sewa gantry.',
+ isi:[{h:'Hasil evaluasi',p:'Penawaran kalah 3,2% dari pemenang. Selisih utama pada biaya mobilisasi gantry dan asumsi produktivitas.'},{h:'Rekomendasi',p:'Gunakan produktivitas aktual terverifikasi dan tinjau skema sewa gantry untuk tender serupa.'}],
+ rel:['KM-MK-021'],checks:[]},
+{id:'KM-IN-005',type:'inovasi',title:'Bekisting Modular Baja untuk Pile Cap',level:2,status:'verified',exp:500,rev:'A',owner:'Bagas Pratama, Insinyur Proyek',unit:'Divisi Infrastruktur',proyek:'Jembatan Kali Contoh, 2024',upd:150,
+ tags:['bekisting','modular','pile cap','siklus kerja','penghematan'],ctx:null,
+ ringkasan:'Bekisting baja modular menggantikan kayu sekali pakai dan memangkas siklus pile cap dari 6 menjadi 5 hari.',
+ isi:[{h:'Sebelum',p:'Bekisting kayu sekali pakai, siklus 6 hari per pile cap.'},{h:'Sesudah',p:'Bekisting baja modular dipakai ulang hingga 8 kali, siklus 5 hari per pile cap.'},{h:'Hasil terukur',list:['Waktu siklus turun 17%','Biaya bekisting per pile cap turun 22% setelah pemakaian ke-4']}],
+ rel:['KM-MK-033','KM-MK-014'],checks:[]},
+{id:'KM-IN-009',type:'inovasi',title:'Sensor Suhu Beton Nirkabel untuk Beton Massa',level:2,status:'verified',exp:30,rev:'A',owner:'Rudi Hartono, Manajer Pelaksana',unit:'Divisi Infrastruktur',proyek:'Pelabuhan Contoh, 2023',upd:200,
+ tags:['sensor','suhu','beton massa','pemantauan','nirkabel'],ctx:null,
+ ringkasan:'Pembacaan suhu tiap 15 menit dengan peringatan otomatis menggantikan pembacaan manual tiga kali sehari.',
+ isi:[{h:'Sebelum',p:'Suhu dibaca manual tiga kali sehari.'},{h:'Sesudah',p:'Sensor nirkabel membaca tiap 15 menit dan mengirim peringatan saat selisih suhu mendekati batas.'}],
+ rel:['KM-MK-033','KM-BA-004'],
+ checks:[{ok:false,t:'Masa berlaku berakhir dalam 30 hari'},{ok:true,t:'Data sebelum dan sesudah tersedia'}]},
+{id:'KM-PR-002',type:'prosedur',title:'SOP Pengendalian Mutu Beton Readymix',level:1,status:'verified',exp:25,rev:'D',owner:'Wulan Sari, Kepala QA',unit:'Mutu dan K3',proyek:'',upd:300,
+ tags:['mutu','beton','readymix','slump','benda uji'],ctx:null,
+ ringkasan:'Langkah pemeriksaan beton readymix dari surat jalan, uji slump, sampai pengambilan benda uji.',
+ isi:[{h:'Langkah',ol:true,list:['Periksa surat jalan: mutu, waktu muat, volume','Uji slump sebelum cor; tolak bila di luar toleransi','Ambil benda uji silinder sesuai rencana mutu proyek','Catat hasil dan simpan di laporan harian']}],
+ rel:['KM-MK-014','KM-MK-033','KM-PT-001'],
+ checks:[{ok:false,t:'Masa berlaku berakhir dalam 25 hari'},{ok:true,t:'Selaras dengan peraturan terkait'}]},
+{id:'KM-PR-007',type:'prosedur',title:'SOP Pekerjaan di Ketinggian',level:1,status:'verified',exp:220,rev:'C',owner:'Wulan Sari, Kepala QA',unit:'Mutu dan K3',proyek:'',upd:130,
+ tags:['k3','ketinggian','harness','izin kerja'],ctx:null,
+ ringkasan:'Izin kerja, alat pelindung jatuh, dan pengawasan untuk pekerjaan di atas 1,8 m.',
+ isi:[{h:'Langkah',ol:true,list:['Izin kerja ketinggian sebelum pekerjaan di atas 1,8 m','Periksa full body harness dan titik angkur','Pagari zona jatuh benda di bawah area kerja','Pengawas K3 hadir selama pekerjaan berlangsung']}],
+ rel:['KM-MK-021','KM-MK-040','KM-PT-001'],checks:[]},
+{id:'KM-PT-001',type:'peraturan',title:'Permen PUPR No. 10 Tahun 2021 tentang Pedoman SMKK',level:1,status:'verified',exp:330,rev:'-',owner:'Divisi Hukum dan Kepatuhan',unit:'Manajemen',proyek:'',upd:80,
+ tags:['smkk','k3','keselamatan konstruksi','peraturan','pupr'],ctx:null,
+ ringkasan:'Pedoman penerapan Sistem Manajemen Keselamatan Konstruksi pada pekerjaan konstruksi; prosedur K3 internal dipetakan ke ketentuan ini.',
+ isi:[{h:'Dampak ke prosedur',list:['SOP Pekerjaan di Ketinggian','SOP Pengendalian Mutu Beton Readymix','Metode kerja yang memuat bagian K3']},{h:'Catatan',p:'Ringkasan ini membantu pencarian. Rujukan utama tetap naskah resmi peraturan.'}],
+ rel:['KM-PR-007','KM-PR-002'],checks:[]},
+{id:'KM-PT-002',type:'peraturan',title:'UU No. 2 Tahun 2017 tentang Jasa Konstruksi',level:1,status:'verified',exp:330,rev:'-',owner:'Divisi Hukum dan Kepatuhan',unit:'Manajemen',proyek:'',upd:80,
+ tags:['jasa konstruksi','undang-undang','kontrak','kegagalan bangunan'],ctx:null,
+ ringkasan:'Dasar hukum penyelenggaraan jasa konstruksi, termasuk kontrak kerja konstruksi dan tanggung jawab atas kegagalan bangunan.',
+ isi:[{h:'Dampak ke prosedur',list:['Prosedur kontrak dan addendum','Prosedur serah terima pekerjaan']},{h:'Catatan',p:'Rujukan utama tetap naskah resmi peraturan.'}],
+ rel:['KM-LL-027'],checks:[]},
+{id:'KM-BA-004',type:'pustaka',title:'Ringkasan Literatur: Pengendalian Retak Termal pada Beton Massa',level:1,status:'verified',exp:380,rev:'A',owner:'Perpustakaan Teknik',unit:'Mutu dan K3',proyek:'',upd:250,
+ tags:['retak termal','beton massa','literatur','panas hidrasi'],ctx:null,
+ ringkasan:'Ringkasan internal tentang penyebab retak termal pada beton massa dan cara membatasi selisih suhu.',
+ isi:[{h:'Poin utama',list:['Retak muncul saat selisih suhu inti dan permukaan melewati batas','Pilihan semen dan pengganti semen menurunkan panas hidrasi','Perawatan dan isolasi perlu mengikuti laju penurunan suhu']},{h:'Catatan hak cipta',p:'Hanya metadata dan ringkasan yang disimpan. Teks lengkap dibaca lewat perpustakaan.'}],
+ rel:['KM-MK-033','KM-IN-009'],checks:[]}
+];
+var VIEWS={'KM-MK-014':184,'KM-MK-021':41,'KM-MK-033':97,'KM-MK-040':12,'KM-DT-003':63,'KM-LL-021':120,'KM-LL-018':58,'KM-LL-027':17,'KM-LL-035':9,'KM-IN-005':72,'KM-IN-009':35,'KM-PR-002':211,'KM-PR-007':246,'KM-PT-001':158,'KM-PT-002':74,'KM-BA-004':43};
+
+var USE={'KM-MK-014':[24,11],'KM-MK-021':[3,2],'KM-MK-033':[14,8],'KM-MK-040':[1,0],'KM-DT-003':[9,3],'KM-LL-021':[6,12],'KM-LL-018':[2,7],'KM-LL-027':[1,2],'KM-LL-035':[0,1],'KM-IN-005':[5,6],'KM-IN-009':[3,4],'KM-PR-002':[8,21],'KM-PR-007':[2,26],'KM-PT-001':[11,9],'KM-PT-002':[4,5],'KM-BA-004':[2,3]};
+var BYID={};
+function indexItem(it){
+  BYID[it.id]=it;
+  if(it.views==null)it.views=VIEWS[it.id]||0;
+  if(it.useT==null){var u=USE[it.id]||[0,0];it.useT=u[0];it.useP=u[1]}
+  it._t=it.title.toLowerCase();
+  it._g=it.tags.join(' ').toLowerCase();
+  var b=[it.ringkasan];
+  it.isi.forEach(function(x){b.push(x.h);if(x.p)b.push(x.p);if(x.list)b.push(x.list.join(' '))});
+  it._b=b.join(' ').toLowerCase();
+}
+ITEMS.forEach(indexItem);
+
+/* ---------- pengguna contoh ---------- */
+function U0(id,name,nip,role,unit,jab,status,mfa,last,opens,searches,dls,asks,contrib){
+  return {id:id,name:name,nip:nip,email:name.toLowerCase().replace(/ir\. /,'').replace(/[^a-z ]/g,'').trim().replace(/ /g,'.')+'@contoh.co.id',role:role,unit:unit,jab:jab,status:status,mfa:mfa,last:last,opens:opens,searches:searches,dls:dls,asks:asks,contrib:contrib};
+}
+var USERS=[
+ U0('u1','Dewi Anggraini','20417','karyawan','Divisi Infrastruktur','Staf Administrasi Proyek','aktif',true,0,38,52,6,9,0),
+ U0('u2','Bagas Pratama','18362','insinyur','Divisi Infrastruktur','Insinyur Proyek','aktif',true,0,96,81,14,22,4),
+ U0('u3','Maya Kusuma','15270','tender','Divisi Komersial','Staf Tender Senior','aktif',true,1,142,167,31,48,3),
+ U0('u4','Hendra Wijaya','12894','reviewer','Mutu dan K3','Reviewer QA','aktif',true,0,77,40,9,12,11),
+ U0('u5','Ir. Sari Nugraha','09115','manajemen','Manajemen','Direktur Operasi','aktif',true,2,29,18,4,15,1),
+ U0('u6','Andi Firmansyah','21003','admin','TI dan Keamanan Informasi','Admin Sistem','aktif',true,0,21,9,0,2,0),
+ U0('u7','Rudi Hartono','11876','insinyur','Divisi Infrastruktur','Manajer Pelaksana','aktif',true,1,118,64,22,17,9),
+ U0('u8','Wulan Sari','13540','reviewer','Mutu dan K3','Kepala QA','aktif',true,3,88,35,11,8,14),
+ U0('u9','Tio Maulana','19288','insinyur','Divisi Gedung','Insinyur Pelaksana','aktif',false,4,64,58,10,19,5),
+ U0('u10','Nadia Putri','22150','karyawan','Divisi Gedung','Staf Teknik','aktif',true,0,45,70,3,26,0),
+ U0('u11','Farid Ramadhan','17741','tender','Divisi Komersial','Estimator','aktif',true,1,103,121,19,35,2),
+ U0('u12','Lestari Wulandari','16402','karyawan','Keuangan','Staf Akuntansi','aktif',true,12,7,11,0,1,0),
+ U0('u13','Joko Susilo','10233','insinyur','Divisi Infrastruktur','Manajer Proyek','resign',true,1,171,90,48,10,6),
+ U0('u14','Bima Aditya','19955','karyawan','Divisi Gedung','Staf Lapangan','nonaktif',false,41,4,6,0,0,0),
+ U0('u15','Agus Salim','14720','insinyur','Divisi Infrastruktur','Manajer Pelaksana','aktif',true,1,59,33,8,11,7)
+];
+var AHLI={u2:['pondasi','beton','sensor','bored','mutu'],u3:['tender','harga','penawaran'],u4:['mutu','k3','beton','retak','sensor','prosedur'],u7:['pondasi','bored','galian','beton','pompa','cor','hujan'],u8:['k3','mutu','prosedur','bekisting','keselamatan','ketinggian'],u9:['bekisting','gedung','pelat','basement'],u11:['tender','harga','biaya'],u15:['girder','gantry','erection','jembatan','struktur']};
+USERS.forEach(function(u){u.ahli=AHLI[u.id]||[]});
+
+/* pengajuan kontribusi contoh, satu untuk tiap tahap alur */
+var SUBS=[
+{id:'S-101',itemId:null,type:'lesson',title:'Retak Rambut pada Pelat Lantai akibat Pengecoran Siang Hari',level:2,proyek:'Gedung Contoh Tower B, 2025',author:'u10',t:addDays(-2),status:'diajukan',round:1,experts:[],votes:{},comments:[],hist:[{t:addDays(-2),txt:'Diajukan oleh Nadia Putri'}],ctx:null,
+ ringkasan:'Pelat lantai 12 retak rambut dua hari setelah dicor siang hari bersuhu tinggi karena perawatan beton terlambat dipasang.',tags:['retak','curing','pelat lantai','cuaca panas'],
+ isi:[{h:'Latar belakang',p:'Pengecoran pelat lantai 12 dilakukan pukul 13.00 dengan suhu udara sekitar 34 derajat.'},{h:'Kejadian dan masalah',p:'Dua hari setelah cor muncul retak rambut pada permukaan. Penyebabnya penguapan air terlalu cepat karena perawatan beton baru dipasang 2 jam setelah finishing.'},{h:'Tindakan yang diambil',list:['Menutup pelat dengan karung basah','Memasang sprinkler kabut','Menginjeksi retakan dengan epoksi']},{h:'Hasil',p:'Retak tidak melebar dan perbaikan selesai dalam 3 hari.'},{h:'Pelajaran dan rekomendasi',p:'Jadwalkan pengecoran sebelum pukul 10 pagi atau sesudah sore, dan mulai perawatan maksimal 30 menit setelah finishing.'}]},
+{id:'S-102',itemId:null,type:'metode',title:'Bekisting Modular untuk Dinding Basement',level:2,proyek:'Pelabuhan Contoh, 2024',author:'u9',t:addDays(-6),status:'verifikasi',round:1,experts:['u2','u8'],votes:{u2:{v:'setuju',round:1}},
+ comments:[{by:'u2',t:addDays(-3),kind:'setuju',round:1,txt:'Tahapan sudah runut dan cocok dengan praktik kami. Setuju.'}],hist:[{t:addDays(-6),txt:'Diajukan oleh Tio Maulana'},{t:addDays(-5),txt:'Koordinator menugaskan Bagas Pratama dan Wulan Sari sebagai ahli'}],
+ ctx:{pek:'galian',kond:['perkotaan-padat'],skala:'menengah'},
+ ringkasan:'Pemasangan bekisting modular untuk dinding basement setinggi 5 meter dengan pengecoran bertahap per 1,5 meter dan pembongkaran setelah 24 jam.',tags:['bekisting','basement','pompa beton','sealant'],
+ isi:[{h:'Konteks penerapan',p:'Dinding basement setinggi 5 meter pada proyek pelabuhan, 2024.'},{h:'Tahapan kerja',ol:true,list:['Setel perancah dan pasang panel bekisting bagian luar','Pasang tulangan lalu tutup bekisting bagian dalam dengan tie rod','Cor bertahap per 1,5 meter memakai pompa beton','Bongkar setelah 24 jam dan bersihkan untuk dipakai ulang']},{h:'Kendala dan mutu',p:'Kebocoran pada sambungan panel diatasi dengan sealant. Cek toleransi sambungan sebelum cor.'},{h:'Hasil dan produktivitas',p:'Produktivitas 45 m2 per hari dengan satu regu 8 orang.'}]},
+{id:'S-103',itemId:null,type:'inovasi',title:'Sensor Suhu Murah untuk Pemantauan Beton Massa',level:2,proyek:'Pelabuhan Contoh, 2023',author:'u2',t:addDays(-9),status:'perbaikan',round:1,experts:['u7','u4'],votes:{u7:{v:'setuju',round:1},u4:{v:'perbaikan',round:1}},
+ comments:[{by:'u7',t:addDays(-5),kind:'setuju',round:1,txt:'Gagasannya praktis untuk proyek kecil.'},{by:'u4',t:addDays(-4),kind:'perbaikan',round:1,txt:'Cantumkan akurasi sensor, biaya per titik, dan hasil kalibrasi terhadap sensor pabrikan sebelum kami bisa menyetujui.'}],
+ hist:[{t:addDays(-9),txt:'Diajukan oleh Bagas Pratama'},{t:addDays(-8),txt:'Koordinator menugaskan Rudi Hartono dan Hendra Wijaya sebagai ahli'},{t:addDays(-4),txt:'Semua ahli sudah menilai: dikembalikan ke penulis untuk perbaikan'}],ctx:null,
+ ringkasan:'Sensor suhu rakitan sendiri menggantikan sensor pabrikan untuk memantau selisih suhu inti dan permukaan beton massa dengan biaya jauh lebih rendah.',tags:['sensor','suhu','beton massa'],
+ isi:[{h:'Latar belakang',p:'Sensor pabrikan mahal dan sering tidak tersedia cukup untuk setiap pengecoran.'},{h:'Gagasan dan penerapan',list:['Rakit sensor dari komponen umum dan kabel tahan air','Tanam pada inti dan permukaan sebelum cor','Baca dan catat suhu tiap 2 jam']},{h:'Hasil dan manfaat',p:'Selisih suhu inti dan permukaan terpantau sepanjang perawatan 7 hari.'}]},
+{id:'S-104',itemId:null,type:'lesson',title:'Keterlambatan Pasokan Ready Mix saat Hujan Deras',level:2,proyek:'Jalan Layang Contoh, 2025',author:'u7',t:addDays(-12),status:'siap',round:1,experts:['u2','u9'],votes:{u2:{v:'setuju',round:1},u9:{v:'setuju',round:1}},
+ comments:[{by:'u2',t:addDays(-8),kind:'setuju',round:1,txt:'Setuju. Usul rute alternatif sudah realistis.'},{by:'u9',t:addDays(-7),kind:'setuju',round:1,txt:'Setuju, kami pernah mengalami hal serupa di proyek gedung.'}],
+ hist:[{t:addDays(-12),txt:'Diajukan oleh Rudi Hartono'},{t:addDays(-11),txt:'Koordinator menugaskan Bagas Pratama dan Tio Maulana sebagai ahli'},{t:addDays(-7),txt:'Semua ahli setuju: menunggu pengesahan koordinator'}],ctx:null,
+ ringkasan:'Truk ready mix terlambat 3 jam saat hujan deras sehingga pengecoran terpotong; pelajaran tentang pemasok cadangan dan rute alternatif.',tags:['ready mix','hujan','pengecoran','pompa beton'],
+ isi:[{h:'Latar belakang',p:'Pengecoran pilar pada musim hujan 2025 mengandalkan satu pemasok ready mix.'},{h:'Kejadian dan masalah',p:'Hujan deras menutup dua ruas jalan; truk terlambat 3 jam sehingga terjadi cold joint pada pilar P4.'},{h:'Tindakan yang diambil',list:['Menghentikan cor di batas konstruksi yang aman','Memasang pengaku sementara','Mengajukan perbaikan sambungan ke konsultan']},{h:'Pelajaran dan rekomendasi',p:'Sebaiknya siapkan pemasok cadangan, pantau cuaca 3 hari sebelumnya, dan tetapkan rute alternatif yang disurvei lebih dulu.'}]}
+];
+
+
+/* ---------- state ---------- */
+var S={uid:'u1',view:'dashboard',q:'',fType:'all',fStatus:'all',sel:null,blocked:false,opens:[],log:[],dl:null,req:{},ai:[],users:USERS,subs:SUBS,sub:null,mSel:null,mu:{name:'',proyek:'',level:2},mFocus:null,kf:null,assign:{},cd:{},mark:{},
+  pol:{maxOpens:15,wm:true,autoBlock:true},nextNip:23001,
+  uf:{q:'',role:'all',st:'all'},kakText:'',kakName:'',kak:null,
+  gaps:[{q:'Metode dewatering untuk galian di dekat sungai',n:3},{q:'Standar pemasangan dinding penahan tanah',n:2}],
+  tender:{pek:'pondasi',kond:['tanah-lunak'],skala:'menengah',pick:null}};
+
+function U(){return S.users.filter(function(u){return u.id===S.uid})[0]}
+function R(){return ROLES[U().role]}
+function can(it){return R().acc[it.level]!=='x'}
+function dispStatus(it){
+  if(it.status==='review')return 'review';
+  if(it.status==='draft')return 'draft';
+  if(it.exp<0)return 'expired';
+  if(it.exp<=45)return 'soon';
+  return 'verified';
+}
+function badge(it){var s=STATUS[dispStatus(it)];return '<span class="st st-'+s[1]+'"><b aria-hidden="true">'+s[2]+'</b>'+s[0]+'</span>'}
+function meter(n){var m='';for(var i=1;i<=4;i++)m+='<i class="'+(i<=n?'on':'')+'"></i>';return '<span class="lv lv'+n+'" title="Level '+n+' dari 4"><span class="meter" aria-hidden="true">'+m+'</span>'+LV[n]+'</span>'}
+function relOf(it){
+  var set={};
+  (it.rel||[]).forEach(function(i){set[i]=1});
+  ITEMS.forEach(function(o){if((o.rel||[]).indexOf(it.id)>-1)set[o.id]=1});
+  return Object.keys(set).filter(function(i){return BYID[i]}).map(function(i){return BYID[i]});
+}
+function dlMode(it){
+  if(S.blocked)return 'blocked';
+  if(U().status==='resign')return 'resign';
+  var a=R().acc[it.level];
+  return a==='d'?'ok':a==='a'?'approval':'none';
+}
+function userStatusBadge(u){
+  var m={aktif:['ok','✓','Aktif'],resign:['warn','!','Masa resign'],nonaktif:['mute','○','Nonaktif']}[u.status];
+  return '<span class="st st-'+m[0]+'"><b aria-hidden="true">'+m[1]+'</b>'+m[2]+'</span>';
+}
+
+function log(act,detail,tone){
+  S.log.unshift({t:new Date(),who:U().name+' ('+R().name+')',act:act,detail:detail,tone:tone||''});
+  if(S.log.length>120)S.log.pop();
+}
+function toast(m){var t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(toast._h);toast._h=setTimeout(function(){t.classList.remove('on')},2600)}
+
+/* ---------- pencarian ---------- */
+var STOP=['yang','apa','di','dan','untuk','pada','kita','pernah','saya','dengan','ke','dari','itu','ini','adalah','bagaimana','berapa','apakah','ada','atau','dalam','tentang','kami','mana','kapan','dipakai','digunakan'];
+function terms(q){
+  var ql=q.toLowerCase();
+  var base=ql.replace(/[^a-z0-9ø\s\-]/g,' ').split(/\s+/).filter(function(w){return w.length>1&&STOP.indexOf(w)<0});
+  var extra=[];
+  Object.keys(SYN).forEach(function(k){if(ql.indexOf(k)>-1)extra=extra.concat(SYN[k])});
+  return {base:base.filter(function(v,i,a){return a.indexOf(v)===i}),extra:extra.filter(function(v,i,a){return a.indexOf(v)===i})};
+}
+function score(it,tr){
+  var s=0;
+  tr.base.forEach(function(t){if(it._t.indexOf(t)>-1)s+=3;if(it._g.indexOf(t)>-1)s+=2;if(it._b.indexOf(t)>-1)s+=1});
+  tr.extra.forEach(function(t){if(it._t.indexOf(t)>-1||it._g.indexOf(t)>-1)s+=1.5;else if(it._b.indexOf(t)>-1)s+=.5});
+  return s;
+}
+function statusPass(it){
+  var d=dispStatus(it);
+  if(S.fStatus==='ok')return d==='verified';
+  if(S.fStatus==='act')return d==='soon'||d==='expired';
+  if(S.fStatus==='wip')return d==='review'||d==='draft';
+  return true;
+}
+function runSearch(){
+  var q=S.q.trim(),tr=terms(q),res=[],hidden=0,order=Object.keys(TYPES);
+  ITEMS.forEach(function(it){
+    var sc=q?score(it,tr):0;
+    if(q&&sc<=0)return;
+    if(!can(it)){hidden++;return}
+    if(S.fType!=='all'&&it.type!==S.fType)return;
+    if(!statusPass(it))return;
+    res.push({it:it,s:sc});
+  });
+  res.sort(function(a,b){return q?(b.s-a.s):(order.indexOf(a.it.type)-order.indexOf(b.it.type)||a.it.id.localeCompare(b.it.id))});
+  return {res:res,hidden:q?hidden:0};
+}
+
+/* ---------- bar atas ---------- */
+function renderWho(){
+  var u=U();
+  var opts=S.users.filter(function(x){return x.status!=='nonaktif'}).map(function(x){return '<option value="'+x.id+'"'+(x.id===S.uid?' selected':'')+'>'+esc(x.name)+' ('+ROLES[x.role].name+')</option>'}).join('');
+  $('#who').innerHTML='<label for="userSel">Masuk sebagai (simulasi)</label><select id="userSel">'+opts+'</select>'
+   +'<span class="id">ID '+u.nip+' &middot; '+esc(u.unit)+'</span>'
+   +'<span class="secure"><span class="pill"><b>✓</b> SSO + MFA</span><span class="pill">Akses dicatat</span></span>';
+}
+function renderBanners(){
+  var h='',u=U();
+  if(S.blocked)h+='<div class="banner bad" role="alert"><span><strong>Unduhan dibekukan sementara.</strong> Pola akses massal terdeteksi pada akun ini dan keamanan informasi sudah diberi tahu.</span><button class="btn" data-act="unblock">Cabut pembekuan (admin keamanan)</button></div>';
+  if(u.status==='resign')h+='<div class="banner warn"><span><strong>Masa pengunduran diri.</strong> HR menandai akun ini: hak unduh dicabut dan pemantauan akses diperketat.</span></div>';
+  $('#banners').innerHTML=h;
+}
+function queue(){return ITEMS.filter(function(it){return can(it)&&dispStatus(it)!=='verified'})}
+function tabList(){
+  var t=[['dashboard','Dashboard'],['cari','Cari pengetahuan'],['model','Model 3D dan peta'],['kak','Analisis KAK'],['tender','Susun tender'],['ai','Tanya AI'],['kontribusi','Kontribusi'],['verifikasi','Verifikasi'],['keamanan','Keamanan dan audit']];
+  if(R().admin){t.push(['pengguna','Pengguna']);t.push(['akses','Pengaturan akses'])}
+  return t;
+}
+function renderTabs(){
+  $('#tabs').innerHTML=tabList().map(function(t){
+    var tk=taskList(),n=t[0]==='verifikasi'?tk.filter(function(x){return x.k!=='revise'}).length:t[0]==='kontribusi'?tk.filter(function(x){return x.k==='revise'}).length:0;
+    var c=n?'<span class="cnt" title="Tugas menunggu Anda">'+n+'</span>':'';
+    var a=(t[0]==='pengguna'||t[0]==='akses')?'<span class="adm">admin</span>':'';
+    return '<button data-act="nav" data-v="'+t[0]+'"'+(S.view===t[0]?' aria-current="page"':'')+'>'+t[1]+c+a+'</button>';
+  }).join('');
+}
+
+/* ---------- cari ---------- */
+function rowHTML(it){
+  return '<button class="row'+(S.sel===it.id?' sel':'')+'" data-act="open" data-id="'+it.id+'"><span class="meta"><span class="mono">'+it.id+'</span><span>'+TYPES[it.type]+'</span></span><span class="rt">'+esc(it.title)+'</span><span class="rs">'+esc(it.ringkasan)+'</span><span class="chips">'+badge(it)+meter(it.level)+'</span></button>';
+}
+function detailHTML(it){
+  var mode=dlMode(it),rel=relOf(it),me=U();
+  var tb=[['No. dokumen','<span class="mono">'+it.id+'</span>'],['Revisi',esc(it.rev)],['Pemilik',esc(it.owner)],['Unit',esc(it.unit)],['Sumber',it.proyek?esc(it.proyek):'-'],['Diperbarui',fmtD(addDays(-it.upd))],['Berlaku sampai',it.status==='verified'?fmtD(addDays(it.exp)):'Belum berlaku'],['Klasifikasi',meter(it.level)]];
+  if(it.ver&&it.ver.length)tb.splice(3,0,['Diverifikasi oleh',it.ver.map(esc).join(', ')]);
+  var body=bodyHTML(it.isi);
+  var relH=rel.map(function(r){
+    return can(r)?'<button class="chip" data-act="open" data-id="'+r.id+'"><span class="mono">'+r.id+'</span> '+esc(r.title)+'</button>'
+                 :'<span class="chip lock" title="Di luar hak akses peran ini"><span class="mono">'+r.id+'</span> terkunci ('+LV[r.level]+')</span>';
+  }).join('')||'<span class="hint">Belum ada tautan.</span>';
+  var btn='',hint='';
+  if(mode==='ok'){btn='<button class="btn primary" data-act="dl" data-id="'+it.id+'">Unduh PDF'+(S.pol.wm?' berwatermark':'')+'</button>';hint=S.pol.wm?'Unduhan memuat nama, ID, dan waktu Anda, dan tercatat di log audit.':'Unduhan tercatat di log audit. Watermark sedang dimatikan oleh admin.'}
+  else if(mode==='approval'){
+    btn=S.req[it.id]?'<button class="btn" disabled>Menunggu persetujuan</button>':'<button class="btn" data-act="req" data-id="'+it.id+'">Ajukan persetujuan unduh</button>';
+    hint='Level '+LV[it.level]+': unduhan butuh persetujuan pemilik data dan keamanan informasi.';
+  }
+  else if(mode==='blocked'){btn='<button class="btn" disabled>Unduh dibekukan</button>';hint='Akun ini dibekukan sementara oleh deteksi akses massal.'}
+  else if(mode==='resign'){btn='<button class="btn" disabled>Unduh dicabut</button>';hint='Hak unduh dicabut selama masa pengunduran diri.'}
+  else{btn='<button class="btn" disabled>Unduh tidak tersedia</button>';hint='Peran ini membaca di aplikasi saja untuk level '+LV[it.level]+'.'}
+  var stamp='';
+  if(S.dl&&S.dl.id===it.id&&S.pol.wm)stamp='<div class="stamp"><strong>Pratinjau watermark pada file yang diunduh</strong>DIUNDUH OLEH '+esc(me.name.toUpperCase())+' &middot; ID '+me.nip+' &middot; '+fmtD(S.dl.t)+' '+fmtT(S.dl.t)+' &middot; '+it.id+' REV '+esc(it.rev)+' &middot; TIDAK UNTUK DISEBARKAN</div>';
+  var wm='';
+  if(it.level>=2&&S.pol.wm){var s='<span>'+esc(me.name)+' &middot; '+me.nip+' &middot; '+fmtD(NOW)+'</span>';for(var i=0;i<60;i++)wm+=s;wm='<div class="wmk" aria-hidden="true">'+wm+'</div>'}
+  return '<article class="doc">'+wm
+   +'<button class="btn ghost back" data-act="back">← Kembali ke daftar</button>'
+   +'<div class="kick"><span>'+TYPES[it.type]+'</span>'+badge(it)+'</div>'
+   +'<h2 class="dt">'+esc(it.title)+'</h2>'
+   +'<dl class="tb">'+tb.map(function(r){return '<div><dt>'+r[0]+'</dt><dd>'+r[1]+'</dd></div>'}).join('')+'</dl>'
+   +'<p>'+esc(it.ringkasan)+'</p>'+body
+   +'<h3>Terkait</h3><div class="rel">'+relH+'</div>'+modelRel(it)
+   +'<div class="actions">'+btn+'<button class="btn sm" data-act="use-t" data-id="'+it.id+'">Catat dipakai di tender</button><button class="btn sm" data-act="use-p" data-id="'+it.id+'">Catat dipakai di pelaksanaan</button></div><p class="hint">'+hint+'</p><p class="hint">Dibaca '+it.views+'x &middot; dipakai di tender '+it.useT+'x &middot; dipakai di pelaksanaan '+it.useP+'x</p>'+stamp
+   +'</article>';
+}
+function modelRel(it){
+  var ms=MODELS.filter(function(m){return canModel(m)&&(m.status==='terbit')&&(m.km.indexOf(it.id)>-1||m.id===it.modelId)});
+  if(!ms.length)return '';
+  return '<h3>Model 3D terkait</h3><div class="rel">'+ms.map(function(m){return '<button class="chip" data-act="model-open" data-id="'+m.id+'"><span class="mono">'+m.id+'</span> '+esc(m.name)+'</button>'}).join('')+'</div>';
+}
+function statsHTML(){
+  var acc=ITEMS.filter(can),ok=acc.filter(function(i){return dispStatus(i)==='verified'}).length,act=acc.length-ok;
+  return '<dl class="stats"><div><dt>Dapat diakses</dt><dd>'+acc.length+' <small>dari '+ITEMS.length+'</small></dd></div><div><dt>Terverifikasi</dt><dd>'+ok+'</dd></div><div><dt>Perlu tindakan</dt><dd>'+act+'</dd></div><div><dt>Celah pengetahuan</dt><dd>'+S.gaps.length+'</dd></div></dl>';
+}
+function viewCari(){
+  var to='<option value="all">Semua jenis</option>'+Object.keys(TYPES).map(function(k){return '<option value="'+k+'"'+(S.fType===k?' selected':'')+'>'+TYPES[k]+'</option>'}).join('');
+  var so=[['all','Semua status'],['ok','Terverifikasi'],['act','Perlu verifikasi ulang'],['wip','Draf dan tinjauan']].map(function(o){return '<option value="'+o[0]+'"'+(S.fStatus===o[0]?' selected':'')+'>'+o[1]+'</option>'}).join('');
+  $('#main').innerHTML=statsHTML()
+   +'<div class="toolbar"><input id="q" type="search" placeholder="Cari: bored pile tanah lunak, retak beton, SMKK, pompa cadangan..." value="'+esc(S.q)+'" aria-label="Cari pengetahuan"><select id="fType" aria-label="Jenis">'+to+'</select><select id="fStatus" aria-label="Status">'+so+'</select></div>'
+   +'<div id="hid"></div><div class="split" id="split"><div class="list" id="list"></div><div class="detail" id="detail"></div></div>';
+  updateCari();
+}
+function updateCari(){
+  var r=runSearch();
+  $('#hid').innerHTML=r.hidden?'<div class="banner info">'+r.hidden+' dokumen lain cocok dengan pencarian ini tetapi berada di luar hak akses peran '+esc(R().name)+', jadi tidak ditampilkan. Pada sistem nyata jumlah ini bisa disembunyikan sama sekali.</div>':'';
+  $('#list').innerHTML=r.res.length?r.res.map(function(x){return rowHTML(x.it)}).join(''):'<div class="empty">Tidak ada dokumen yang cocok. Pencarian ini dicatat sebagai celah pengetahuan bila dilakukan lewat Tanya AI.</div>';
+  var it=S.sel&&BYID[S.sel];
+  if(it&&!can(it)){S.sel=null;it=null}
+  $('#detail').innerHTML=it?detailHTML(it):'<div class="placeholder">Pilih dokumen untuk melihat isi, status verifikasi, pemilik, masa berlaku, dan tautan ke pengetahuan terkait.</div>';
+  $('#split').className='split '+(it?'has-detail':'no-detail');
+}
+
+/* ---------- dashboard ---------- */
+function barRow(label,val,max,cls,tag,attrs){
+  var w=max?Math.round(val/max*100):0;
+  var inner='<span class="bl">'+esc(label)+'</span><span class="bt"><i class="'+cls+'" style="width:'+w+'%">'+(w>=8?val:'')+'</i></span><span class="bv">'+val+'</span>';
+  return tag==='button'?'<button class="br" '+attrs+'>'+inner+'</button>':'<div class="br">'+inner+'</div>';
+}
+function dailySeries(){
+  var base=[8,46,52,58,49,55,14],out=[];
+  for(var i=13;i>=1;i--){var d=addDays(-i);out.push({d:d,v:Math.round(base[d.getDay()]*(0.85+((i*37)%30)/100))})}
+  out.push({d:NOW,v:Math.round(base[NOW.getDay()]*0.4)+S.log.length,now:true});
+  return out;
+}
+function rankHTML(rows){
+  if(!rows.length)return '<div class="empty">Belum ada data.</div>';
+  var mx=Math.max.apply(null,rows.map(function(r){return r.v}))||1;
+  return '<ol class="rank">'+rows.map(function(r,i){return '<li><span class="n">'+(i+1)+'</span><span>'+r.l+(r.sub?'<span class="sub">'+r.sub+'</span>':'')+'</span><span class="m" aria-hidden="true"><i style="width:'+Math.round(r.v/mx*100)+'%"></i></span><span class="v">'+r.v+' '+r.u+'</span></li>'}).join('')+'</ol>';
+}
+function topItems(key,unit){
+  return rankHTML(ITEMS.filter(function(it){return can(it)&&it[key]>0}).sort(function(a,b){return b[key]-a[key]}).slice(0,5).map(function(it){
+    return {l:'<button class="chip" data-act="open" data-id="'+it.id+'">'+esc(it.title)+'</button>',sub:'<span class="mono">'+it.id+'</span> &middot; '+TYPES[it.type],v:it[key],u:unit};
+  }));
+}
+function contribSection(){
+  var c={};S.subs.forEach(function(x){c[x.status]=(c[x.status]||0)+1});
+  var pipe=[['Diajukan, menunggu ahli','diajukan'],['Sedang diverifikasi','verifikasi'],['Perlu perbaikan','perbaikan'],['Siap disahkan','siap'],['Terbit lewat alur ini','terbit']].map(function(x){return '<div><dt>'+x[0]+'</dt><dd>'+(c[x[1]]||0)+'</dd></div>'}).join('');
+  var contr=rankHTML(S.users.filter(function(u){return u.contrib>0}).sort(function(a,b){return b.contrib-a.contrib}).slice(0,5).map(function(u){return {l:esc(u.name),sub:esc(u.unit)+(u.status==='aktif'?'':' &middot; '+(u.status==='resign'?'masa resign':'nonaktif')),v:u.contrib,u:'KM'}}));
+  return '<h2 class="secttl">Kontribusi dan penggunaan KM</h2><p class="hint" style="margin:0 0 10px">Alur verifikasi saat ini dan peringkat kontributor serta KM yang paling bermanfaat. Judul KM hanya yang dapat Anda akses.</p>'
+   +'<dl class="stats">'+pipe+'</dl>'
+   +'<div class="grid2"><div class="panel"><h2>Kontributor KM terbanyak</h2><p class="hint" style="margin:0 0 6px">Jumlah KM yang ditulis dan sudah disahkan.</p>'+contr+'</div>'
+   +'<div class="panel"><h2>KM paling sering dibaca</h2><p class="hint" style="margin:0 0 6px">Jumlah pembukaan dokumen.</p>'+topItems('views','dibaca')+'</div></div>'
+   +'<div class="grid2"><div class="panel"><h2>Paling sering dipakai untuk tender</h2><p class="hint" style="margin:0 0 6px">Dicatat saat metode dipakai menyusun proposal tender.</p>'+topItems('useT','tender')+'</div>'
+   +'<div class="panel"><h2>Paling sering dipakai untuk pelaksanaan</h2><p class="hint" style="margin:0 0 6px">Dicatat saat tim proyek menerapkan KM di lapangan.</p>'+topItems('useP','proyek')+'</div></div>';
+}
+function viewDash(){
+  var types=Object.keys(TYPES),grp={},tot=ITEMS.length;
+  types.forEach(function(t){grp[t]={ok:0,act:0,wip:0,n:0}});
+  ITEMS.forEach(function(it){
+    var g=grp[it.type],d=dispStatus(it);g.n++;
+    if(d==='verified')g.ok++;else if(d==='soon'||d==='expired')g.act++;else g.wip++;
+  });
+  var ver=ITEMS.filter(function(i){return dispStatus(i)==='verified'}).length;
+  var act=ITEMS.filter(function(i){var d=dispStatus(i);return d==='soon'||d==='expired'}).length;
+  var maxT=Math.max.apply(null,types.map(function(t){return grp[t].n}));
+  var catRows=types.map(function(t){
+    var g=grp[t];
+    var seg=function(c,cl){return c?'<i class="'+cl+'" style="width:'+Math.round(c/maxT*100)+'%" title="'+c+'">'+(c/maxT>=.12?c:'')+'</i>':''};
+    return '<button class="br" data-act="cat" data-type="'+t+'"><span class="bl">'+TYPES[t]+'</span><span class="bt">'+seg(g.ok,'s-ok')+seg(g.act,'s-warn')+seg(g.wip,'s-info')+'</span><span class="bv">'+g.n+'</span></button>';
+  }).join('');
+  var lvC=[0,0,0,0,0];ITEMS.forEach(function(it){lvC[it.level]++});
+  var maxL=Math.max.apply(null,lvC.slice(1));
+  var lvRows=[1,2,3,4].map(function(l){return barRow(LV[l],lvC[l],maxL,'s-acc','div')}).join('');
+  var h='<h2>Dashboard</h2><p class="lead">Ringkasan seluruh bank pengetahuan. Angka mencakup dokumen di luar hak akses Anda, tetapi judul dan isinya tidak ditampilkan.</p>'
+   +'<dl class="stats"><div><dt>Total KM</dt><dd>'+tot+'</dd></div><div><dt>Terverifikasi</dt><dd>'+ver+' <small>'+Math.round(ver/tot*100)+'%</small></dd></div><div><dt>Perlu verifikasi ulang</dt><dd>'+act+'</dd></div><div><dt>Celah pengetahuan</dt><dd>'+S.gaps.length+'</dd></div></dl>'
+   +'<div class="grid2"><div class="panel"><h2>Jumlah KM menurut kategori</h2><p class="hint" style="margin:0 0 8px">Klik kategori untuk membuka daftarnya.</p>'
+   +'<div class="legend"><span><i class="sw s-ok"></i>Terverifikasi</span><span><i class="sw s-warn"></i>Segera kedaluwarsa atau lewat</span><span><i class="sw s-info"></i>Draf dan tinjauan</span></div>'+catRows+'</div>'
+   +'<div class="panel"><h2>Menurut klasifikasi</h2><p class="hint" style="margin:0 0 8px">Jumlah dokumen per level kerahasiaan.</p>'+lvRows+'</div></div>';
+  h+=contribSection();
+
+  /* statistik pengguna */
+  if(R().stats){
+    var us=S.users,aktif=us.filter(function(u){return u.status==='aktif'}),mfaN=aktif.filter(function(u){return u.mfa}).length;
+    var wk=aktif.filter(function(u){return u.last<=7}).length;
+    var series=dailySeries(),maxS=Math.max.apply(null,series.map(function(x){return x.v}));
+    var bars=series.map(function(x){return '<div class="'+(x.now?'now':'')+'" title="'+fmtD(x.d)+': '+x.v+' aktivitas"><span class="dv">'+x.v+'</span><i style="height:'+Math.max(2,Math.round(x.v/maxS*88))+'px"></i></div>'}).join('');
+    var labs=series.map(function(x){return '<span>'+(x.now?'Kini':x.d.toLocaleDateString('id-ID',{weekday:'short'}))+'</span>'}).join('');
+    var uAct={};UNITS.forEach(function(un){uAct[un]=0});
+    us.forEach(function(u){uAct[u.unit]=(uAct[u.unit]||0)+u.opens+u.searches+u.dls+u.asks});
+    var maxU=Math.max.apply(null,UNITS.map(function(un){return uAct[un]}));
+    var unitRows=UNITS.filter(function(un){return uAct[un]>0}).sort(function(a,b){return uAct[b]-uAct[a]}).map(function(un){return barRow(un,uAct[un],maxU,'s-acc','div')}).join('');
+    var tot30=us.reduce(function(a,u){return a+u.opens+u.searches+u.dls+u.asks},0);
+    h+='<h2 class="secttl">Statistik pengguna</h2>'
+     +'<dl class="stats"><div><dt>Pengguna aktif</dt><dd>'+aktif.length+' <small>dari '+us.length+' akun</small></dd></div><div><dt>Masuk 7 hari terakhir</dt><dd>'+wk+'</dd></div><div><dt>MFA terpasang</dt><dd>'+Math.round(mfaN/aktif.length*100)+'% <small>pengguna aktif</small></dd></div><div><dt>Aktivitas 30 hari</dt><dd>'+tot30+'</dd></div></dl>'
+     +'<div class="grid2"><div class="panel"><h2>Aktivitas harian, 14 hari</h2><p class="hint" style="margin:0 0 10px">Buka dokumen, cari, unduh, dan tanya AI. Batang gelap adalah hari ini dan bertambah saat Anda memakai prototipe.</p><div class="daily">'+bars+'</div><div class="dlab">'+labs+'</div></div>'
+     +'<div class="panel"><h2>Aktivitas per unit</h2><p class="hint" style="margin:0 0 8px">Total aktivitas 30 hari.</p>'+unitRows+'</div></div>';
+  }else{
+    h+='<div class="banner info"><span>Statistik pengguna hanya ditampilkan untuk peran Manajemen dan Admin Sistem. Ganti pengguna di kanan atas untuk melihatnya.</span></div>';
+  }
+
+  /* kebutuhan konten */
+  var gaps=S.gaps.slice(0,6).map(function(g){return '<div class="gap"><span>'+esc(g.q)+'</span><span class="mono">'+g.n+'x <button class="chip" data-act="write-gap" data-q="'+esc(g.q)+'">Tulis KM</button></span></div>'}).join('');
+  var kakNote=S.kak?'<p class="hint" style="margin-top:10px">KAK terakhir: '+esc(S.kak.name||'teks yang ditempel')+', '+S.kak.res.covered+' dari '+S.kak.res.reqs.length+' kebutuhan tercakup. <button class="chip" data-act="nav" data-v="kak">Buka analisis</button></p>':'';
+  h+='<h2 class="secttl">Kebutuhan konten</h2><div class="panel"><h2>Celah pengetahuan</h2><p class="hint" style="margin:0 0 8px">Pertanyaan yang tidak terjawab dan kebutuhan dari KAK yang belum punya KM. Ini daftar topik yang perlu ditulis.</p>'+gaps+kakNote+'</div>';
+  $('#main').innerHTML=h;
+}
+
+/* ---------- analisis KAK ---------- */
+var SAMPLE_KAK='KERANGKA ACUAN KERJA (CONTOH FIKTIF)\nPaket: Pembangunan Jalan Layang Simpang Contoh, Segmen 2\n\nLokasi: kawasan perkotaan padat dengan lalu lintas tinggi. Lapisan tanah berupa lempung lunak dengan muka air tanah dangkal; musim hujan panjang.\nNilai HPS: Rp 485,5 miliar. Jangka waktu pelaksanaan: 540 hari kalender.\n\nLingkup pekerjaan:\n1. Pondasi bored pile diameter 1000 mm sebanyak 220 titik.\n2. Pile cap beton massa dengan pengendalian suhu hidrasi.\n3. Erection girder box beton pratekan memakai launching gantry.\n4. Dinding penahan tanah (retaining wall) pada oprit jalan layang.\n\nPersyaratan pelaksanaan:\n- Pemasangan girder dilakukan pada pekerjaan malam hari dengan rekayasa lalu lintas yang disetujui pemilik pekerjaan.\n- Penyedia wajib menerapkan SMKK sesuai peraturan yang berlaku, dengan prosedur pekerjaan di ketinggian dan izin kerja.\n- Pengendalian mutu beton readymix, termasuk uji slump dan benda uji, dilaporkan mingguan.\n- Pemantauan deformasi menggunakan inklinometer dan settlement plate selama galian pile cap.\n- Perubahan lingkup hanya sah melalui addendum tertulis.\n- Penyedia memiliki sertifikat ISO 9001 dan ISO 45001 serta SBU konstruksi yang masih berlaku.\nPeralatan minimal: rig bor putar, crane 80 ton, launching gantry, pompa beton.';
+var REQS=[
+ {k:'bored',label:'Pondasi bored pile',re:/bored\s*pile|tiang bor|pondasi dalam/g,q:'bored',pek:'pondasi'},
+ {k:'girder',label:'Erection girder dan launching gantry',re:/girder|launching|gantry|jalan layang|jembatan layang/g,q:'girder gantry',pek:'struktur-atas'},
+ {k:'massa',label:'Beton massa dan pile cap',re:/beton massa|pile\s*cap|mass concrete/g,q:'massa',pek:'beton-massa'},
+ {k:'galian',label:'Galian dalam dan basement',re:/galian dalam|secant|basement|diaphragm wall/g,q:'galian',pek:'galian'},
+ {k:'mutu',label:'Pengendalian mutu beton',re:/readymix|ready mix|mutu beton|slump|benda uji/g,q:'readymix'},
+ {k:'k3',label:'K3 dan SMKK',re:/smkk|\bk3\b|keselamatan konstruksi/g,q:'smkk k3'},
+ {k:'tinggi',label:'Pekerjaan di ketinggian',re:/ketinggian|harness|izin kerja/g,q:'ketinggian'},
+ {k:'dewater',label:'Dewatering',re:/dewatering|pemompaan air/g,q:'dewatering'},
+ {k:'lalin',label:'Rekayasa lalu lintas dan kerja malam',re:/rekayasa lalu lintas|kerja malam|pekerjaan malam/g,q:'lalu lintas'},
+ {k:'kontrak',label:'Addendum dan variasi pekerjaan',re:/addendum|variasi|klaim|perubahan lingkup/g,q:'addendum variasi'},
+ {k:'hukum',label:'Dasar hukum jasa konstruksi',re:/kegagalan bangunan|undang-undang jasa konstruksi|uu no\.? ?2 tahun 2017/g,q:'kegagalan'},
+ {k:'retain',label:'Dinding penahan tanah',re:/dinding penahan tanah|retaining wall/g,q:'retaining'},
+ {k:'monitor',label:'Pemantauan deformasi geoteknik',re:/inklinometer|deformasi|settlement|instrumentasi/g,q:'inklinometer deformasi'}
+];
+var KONDS=[['tanah-lunak',/tanah lunak|lempung lunak|lanau lunak|gambut/],['tanah-keras',/tanah keras|batuan|batu cadas/],['muka-air-tinggi',/muka air (tanah )?(tinggi|dangkal)|air tanah dangkal|rawa|pasang surut|tepi sungai|dekat sungai/],['perkotaan-padat',/perkotaan|kawasan kota|permukiman padat|lalu lintas tinggi|lalu lintas padat/],['curah-hujan-tinggi',/curah hujan tinggi|musim hujan|hujan lebat/],['cuaca-panas',/cuaca panas|suhu tinggi|panas terik/]];
+var ALAT=['launching gantry','rig bor','crane','pompa beton','excavator','batching plant','tower crane'];
+var ADM=[['ISO 9001',/iso\s*9001/],['ISO 14001',/iso\s*14001/],['ISO 45001',/iso\s*45001/],['SBU',/\bsbu\b/],['SMKK',/smkk/],['TKDN',/tkdn/]];
+
+function parseRp(num,unit){
+  var v=parseFloat(num.replace(/\./g,'').replace(',','.'));
+  if(isNaN(v))return null;
+  unit=(unit||'').toLowerCase();
+  if(unit==='triliun')v*=1000;else if(unit==='juta')v/=1000;else if(unit!=='miliar')v/=1e9;
+  return v;
+}
+function snippet(t,idx,len){
+  var a=Math.max(0,idx-45),b=Math.min(t.length,idx+len+60);
+  return (a>0?'... ':'')+t.slice(a,b).replace(/\s+/g,' ').trim()+(b<t.length?' ...':'');
+}
+function analyzeKAK(raw){
+  var low=raw.toLowerCase(),reqs=[],pekCount={};
+  REQS.forEach(function(r){
+    r.re.lastIndex=0;var m=r.re.exec(low);if(!m)return;
+    r.re.lastIndex=0;var cnt=(low.match(r.re)||[]).length;
+    if(r.pek)pekCount[r.pek]=(pekCount[r.pek]||0)+cnt;
+    var tr=terms(r.q);
+    var all=ITEMS.map(function(it){return {it:it,s:score(it,tr)}}).filter(function(x){return x.s>=2}).sort(function(a,b){return b.s-a.s});
+    var vis=all.filter(function(x){return can(x.it)});
+    var good=vis.filter(function(x){var d=dispStatus(x.it);return d==='verified'||d==='soon'});
+    var cov=good.length?'ok':vis.length?'warn':all.length?'lock':'gap';
+    reqs.push({k:r.k,label:r.label,snip:snippet(raw,m.index,m[0].length),items:vis.slice(0,3).map(function(x){return x.it.id}),hid:all.length-vis.length,cov:cov});
+  });
+  var pek=null,best=0;Object.keys(pekCount).forEach(function(k){if(pekCount[k]>best){best=pekCount[k];pek=k}});
+  var kond=KONDS.filter(function(k){return k[1].test(low)}).map(function(k){return k[0]});
+  var hps=null,hm=/(?:hps|pagu|nilai (?:pekerjaan|kontrak))[^0-9]{0,40}rp\.?\s*([\d\.,]+)\s*(miliar|juta|triliun)?/i.exec(raw);
+  if(hm)hps=parseRp(hm[1],hm[2]);
+  var dm=/(\d{2,4})\s*(?:\([^)]*\)\s*)?hari kalender/i.exec(raw);
+  var skala=hps==null?null:(hps<100?'kecil':hps<500?'menengah':'besar');
+  var res={reqs:reqs,pek:pek,kond:kond,hps:hps,hari:dm?parseInt(dm[1],10):null,skala:skala,
+    alat:ALAT.filter(function(a){return low.indexOf(a)>-1}),adm:ADM.filter(function(a){return a[1].test(low)}).map(function(a){return a[0]})};
+  var c={ok:0,warn:0,lock:0,gap:0};reqs.forEach(function(r){c[r.cov]++});
+  res.cnt=c;res.covered=c.ok;
+  return res;
+}
+var COVB={ok:['ok','✓','Tercakup'],warn:['warn','!','Perlu verifikasi'],lock:['info','◐','Ada, di luar akses'],gap:['bad','✕','Celah']};
+function viewKAK(){
+  $('#main').innerHTML='<h2>Analisis KAK</h2><p class="lead">Unggah atau tempel KAK tender. Sistem membaca jenis pekerjaan, kondisi lapangan, dan persyaratan, lalu mencocokkannya dengan bank pengetahuan untuk menunjukkan KM yang tersedia dan celah yang harus ditutup sebelum menyusun proposal.</p>'
+   +'<div class="panel" style="margin-bottom:18px"><div class="fileline"><label for="kakFile" class="hint" style="margin:0">Berkas KAK (.txt, .md, .pdf, .docx)</label><input id="kakFile" type="file" accept=".txt,.md,.pdf,.docx"><span id="kakStatus" class="hint" style="margin:0" role="status"></span></div>'
+   +'<div class="field"><label for="kakText">Atau tempel teks KAK</label><textarea id="kakText" rows="8" placeholder="Tempel bagian lingkup pekerjaan, persyaratan, dan kondisi lokasi...">'+esc(S.kakText)+'</textarea></div>'
+   +'<div class="actions" style="border:0;margin:10px 0 0;padding:0"><button class="btn primary" data-act="kak-run">Analisis KAK</button><button class="btn" data-act="kak-sample">Pakai contoh KAK</button><button class="btn ghost" data-act="kak-clear">Bersihkan</button></div>'
+   +'<p class="hint">Berkas dibaca di peramban Anda dan tidak dikirim ke server. Teks biasa paling andal; PDF dan DOCX dibaca lewat pustaka yang dimuat saat dibutuhkan dan bisa gagal pada berkas tertentu. Bila gagal, tempel teksnya.</p></div>'
+   +'<div id="kakRes"></div>';
+  renderKAKRes();
+}
+function renderKAKRes(){
+  var box=$('#kakRes');if(!box)return;
+  if(!S.kak){box.innerHTML='<div class="placeholder">Hasil analisis muncul di sini: kondisi yang terdeteksi, kebutuhan KM, dan celah pengetahuan.</div>';return}
+  var r=S.kak.res,n=r.reqs.length;
+  if(!n){box.innerHTML='<div class="banner warn">Tidak ada kebutuhan yang dikenali dari teks ini. Pastikan bagian lingkup pekerjaan dan persyaratan ikut ditempel.</div>';return}
+  var chips=function(a,f){return a.length?a.map(function(x){return '<span class="tag">'+esc(f?f(x):x)+'</span>'}).join(''):'<span class="hint" style="margin:0">Tidak terdeteksi</span>'};
+  var dl='<dl class="kakgrid">'
+   +'<div><dt>Nilai HPS</dt><dd>'+(r.hps!=null?'Rp '+r.hps.toLocaleString('id-ID',{maximumFractionDigits:1})+' miliar':'<span class="hint" style="margin:0">Tidak terdeteksi</span>')+'</dd></div>'
+   +'<div><dt>Jangka waktu</dt><dd>'+(r.hari?r.hari+' hari kalender':'<span class="hint" style="margin:0">Tidak terdeteksi</span>')+'</dd></div>'
+   +'<div><dt>Skala diperkirakan</dt><dd>'+(r.skala?SKALA[r.skala]:'<span class="hint" style="margin:0">Tidak terdeteksi</span>')+'</dd></div>'
+   +'<div><dt>Pekerjaan utama</dt><dd>'+(r.pek?esc(PEK[r.pek]):'<span class="hint" style="margin:0">Tidak terdeteksi</span>')+'</dd></div>'
+   +'<div><dt>Kondisi lapangan</dt><dd>'+chips(r.kond,function(k){return KOND[k]})+'</dd></div>'
+   +'<div><dt>Peralatan disebut</dt><dd>'+chips(r.alat)+'</dd></div>'
+   +'<div><dt>Persyaratan administrasi</dt><dd>'+chips(r.adm)+'</dd></div></dl>';
+  var cv=['ok','warn','lock','gap'].map(function(k){return r.cnt[k]?'<i class="c-'+k+'" style="width:'+(r.cnt[k]/n*100)+'%" title="'+COVB[k][2]+': '+r.cnt[k]+'"></i>':''}).join('');
+  var rows=r.reqs.map(function(q){
+    var b=COVB[q.cov];
+    var km=q.items.map(function(id){var it=BYID[id];return '<button class="chip" data-act="open" data-id="'+id+'" style="margin:0 4px 4px 0"><span class="mono">'+id+'</span> '+esc(it.title)+'</button>'}).join('');
+    if(q.hid)km+='<div class="hint" style="margin:0">'+q.hid+' KM lain di luar akses peran ini.</div>';
+    if(!km)km='<span class="hint" style="margin:0">Belum ada KM.</span>';
+    return '<tr><td><strong>'+esc(q.label)+'</strong></td><td class="quote">'+esc(q.snip)+'</td><td>'+km+'</td><td><span class="st st-'+b[0]+'"><b aria-hidden="true">'+b[1]+'</b>'+b[2]+'</span></td></tr>';
+  }).join('');
+  box.innerHTML='<div class="panel" style="margin-bottom:18px"><h2>Ringkasan yang terdeteksi</h2>'+(S.kak.name?'<p class="hint" style="margin:0">Sumber: '+esc(S.kak.name)+'</p>':'')+dl
+   +'<h2>Cakupan pengetahuan</h2><p style="margin:6px 0 0"><strong>'+r.cnt.ok+' dari '+n+'</strong> kebutuhan sudah tercakup KM yang terverifikasi.</p><div class="cov" aria-hidden="true">'+cv+'</div>'
+   +'<div class="legend"><span><i class="sw s-ok"></i>Tercakup '+r.cnt.ok+'</span><span><i class="sw s-warn"></i>Perlu verifikasi '+r.cnt.warn+'</span><span><i class="sw s-info"></i>Di luar akses '+r.cnt.lock+'</span><span><i class="sw" style="background:var(--bad)"></i>Celah '+r.cnt.gap+'</span></div></div>'
+   +'<h2 style="margin-bottom:8px">KM yang dibutuhkan</h2><div class="scroll"><table class="tbl"><thead><tr><th>Kebutuhan</th><th>Dasar di KAK</th><th>KM tersedia</th><th>Status</th></tr></thead><tbody>'+rows+'</tbody></table></div>'
+   +'<div class="actions"><button class="btn primary" data-act="kak-tender">Teruskan ke Susun tender</button><button class="btn" data-act="kak-gaps"'+(r.cnt.gap?'':' disabled')+'>Catat '+r.cnt.gap+' celah ke daftar topik</button></div>'
+   +'<p class="hint">Pencocokan memakai aturan kata kunci pada teks KAK. Versi produksi memakai model bahasa untuk membaca KAK utuh, tetapi hasilnya tetap perlu ditinjau tim tender.</p>';
+}
+function loadScript(u){return new Promise(function(res,rej){var s=document.createElement('script');s.src=u;s.onload=res;s.onerror=function(){rej(new Error('gagal memuat pustaka'))};document.head.appendChild(s)})}
+var PDFJS='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js',PDFJSW='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js',MAMMOTH='https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js';
+function withTimeout(p,ms){return Promise.race([p,new Promise(function(_,rej){setTimeout(function(){rej(new Error('waktu habis'))},ms)})])}
+function readKAKFile(f){
+  var n=f.name.toLowerCase();
+  if(/\.(txt|md)$/.test(n))return f.text();
+  if(/\.pdf$/.test(n))return f.arrayBuffer().then(function(buf){
+    return (window.pdfjsLib?Promise.resolve():loadScript(PDFJS)).then(function(){
+      window.pdfjsLib.GlobalWorkerOptions.workerSrc=PDFJSW;
+      return window.pdfjsLib.getDocument({data:buf}).promise;
+    }).then(function(doc){
+      var pages=[],chain=Promise.resolve();
+      var max=Math.min(doc.numPages,40);
+      for(var i=1;i<=max;i++){(function(i){chain=chain.then(function(){return doc.getPage(i)}).then(function(p){return p.getTextContent()}).then(function(c){pages.push(c.items.map(function(x){return x.str}).join(' '))})})(i)}
+      return chain.then(function(){return pages.join('\n')});
+    });
+  });
+  if(/\.docx$/.test(n))return f.arrayBuffer().then(function(buf){
+    return (window.mammoth?Promise.resolve():loadScript(MAMMOTH)).then(function(){return window.mammoth.extractRawText({arrayBuffer:buf})}).then(function(r){return r.value});
+  });
+  return Promise.reject(new Error('format tidak didukung'));
+}
+function runKAK(name){
+  var t=($('#kakText')||{}).value||S.kakText;
+  S.kakText=t;
+  if(t.trim().length<30){toast('Teks KAK terlalu pendek untuk dianalisis');return}
+  S.kak={name:name||S.kakName||'',res:analyzeKAK(t)};
+  log('KAK',(S.kak.name||'Teks KAK')+': '+S.kak.res.reqs.length+' kebutuhan, '+S.kak.res.cnt.gap+' celah');
+  renderKAKRes();
+}
+
+/* ---------- susun tender ---------- */
+function viewTender(){
+  var T=S.tender;
+  var po=Object.keys(PEK).map(function(k){return '<option value="'+k+'"'+(T.pek===k?' selected':'')+'>'+PEK[k]+'</option>'}).join('');
+  var so=Object.keys(SKALA).map(function(k){return '<option value="'+k+'"'+(T.skala===k?' selected':'')+'>'+SKALA[k]+'</option>'}).join('');
+  var ko=Object.keys(KOND).map(function(k){return '<button class="toggle" data-act="kond" data-k="'+k+'" aria-pressed="'+(T.kond.indexOf(k)>-1)+'">'+KOND[k]+'</button>'}).join('');
+  var ms=ITEMS.filter(function(it){return it.type==='metode'&&it.ctx&&can(it)}).map(function(it){
+    var s=0,why=[];
+    if(it.ctx.pek===T.pek){s+=4;why.push('jenis pekerjaan')}
+    var k=it.ctx.kond.filter(function(c){return T.kond.indexOf(c)>-1});
+    if(k.length){s+=2*k.length;why.push(k.map(function(c){return KOND[c].toLowerCase()}).join(', '))}
+    if(it.ctx.skala===T.skala){s+=1;why.push('skala')}
+    return {it:it,s:s,why:why};
+  }).filter(function(x){return x.s>0}).sort(function(a,b){return b.s-a.s});
+  var list=ms.length?ms.map(function(x){
+    return '<button class="opt'+(T.pick===x.it.id?' sel':'')+'" data-act="pick" data-id="'+x.it.id+'"><span class="score" title="Skor kecocokan">'+x.s+'</span><span><span class="meta mono">'+x.it.id+'</span><br><strong>'+esc(x.it.title)+'</strong><br><span class="why">Cocok: '+esc(x.why.join('; '))+'</span><br><span class="chips">'+badge(x.it)+'</span></span></button>';
+  }).join(''):'<div class="empty">Belum ada metode yang cocok untuk kondisi ini. Ubah pilihan di atas.</div>';
+  var draft='<div class="placeholder">Pilih satu metode untuk menyusun draf bagian Metode Pelaksanaan beserta peringatan dari lesson learned terkait.</div>';
+  if(T.pick&&BYID[T.pick]&&can(BYID[T.pick])){
+    var it=BYID[T.pick],txt=draftFor(it),warn=dispStatus(it)==='verified'?'':'<div class="banner warn" style="margin-top:10px">Metode ini belum terverifikasi penuh ('+STATUS[dispStatus(it)][0].toLowerCase()+'). Pakai sebagai bahan dan tandai untuk ditinjau.</div>';
+    draft='<div class="panel"><h2>Draf Metode Pelaksanaan</h2><p class="hint">Draf buatan sistem. Tinjau bersama pemilik metode sebelum masuk proposal.</p>'+warn+'<pre class="draft" id="draftText">'+esc(txt)+'</pre><div class="actions" style="border:0;margin:0;padding:0"><button class="btn primary" data-act="copy">Salin draf</button></div></div>';
+  }
+  var fromKak=S.kak&&S.tender.fromKak?'<div class="banner ok">Kondisi di bawah diisi dari analisis KAK'+(S.kak.name?' ('+esc(S.kak.name)+')':'')+'. Ubah bila perlu.</div>':'';
+  $('#main').innerHTML='<h2>Susun tender</h2><p class="lead">Masukkan kondisi proyek baru, atau teruskan dari Analisis KAK. Sistem mencari metode kerja yang paling cocok, lalu menyusun draf bagian metode pelaksanaan dengan peringatan dari pengalaman proyek sebelumnya.</p>'+fromKak
+   +'<div class="panel" style="margin-bottom:18px"><div class="fields"><div class="field"><label for="tPek">Jenis pekerjaan</label><select id="tPek">'+po+'</select></div><div class="field"><label for="tSk">Skala proyek</label><select id="tSk">'+so+'</select></div></div><div class="field"><label>Kondisi lapangan</label><div class="toggles">'+ko+'</div></div></div>'
+   +'<div class="cols"><div><h3 style="margin-top:0">Metode yang cocok</h3><div class="match">'+list+'</div></div><div>'+draft+'</div></div>';
+}
+function draftFor(it){
+  var L=[];
+  L.push('METODE PELAKSANAAN: '+it.title.toUpperCase());
+  L.push('Dasar: '+it.id+' Rev '+it.rev+(it.proyek?', penerapan pada '+it.proyek:'')+'.');
+  L.push('');
+  it.isi.forEach(function(s){
+    L.push(s.h.toUpperCase());
+    if(s.p)L.push(s.p);
+    if(s.list)s.list.forEach(function(x,i){L.push((s.ol?(i+1)+'. ':'- ')+x)});
+    L.push('');
+  });
+  var ll=relOf(it).filter(function(r){return r.type==='lesson'&&can(r)});
+  if(ll.length){L.push('PERHATIAN DARI PENGALAMAN PROYEK');ll.forEach(function(r){L.push('- '+r.title+': '+(r.rekom||r.ringkasan))});L.push('')}
+  L.push('Catatan penyusun: produktivitas dan biaya tidak dimasukkan otomatis. Konfirmasi angka dengan pemilik metode sebelum dicantumkan.');
+  return L.join('\n');
+}
+
+/* ---------- tanya AI ---------- */
+function viewAI(){
+  var sug=['Metode apa yang pernah dipakai untuk bored pile di tanah lunak?','Berapa produktivitas aktual bored pile?','Apa pelajaran dari pengecoran yang terlambat?','Bagaimana strategi harga tender jembatan bentang panjang?','Bagaimana dewatering dekat sungai?'];
+  $('#main').innerHTML='<h2>Tanya AI</h2><p class="lead">AI menjawab hanya dari dokumen yang boleh dilihat peran Anda dan selalu menyertakan sumber serta status verifikasinya. Coba pertanyaan yang sama dengan pengguna berbeda.</p>'
+   +'<form class="askbox" id="aiForm"><input id="aiq" type="text" placeholder="Tulis pertanyaan tentang metode, lesson learned, prosedur, peraturan..." aria-label="Pertanyaan"><button class="btn primary" type="submit">Tanya</button></form>'
+   +'<div class="sugg">'+sug.map(function(s){return '<button data-act="ask" data-q="'+esc(s)+'">'+esc(s)+'</button>'}).join('')+'</div><div id="thread"></div>';
+  updateThread();
+}
+function updateThread(){
+  var t=$('#thread');if(!t)return;
+  t.innerHTML=S.ai.length?S.ai.map(function(a){
+    var used=a.used.map(function(i){return BYID[i]});
+    var body;
+    if(used.length){
+      var unv=used.some(function(u){return dispStatus(u)!=='verified'});
+      body='<p>Berdasarkan '+used.length+' dokumen yang dapat Anda akses:</p><ul>'+used.map(function(u){return '<li><strong>'+esc(u.title)+'</strong>. '+esc(u.ringkasan)+' <button class="chip" data-act="open" data-id="'+u.id+'"><span class="mono">'+u.id+'</span></button> '+badge(u)+'</li>'}).join('')+'</ul>'
+        +(unv?'<div class="banner warn">Sebagian sumber belum terverifikasi penuh. Perlakukan jawaban ini sebagai draf dan konfirmasi ke pemilik dokumen.</div>':'');
+    }else{
+      body='<p>Tidak ditemukan dokumen yang relevan dan dapat Anda akses. AI tidak menebak. Topik ini dicatat sebagai celah pengetahuan untuk ditulis.</p>';
+    }
+    if(a.hid)body+='<div class="banner info">Ada '+a.hid+' dokumen relevan di luar hak akses peran '+esc(a.role)+'. Isinya tidak dikirim ke AI dan tidak ditampilkan. Anda dapat meminta akses lewat pemilik data.</div>';
+    return '<div class="ans"><div class="q">'+esc(a.q)+'</div><div class="pipe"><span>1. Cari: '+a.found+' dokumen</span><span class="arrow">→</span><span>2. Saring hak akses: '+a.allowed+' lolos</span><span class="arrow">→</span><span>3. Jawab dari '+used.length+' sumber</span></div>'+body+'</div>';
+  }).join(''):'<div class="empty">Belum ada pertanyaan. Pilih salah satu contoh di atas.</div>';
+}
+function ask(q){
+  q=q.trim();if(!q)return;
+  var tr=terms(q);
+  var all=ITEMS.map(function(it){return {it:it,s:score(it,tr)}}).filter(function(x){return x.s>=3}).sort(function(a,b){return b.s-a.s});
+  var ok=all.filter(function(x){return can(x.it)});
+  var used=ok.slice(0,3).map(function(x){return x.it.id});
+  S.ai.unshift({q:q,found:all.length,allowed:ok.length,hid:all.length-ok.length,used:used,role:R().name});
+  U().asks++;
+  log('TANYA AI','"'+q+'": ditemukan '+all.length+', lolos hak akses '+ok.length);
+  if(!used.length){
+    var g=S.gaps.filter(function(x){return x.q.toLowerCase()===q.toLowerCase()})[0];
+    if(g)g.n++;else S.gaps.unshift({q:q,n:1});
+  }
+  renderTabs();
+  var i=$('#aiq');if(i)i.value='';
+  updateThread();
+}
+
+/* ---------- model 3D dan peta ---------- */
+/* Penampil 3D memakai WebGL buatan sendiri (tanpa three.js); IFC dibaca web-ifc, peta memakai Leaflet. Keduanya dimuat dari CDN saat dibutuhkan. */
+var LEAFLET_JS='https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js',LEAFLET_CSS='https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css';
+var WIFC='https://cdn.jsdelivr.net/npm/web-ifc@0.0.57/';
+
+/* ---- pembangun geometri contoh (sumbu Y ke atas, satuan meter) ---- */
+function GB(){this.v=[];this.i=[]}
+GB.prototype.quad=function(a,b,c,d,n){
+  var o=this.v.length/6,v=this.v;
+  [a,b,c,d].forEach(function(p){v.push(p[0],p[1],p[2],n[0],n[1],n[2])});
+  this.i.push(o,o+1,o+2,o,o+2,o+3);
+};
+GB.prototype.box=function(cx,cy,cz,sx,sy,sz){
+  var x0=cx-sx/2,x1=cx+sx/2,y0=cy-sy/2,y1=cy+sy/2,z0=cz-sz/2,z1=cz+sz/2;
+  this.quad([x0,y0,z1],[x1,y0,z1],[x1,y1,z1],[x0,y1,z1],[0,0,1]);
+  this.quad([x1,y0,z0],[x0,y0,z0],[x0,y1,z0],[x1,y1,z0],[0,0,-1]);
+  this.quad([x1,y0,z1],[x1,y0,z0],[x1,y1,z0],[x1,y1,z1],[1,0,0]);
+  this.quad([x0,y0,z0],[x0,y0,z1],[x0,y1,z1],[x0,y1,z0],[-1,0,0]);
+  this.quad([x0,y1,z1],[x1,y1,z1],[x1,y1,z0],[x0,y1,z0],[0,1,0]);
+  this.quad([x0,y0,z0],[x1,y0,z0],[x1,y0,z1],[x0,y0,z1],[0,-1,0]);
+  return this;
+};
+GB.prototype.cyl=function(cx,cy,cz,r,h,seg){
+  seg=seg||16;var y0=cy-h/2,y1=cy+h/2,k;
+  for(k=0;k<seg;k++){
+    var a0=k/seg*Math.PI*2,a1=(k+1)/seg*Math.PI*2,c0=Math.cos(a0),s0=Math.sin(a0),c1=Math.cos(a1),s1=Math.sin(a1),o=this.v.length/6;
+    this.v.push(cx+r*c0,y0,cz+r*s0,c0,0,s0, cx+r*c1,y0,cz+r*s1,c1,0,s1, cx+r*c1,y1,cz+r*s1,c1,0,s1, cx+r*c0,y1,cz+r*s0,c0,0,s0);
+    this.i.push(o,o+1,o+2,o,o+2,o+3);
+    var t=this.v.length/6;
+    this.v.push(cx,y1,cz,0,1,0, cx+r*c0,y1,cz+r*s0,0,1,0, cx+r*c1,y1,cz+r*s1,0,1,0);
+    this.i.push(t,t+2,t+1);
+  }
+  return this;
+};
+GB.prototype.done=function(color,ground){
+  var m={v:new Float32Array(this.v),i:new Uint32Array(this.i),c:color,g:!!ground};
+  this.v=[];this.i=[];return m;
+};
+function sampleMeshes(kind){
+  var g=new GB(),out=[],k,j;
+  if(kind==='jembatan'||kind==='layang'){
+    var spans=kind==='jembatan'?3:6,L=kind==='jembatan'?30:35,W=kind==='jembatan'?10:14,H=kind==='jembatan'?8:9,tot=spans*L,x0=-tot/2;
+    out.push(g.box(0,-0.6,0,tot+70,0.2,kind==='jembatan'?60:50).done(kind==='jembatan'?[.42,.62,.78,.55]:[.62,.64,.62,1],true));
+    g.box(0,H+0.6,0,tot,1.2,W);out.push(g.done([.74,.74,.72,1]));
+    for(k=0;k<spans;k++)for(j=-1;j<=1;j+=2)g.box(x0+L*(k+.5),H-0.7,j*W*0.3,L-1,1.4,0.6);
+    out.push(g.done([.6,.6,.58,1]));
+    for(k=0;k<=spans;k++){
+      if(k===0||k===spans){g.box(x0+k*L+(k?1.5:-1.5),H/2,0,3,H,W);}
+      else{g.cyl(x0+k*L,H/2-0.6,-W*0.22,1.1,H+1.2);g.cyl(x0+k*L,H/2-0.6,W*0.22,1.1,H+1.2);g.box(x0+k*L,H-0.4,0,2.4,1.0,W*0.7)}
+    }
+    out.push(g.done([.5,.5,.5,1]));
+    g.box(0,H+1.5,W/2-0.15,tot,0.9,0.3);g.box(0,H+1.5,-W/2+0.15,tot,0.9,0.3);out.push(g.done([.86,.86,.84,1]));
+    if(kind==='layang'){for(k=0;k<spans;k++)g.box(x0+L*(k+.5),H+1.22,0,2.5,0.04,0.2);out.push(g.done([.95,.95,.95,1]))}
+  }else if(kind==='gedung'){
+    var fl=12,fh=3.6,wx=32,wz=20,i2,cx,cz;
+    out.push(g.box(0,-0.3,0,70,0.2,60).done([.58,.66,.52,1],true));
+    for(i2=0;i2<=fl;i2++)g.box(0,i2*fh,0,wx,0.35,wz);
+    out.push(g.done([.78,.78,.76,1]));
+    for(cx=0;cx<5;cx++)for(cz=0;cz<3;cz++)g.box(-wx/2+1+cx*(wx-2)/4,fl*fh/2,-wz/2+1+cz*(wz-2)/2,0.7,fl*fh,0.7);
+    out.push(g.done([.52,.52,.5,1]));
+    g.box(0,fl*fh/2+fh/2,0,6,(fl+1)*fh,8);out.push(g.done([.66,.7,.74,1]));
+    for(i2=1;i2<=fl;i2++){g.box(0,i2*fh-fh/2+0.2,wz/2,wx-1,fh*0.55,0.1);g.box(0,i2*fh-fh/2+0.2,-wz/2,wx-1,fh*0.55,0.1)}
+    out.push(g.done([.45,.65,.8,.45]));
+  }else{
+    out.push(g.box(0,-1.2,0,140,0.2,110).done([.4,.6,.75,.6],true));
+    g.box(0,3.8,0,60,1.0,20);out.push(g.done([.7,.7,.68,1]));
+    for(k=0;k<13;k++)for(j=0;j<4;j++)g.cyl(-27+k*4.5,1.2,-7.5+j*5,0.45,10.5,10);
+    out.push(g.done([.5,.5,.52,1]));
+    g.box(-18,7.5,0,6,7,10);g.box(-18,13,0,2,5,2);g.box(8,10,0,1.4,12,1.4);g.box(8,16.3,4,1.2,1.2,16);
+    out.push(g.done([.85,.45,.2,1]));
+    g.box(22,5.7,3,10,2.6,6);out.push(g.done([.55,.58,.62,1]));
+  }
+  return out;
+}
+function bboxOf(meshes){
+  var mn=[1e30,1e30,1e30],mx=[-1e30,-1e30,-1e30];
+  meshes.forEach(function(m){
+    if(m.g&&meshes.length>1)return;
+    for(var k=0;k<m.v.length;k+=6)for(var a=0;a<3;a++){var x=m.v[k+a];if(x<mn[a])mn[a]=x;if(x>mx[a])mx[a]=x}
+  });
+  if(mn[0]>mx[0]){mn=[0,0,0];mx=[1,1,1]}
+  return {mn:mn,mx:mx};
+}
+
+/* ---- penampil WebGL2 ---- */
+function m4mul(a,b){var o=new Float32Array(16);for(var c=0;c<4;c++)for(var r=0;r<4;r++){var s=0;for(var k=0;k<4;k++)s+=a[k*4+r]*b[c*4+k];o[c*4+r]=s}return o}
+function m4persp(fy,asp,n,f){var t=1/Math.tan(fy/2),o=new Float32Array(16);o[0]=t/asp;o[5]=t;o[10]=(f+n)/(n-f);o[11]=-1;o[14]=2*f*n/(n-f);return o}
+function m4look(e,c,u){
+  var zx=e[0]-c[0],zy=e[1]-c[1],zz=e[2]-c[2],zl=Math.hypot(zx,zy,zz);zx/=zl;zy/=zl;zz/=zl;
+  var xx=u[1]*zz-u[2]*zy,xy=u[2]*zx-u[0]*zz,xz=u[0]*zy-u[1]*zx,xl=Math.hypot(xx,xy,xz);xx/=xl;xy/=xl;xz/=xl;
+  var yx=zy*xz-zz*xy,yy=zz*xx-zx*xz,yz=zx*xy-zy*xx;
+  return new Float32Array([xx,yx,zx,0,xy,yy,zy,0,xz,yz,zz,0,-(xx*e[0]+xy*e[1]+xz*e[2]),-(yx*e[0]+yy*e[1]+yz*e[2]),-(zx*e[0]+zy*e[1]+zz*e[2]),1]);
+}
+function GLViewer(canvas){
+  var gl=null;
+  try{gl=canvas.getContext('webgl2',{antialias:true,alpha:true})}catch(e){}
+  if(!gl)return null;
+  function sh(t,src){var s=gl.createShader(t);gl.shaderSource(s,src);gl.compileShader(s);if(!gl.getShaderParameter(s,gl.COMPILE_STATUS))throw new Error(gl.getShaderInfoLog(s));return s}
+  var pr=gl.createProgram();
+  gl.attachShader(pr,sh(gl.VERTEX_SHADER,'#version 300 es\nin vec3 aPos;in vec3 aNor;uniform mat4 uMVP;out vec3 vN;void main(){vN=aNor;gl_Position=uMVP*vec4(aPos,1.0);}'));
+  gl.attachShader(pr,sh(gl.FRAGMENT_SHADER,'#version 300 es\nprecision mediump float;in vec3 vN;uniform vec4 uColor;out vec4 o;void main(){vec3 n=normalize(vN);if(!gl.FrontFacing)n=-n;float l=0.38+0.62*max(dot(n,normalize(vec3(0.4,0.8,0.5))),0.0)+0.15*max(dot(n,normalize(vec3(-0.5,0.2,-0.6))),0.0);o=vec4(uColor.rgb*l,uColor.a);}'.replace('gl.FrontFacing','gl_FrontFacing')));
+  gl.linkProgram(pr);
+  if(!gl.getProgramParameter(pr,gl.LINK_STATUS))throw new Error(gl.getProgramInfoLog(pr));
+  var uMVP=gl.getUniformLocation(pr,'uMVP'),uCol=gl.getUniformLocation(pr,'uColor'),aPos=gl.getAttribLocation(pr,'aPos'),aNor=gl.getAttribLocation(pr,'aNor');
+  var parts=[],cam={yaw:-0.8,pitch:0.45,dist:60,t:[0,0,0]},size=50,raf=0,dead=false;
+  function free(){parts.forEach(function(p){gl.deleteVertexArray(p.vao);gl.deleteBuffer(p.vb);gl.deleteBuffer(p.ib)});parts=[]}
+  function set(meshes,bb){
+    free();
+    meshes.forEach(function(m){
+      var vao=gl.createVertexArray();gl.bindVertexArray(vao);
+      var vb=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,vb);gl.bufferData(gl.ARRAY_BUFFER,m.v,gl.STATIC_DRAW);
+      gl.enableVertexAttribArray(aPos);gl.vertexAttribPointer(aPos,3,gl.FLOAT,false,24,0);
+      gl.enableVertexAttribArray(aNor);gl.vertexAttribPointer(aNor,3,gl.FLOAT,false,24,12);
+      var ib=gl.createBuffer();gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,ib);gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,m.i,gl.STATIC_DRAW);
+      parts.push({vao:vao,vb:vb,ib:ib,n:m.i.length,c:m.c||[.7,.7,.7,1]});
+    });
+    gl.bindVertexArray(null);
+    var b=bb||bboxOf(meshes);
+    cam.t=[(b.mn[0]+b.mx[0])/2,(b.mn[1]+b.mx[1])/2,(b.mn[2]+b.mx[2])/2];
+    size=Math.max(1,Math.hypot(b.mx[0]-b.mn[0],b.mx[1]-b.mn[1],b.mx[2]-b.mn[2]));
+    cam.dist=size*1.5;cam.yaw=-0.8;cam.pitch=0.45;
+    draw();
+  }
+  function resize(){
+    var d=Math.min(window.devicePixelRatio||1,2),w=Math.max(1,Math.round(canvas.clientWidth*d)),h=Math.max(1,Math.round(canvas.clientHeight*d));
+    if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h}
+  }
+  function paint(){
+    raf=0;if(dead)return;
+    resize();gl.viewport(0,0,canvas.width,canvas.height);
+    gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
+    gl.enable(gl.DEPTH_TEST);gl.disable(gl.CULL_FACE);gl.useProgram(pr);
+    var cp=Math.cos(cam.pitch),e=[cam.t[0]+cam.dist*cp*Math.sin(cam.yaw),cam.t[1]+cam.dist*Math.sin(cam.pitch),cam.t[2]+cam.dist*cp*Math.cos(cam.yaw)];
+    var P=m4persp(0.8,canvas.width/canvas.height,Math.max(0.05,cam.dist*0.02),cam.dist+size*4),V=m4look(e,cam.t,[0,1,0]);
+    gl.uniformMatrix4fv(uMVP,false,m4mul(P,V));
+    for(var pass=0;pass<2;pass++){
+      gl.depthMask(pass===0);if(pass===1){gl.enable(gl.BLEND);gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA)}else gl.disable(gl.BLEND);
+      parts.forEach(function(p){
+        if((p.c[3]<0.99)!==(pass===1))return;
+        gl.uniform4f(uCol,p.c[0],p.c[1],p.c[2],p.c[3]);gl.bindVertexArray(p.vao);gl.drawElements(gl.TRIANGLES,p.n,gl.UNSIGNED_INT,0);
+      });
+    }
+    gl.depthMask(true);gl.bindVertexArray(null);
+  }
+  function draw(){if(!raf&&!dead)raf=requestAnimationFrame(paint)}
+  var drag=null,pts={};
+  canvas.addEventListener('pointerdown',function(e){canvas.setPointerCapture&&canvas.setPointerCapture(e.pointerId);pts[e.pointerId]=[e.clientX,e.clientY];drag={x:e.clientX,y:e.clientY,pan:e.shiftKey||e.button===2,d:0}});
+  canvas.addEventListener('pointermove',function(e){
+    if(!pts[e.pointerId])return;
+    var ids=Object.keys(pts);
+    if(ids.length===2){
+      var o=ids.filter(function(k){return +k!==e.pointerId})[0],q=pts[o],old=Math.hypot(pts[e.pointerId][0]-q[0],pts[e.pointerId][1]-q[1]),nw=Math.hypot(e.clientX-q[0],e.clientY-q[1]);
+      if(old>0)cam.dist=Math.min(size*8,Math.max(size*0.05,cam.dist*old/Math.max(nw,1)));
+      pts[e.pointerId]=[e.clientX,e.clientY];draw();return;
+    }
+    pts[e.pointerId]=[e.clientX,e.clientY];
+    if(!drag)return;
+    var dx=e.clientX-drag.x,dy=e.clientY-drag.y;drag.x=e.clientX;drag.y=e.clientY;
+    if(drag.pan){
+      var k=cam.dist*0.0016,cy=Math.cos(cam.yaw),sy=Math.sin(cam.yaw);
+      cam.t[0]+=(-dx*cy)*k;cam.t[2]+=(dx*sy)*k;cam.t[1]+=dy*k;
+    }else{cam.yaw-=dx*0.006;cam.pitch=Math.max(-1.45,Math.min(1.5,cam.pitch+dy*0.006))}
+    draw();
+  });
+  function up(e){delete pts[e.pointerId];drag=null}
+  canvas.addEventListener('pointerup',up);canvas.addEventListener('pointercancel',up);
+  canvas.addEventListener('contextmenu',function(e){e.preventDefault()});
+  canvas.addEventListener('wheel',function(e){e.preventDefault();cam.dist=Math.min(size*8,Math.max(size*0.05,cam.dist*(e.deltaY>0?1.12:0.89)));draw()},{passive:false});
+  var ro=null;
+  if(window.ResizeObserver){ro=new ResizeObserver(function(){draw()});ro.observe(canvas)}
+  return {
+    set:set,draw:draw,
+    reset:function(){cam.yaw=-0.8;cam.pitch=0.45;cam.dist=size*1.5;draw()},
+    view:function(n){if(n==='atas'){cam.yaw=0;cam.pitch=1.5}else if(n==='depan'){cam.yaw=0;cam.pitch=0.05}else if(n==='samping'){cam.yaw=Math.PI/2;cam.pitch=0.05}draw()},
+    dispose:function(){dead=true;if(ro)ro.disconnect();free();var x=gl.getExtension('WEBGL_lose_context');if(x)x.loseContext()},
+    stats:function(){return {parts:parts.length,dist:cam.dist,yaw:cam.yaw,pitch:cam.pitch}}
+  };
+}
+
+/* ---- pembaca IFC (web-ifc) ---- */
+var IFCAPI=null;
+function ifcApi(){
+  if(IFCAPI)return IFCAPI;
+  IFCAPI=(window.WebIFC?Promise.resolve():loadScript(WIFC+'web-ifc-api-browser.js')).then(function(){
+    if(!window.WebIFC)throw new Error('pustaka web-ifc tidak tersedia');
+    var api=new window.WebIFC.IfcAPI();api.SetWasmPath(WIFC);
+    return Promise.resolve(api.Init()).then(function(){return api});
+  }).catch(function(e){IFCAPI=null;throw e});
+  return IFCAPI;
+}
+/* IFC memakai sumbu Z ke atas; penampil memakai Y ke atas: (x,y,z) -> (x,z,-y) */
+function ifcMesh(vd,ix,M,col){
+  var n=vd.length/6,v=new Float32Array(n*6),i=new Uint32Array(ix.length),k,x,y,z,nx,ny,nz;
+  for(k=0;k<n;k++){
+    x=vd[k*6];y=vd[k*6+1];z=vd[k*6+2];nx=vd[k*6+3];ny=vd[k*6+4];nz=vd[k*6+5];
+    var X=M[0]*x+M[4]*y+M[8]*z+M[12],Y=M[1]*x+M[5]*y+M[9]*z+M[13],Z=M[2]*x+M[6]*y+M[10]*z+M[14];
+    var NX=M[0]*nx+M[4]*ny+M[8]*nz,NY=M[1]*nx+M[5]*ny+M[9]*nz,NZ=M[2]*nx+M[6]*ny+M[10]*nz;
+    v[k*6]=X;v[k*6+1]=Z;v[k*6+2]=-Y;v[k*6+3]=NX;v[k*6+4]=NZ;v[k*6+5]=-NY;
+  }
+  for(k=0;k<ix.length;k++)i[k]=ix[k];
+  return {v:v,i:i,c:[col.x,col.y,col.z,col.w]};
+}
+function parseIFC(buf){
+  return ifcApi().then(function(api){
+    var id=api.OpenModel(new Uint8Array(buf)),meshes=[];
+    try{
+      api.StreamAllMeshes(id,function(m){
+        var gs=m.geometries;
+        for(var k=0;k<gs.size();k++){
+          var pg=gs.get(k),g=api.GetGeometry(id,pg.geometryExpressID);
+          var vd=api.GetVertexArray(g.GetVertexData(),g.GetVertexDataSize()),ix=api.GetIndexArray(g.GetIndexData(),g.GetIndexDataSize());
+          meshes.push(ifcMesh(vd,ix,pg.flatTransformation,pg.color));
+          if(g.delete)g.delete();
+        }
+      });
+    }finally{api.CloseModel(id)}
+    if(!meshes.length)throw new Error('tidak ada geometri yang terbaca');
+    return meshes;
+  });
+}
+
+/* ---- data model contoh (lokasi dan nama fiktif) ---- */
+var MODELS=[
+ {id:'M-01',name:'Jembatan Kali Contoh',kind:'jembatan',src:'contoh',proyek:'Jembatan Kali Contoh, 2024',lat:-6.2640,lng:106.9420,rot:35,sc:1,level:2,status:'terbit',km:['KM-MK-014','KM-DT-003','KM-LL-021'],by:'u7',desc:'Jembatan beton tiga bentang di atas sungai, model BIM contoh dengan pilar bored pile dan gelagar.'},
+ {id:'M-02',name:'Jalan Layang Simpang Contoh',kind:'layang',src:'contoh',proyek:'Jalan Layang Contoh, 2025',lat:-6.2350,lng:106.8600,rot:-20,sc:1,level:2,status:'terbit',km:['KM-MK-021','KM-PR-007','KM-LL-035'],by:'u15',desc:'Jalan layang enam bentang box girder, dipakai untuk simulasi erection dengan launching gantry.'},
+ {id:'M-03',name:'Gedung Contoh Tower B',kind:'gedung',src:'contoh',proyek:'Gedung Contoh Tower B, 2025',lat:-6.2146,lng:106.8190,rot:10,sc:1,level:2,status:'terbit',km:['KM-LL-021','KM-PR-002'],by:'u9',desc:'Gedung 12 lantai struktur beton dengan inti lift dan fasad kaca.'},
+ {id:'M-04',name:'Dermaga Pelabuhan Contoh',kind:'dermaga',src:'contoh',proyek:'Pelabuhan Contoh, 2023',lat:-6.1050,lng:106.8920,rot:0,sc:1,level:3,status:'terbit',km:['KM-MK-033','KM-IN-009'],by:'u7',desc:'Dermaga tiang pancang dengan crane dan gudang; berklasifikasi Sensitif karena memuat data desain terperinci.'}
+];
+var MAP=null,MPOLY={},MPIN={},GLV=null,PLACING=false,LEAF=null,MBUSY='';
+function modelById(id){return MODELS.filter(function(m){return m.id===id})[0]}
+function mMeshes(m){if(!m.meshes)m.meshes=sampleMeshes(m.kind);return m.meshes}
+function mBox(m){if(!m.bb)m.bb=bboxOf(mMeshes(m));return m.bb}
+function mDim(m){var b=mBox(m);return [b.mx[0]-b.mn[0],b.mx[2]-b.mn[2],b.mx[1]-b.mn[1]]}
+function canModel(m){return R().acc[m.level]!=='x'}
+function canEditModel(m){return m.status==='draf'&&(m.by===S.uid||R().verify)}
+/* denah model pada peta: x ke timur, -z ke utara; rotasi searah jarum jam dari utara */
+function footprint(m){
+  var b=mBox(m),cx=(b.mn[0]+b.mx[0])/2,cz=(b.mn[2]+b.mx[2])/2,hw=(b.mx[0]-b.mn[0])/2*m.sc,hd=(b.mx[2]-b.mn[2])/2*m.sc;
+  var th=m.rot*Math.PI/180,c=Math.cos(th),s=Math.sin(th),mlat=111320,mlng=111320*Math.cos(m.lat*Math.PI/180);
+  return [[-hw,-hd],[hw,-hd],[hw,hd],[-hw,hd]].map(function(p){
+    var E=p[0],N=-p[1],E2=E*c+N*s,N2=-E*s+N*c;
+    return [m.lat+N2/mlat,m.lng+E2/mlng];
+  });
+}
+function loadLeaflet(){
+  if(window.L&&window.L.map)return Promise.resolve();
+  if(LEAF)return LEAF;
+  var l=document.createElement('link');l.rel='stylesheet';l.href=LEAFLET_CSS;document.head.appendChild(l);
+  LEAF=loadScript(LEAFLET_JS).then(function(){if(!(window.L&&window.L.map))throw new Error('Leaflet tidak tersedia')}).catch(function(e){LEAF=null;throw e});
+  return LEAF;
+}
+function destroyModelView(){
+  if(MAP){try{MAP.remove()}catch(e){}MAP=null}
+  MPOLY={};MPIN={};PLACING=false;
+  if(GLV){GLV.dispose();GLV=null}
+}
+function modelStatusBadge(m){
+  var mm={terbit:['ok','✓','Terverifikasi'],draf:['mute','○','Draf, belum diverifikasi'],diajukan:['info','◐','Dalam verifikasi']}[m.status];
+  return '<span class="st st-'+mm[0]+'"><b aria-hidden="true">'+mm[1]+'</b>'+mm[2]+'</span>';
+}
+function modelPanelHTML(m){
+  var d=mDim(m),me=U(),ed=canEditModel(m);
+  var kms=ITEMS.filter(function(it){return m.km.indexOf(it.id)>-1||it.modelId===m.id}).map(function(it){
+    return can(it)?'<button class="chip" data-act="open" data-id="'+it.id+'"><span class="mono">'+it.id+'</span> '+esc(it.title)+'</button>':'<span class="chip lock"><span class="mono">'+it.id+'</span> terkunci</span>';
+  }).join('')||'<span class="hint">Belum ada KM terkait.</span>';
+  var tb=[['Proyek',esc(m.proyek||'-')],['Klasifikasi',meter(m.level)],['Status',modelStatusBadge(m)],['Sumber',m.src==='ifc'?'Berkas IFC: '+esc(m.file||''):'Model contoh (fiktif)'],['Dimensi (P x L x T)',d.map(function(x){return Math.round(x*10)/10}).join(' x ')+' m'],['Komponen',mMeshes(m).length+' bagian'],['Koordinat',m.lat.toFixed(5)+', '+m.lng.toFixed(5)],['Orientasi',Math.round(m.rot)+'° dari utara, skala '+m.sc+'x']];
+  var h='<h3 style="margin-top:0">'+esc(m.name)+'</h3><p class="hint" style="margin:0 0 8px">'+esc(m.desc||'')+'</p><dl class="tb">'+tb.map(function(r){return '<div><dt>'+r[0]+'</dt><dd>'+r[1]+'</dd></div>'}).join('')+'</dl>'
+   +'<h3>KM terkait</h3><div class="rel">'+kms+'</div>';
+  if(ed){
+    h+='<h3>Penempatan di peta</h3><p class="hint" style="margin:0 0 8px">Klik tombol, lalu klik titik di peta. Atau isi koordinat dan putar orientasinya. Denah hijau di peta mengikuti ukuran model.</p>'
+     +'<div class="fields"><div class="field"><label for="mLat">Lintang</label><input id="mLat" type="number" step="0.00001" value="'+m.lat.toFixed(5)+'"></div><div class="field"><label for="mLng">Bujur</label><input id="mLng" type="number" step="0.00001" value="'+m.lng.toFixed(5)+'"></div></div>'
+     +'<div class="field" style="margin-bottom:10px"><label for="mRot">Orientasi: <span id="mRotV">'+Math.round(m.rot)+'</span>° dari utara</label><input id="mRot" type="range" min="-180" max="180" value="'+Math.round(m.rot)+'" style="padding:0"></div>'
+     +'<div class="actions" style="border:0;margin:0;padding:0"><button class="btn" data-act="m-place" id="mPlaceBtn">Tempatkan dengan klik di peta</button></div>';
+  }
+  h+='<div class="actions">';
+  h+='<button class="btn" data-act="m-zoom" data-id="'+m.id+'">Zoom ke model di peta</button>';
+  if(m.status==='draf'&&(m.by===S.uid||R().verify))h+='<button class="btn primary" data-act="m-submit" data-id="'+m.id+'">Ajukan untuk verifikasi</button>';
+  if(m.sub&&subById(m.sub))h+='<button class="btn" data-act="sub-open" data-id="'+m.sub+'">Buka alur verifikasi '+m.sub+'</button>';
+  h+='</div>';
+  if(m.status==='draf')h+='<p class="hint">Aset 3D juga wajib lolos verifikasi minimal '+MINX+' ahli sebelum terbit dan terlihat oleh pengguna lain.</p>';
+  return h;
+}
+function viewModel(){
+  var list=MODELS.filter(function(m){return canModel(m)&&(m.status==='terbit'||m.by===S.uid||R().verify)});
+  var hidden=MODELS.filter(function(m){return !canModel(m)}).length;
+  if(!S.mSel||!modelById(S.mSel)||!list.some(function(m){return m.id===S.mSel}))S.mSel=list.length?list[0].id:null;
+  var al=allowedLv(),mu=S.mu;
+  if(al.indexOf(mu.level)<0)mu.level=al[al.length-1];
+  var lo=al.map(function(l){return '<option value="'+l+'"'+(mu.level===l?' selected':'')+'>Level '+l+': '+LV[l]+'</option>'}).join('');
+  var rows=list.map(function(m){
+    return '<button class="row'+(S.mSel===m.id?' sel':'')+'" data-act="m-sel" data-id="'+m.id+'"><span class="meta"><span class="mono">'+m.id+'</span><span>'+(m.src==='ifc'?'IFC unggahan':'Model contoh')+'</span></span><span class="rt">'+esc(m.name)+'</span><span class="chips">'+modelStatusBadge(m)+meter(m.level)+'</span></button>';
+  }).join('')||'<div class="empty">Belum ada model yang dapat Anda akses.</div>';
+  $('#main').innerHTML='<h2>Model 3D dan peta</h2><p class="lead">Lihat model BIM (IFC) dan lokasinya di peta, lalu telusuri KM yang terkait dengan proyek tersebut. Unggah berkas IFC Anda, tempatkan di peta, dan ajukan agar diverifikasi seperti KM lainnya.</p>'
+   +(hidden?'<div class="banner info">'+hidden+' model lain berada di luar hak akses peran '+esc(R().name)+' dan tidak ditampilkan.</div>':'')
+   +'<div class="mgrid"><div class="mleft"><div id="map" class="mapbox" role="application" aria-label="Peta lokasi model"><div class="mapmsg">Memuat peta...</div></div><div id="mPlaceNote" class="hint"></div><h3>Daftar model</h3><div class="list">'+rows+'</div>'
+   +'<div class="panel" style="margin-top:14px"><h2>Unggah model IFC</h2><p class="hint" style="margin:0 0 10px">Berkas dibaca di peramban Anda dan tidak dikirim ke luar. Satuan model diasumsikan meter.</p>'
+   +'<div class="fields"><div class="field"><label for="muName">Nama model</label><input id="muName" type="text" value="'+esc(mu.name)+'" placeholder="Terisi dari nama berkas"></div><div class="field"><label for="muProy">Proyek dan tahun</label><input id="muProy" type="text" value="'+esc(mu.proyek)+'"></div><div class="field"><label for="muLv">Klasifikasi</label><select id="muLv">'+lo+'</select></div></div>'
+   +'<label class="btn primary" style="cursor:pointer">Pilih berkas .ifc<input id="mIfc" type="file" accept=".ifc" style="display:none"></label><span id="mIfcSt" class="hint" style="margin-left:10px">'+esc(MBUSY)+'</span></div></div>'
+   +'<div class="mright"><div class="vwrap"><canvas id="gl" class="glc" tabindex="0" aria-label="Penampil model 3D"></canvas><div class="vbar"><button class="btn sm" data-act="v-reset">Isometri</button><button class="btn sm" data-act="v-atas">Atas</button><button class="btn sm" data-act="v-depan">Depan</button><button class="btn sm" data-act="v-samping">Samping</button></div><div class="vhint">Seret: putar &middot; Roda atau cubit: zoom &middot; Shift + seret: geser</div></div><div class="panel" id="mPanel" style="margin-top:14px"></div></div></div>';
+  try{GLV=GLViewer($('#gl'))}catch(e){GLV=null}
+  if(!GLV){var c=$('#gl');if(c&&c.parentNode)c.parentNode.innerHTML='<div class="mapmsg">Peramban ini tidak mendukung WebGL2, jadi model 3D tidak bisa ditampilkan. Coba Chrome, Edge, atau Safari terbaru.</div>'}
+  selectModel(S.mSel,true);
+  loadLeaflet().then(function(){initMap(list)}).catch(function(){var m=$('#map');if(m)m.innerHTML='<div class="mapmsg">Peta tidak dapat dimuat (perlu koneksi internet ke pustaka peta). Daftar model dan penampil 3D tetap dapat dipakai.</div>'});
+}
+function initMap(list){
+  var el=$('#map');if(!el||S.view!=='model')return;
+  el.innerHTML='';
+  var sel=modelById(S.mSel)||list[0];
+  MAP=L.map(el).setView(sel?[sel.lat,sel.lng]:[-6.2,106.85],sel?16:11);
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; OpenStreetMap'}).addTo(MAP);
+  list.forEach(addMapModel);
+  if(list.length>1&&!S.mFocus){var ll=list.map(function(m){return [m.lat,m.lng]});if(MAP.fitBounds)MAP.fitBounds(ll,{padding:[40,40],maxZoom:15})}
+  if(S.mFocus){var f=modelById(S.mFocus);S.mFocus=null;if(f)MAP.setView([f.lat,f.lng],17)}
+  MAP.on('click',function(e){
+    if(!PLACING)return;
+    var m=modelById(S.mSel);if(!m||!canEditModel(m))return;
+    m.lat=e.latlng.lat;m.lng=e.latlng.lng;PLACING=false;refreshPlacement(m);
+  });
+  setTimeout(function(){if(MAP&&MAP.invalidateSize)MAP.invalidateSize()},150);
+}
+function addMapModel(m){
+  if(!MAP)return;
+  var col=m.status==='terbit'?'#0D6770':'#B26A00';
+  MPOLY[m.id]=L.polygon(footprint(m),{color:col,weight:2,fillOpacity:0.28}).addTo(MAP).on('click',function(){selectModel(m.id)});
+  MPIN[m.id]=L.marker([m.lat,m.lng],{title:m.name,icon:L.divIcon({className:'mpin',html:'<span>'+m.id.replace('M-','')+'</span>',iconSize:[28,28],iconAnchor:[14,14]})}).addTo(MAP).on('click',function(){selectModel(m.id)});
+  styleMapModel(m);
+}
+function styleMapModel(m){
+  var p=MPOLY[m.id];if(!p)return;
+  var on=S.mSel===m.id;
+  p.setStyle({color:on?'#16A34A':(m.status==='terbit'?'#0D6770':'#B26A00'),weight:on?3:2,fillOpacity:on?0.4:0.22});
+}
+function refreshPlacement(m){
+  if(MPOLY[m.id])MPOLY[m.id].setLatLngs(footprint(m));
+  if(MPIN[m.id])MPIN[m.id].setLatLng([m.lat,m.lng]);
+  var n=$('#mPlaceNote');if(n)n.textContent='';
+  var b=$('#mPlaceBtn');if(b)b.textContent='Tempatkan dengan klik di peta';
+  var la=$('#mLat'),ln=$('#mLng');if(la)la.value=m.lat.toFixed(5);if(ln)ln.value=m.lng.toFixed(5);
+}
+function selectModel(id,first){
+  var m=modelById(id);if(!m)return;
+  S.mSel=id;PLACING=false;
+  var p=$('#mPanel');if(p)p.innerHTML=modelPanelHTML(m);
+  if(GLV){GLV.set(mMeshes(m),mBox(m))}
+  Object.keys(MPOLY).forEach(function(k){styleMapModel(modelById(k))});
+  if(!first){
+    document.querySelectorAll&&Array.prototype.forEach.call(document.querySelectorAll('.mleft .row'),function(r){r.classList.toggle('sel',r.getAttribute('data-id')===id)});
+    if(MAP&&MAP.setView)MAP.setView([m.lat,m.lng],Math.max(MAP.getZoom?MAP.getZoom():16,16));
+  }
+}
+function submitModel(m){
+  if(m.status!=='draf'||!(m.by===S.uid||R().verify))return;
+  var d=mDim(m).map(function(x){return Math.round(x*10)/10});
+  var s={id:nextSid(),itemId:null,modelId:m.id,type:'model3d',title:'Model 3D: '+m.name,level:m.level,proyek:m.proyek||'',author:m.by,t:new Date(),status:'diajukan',round:1,experts:[],votes:{},comments:[],hist:[],ctx:null,
+    ringkasan:'Model BIM berformat IFC untuk '+(m.proyek||m.name)+', ditempatkan pada koordinat '+m.lat.toFixed(5)+', '+m.lng.toFixed(5)+' dengan orientasi '+Math.round(m.rot)+' derajat dari utara.',
+    tags:['model 3d','bim','ifc'].concat(m.proyek?[m.proyek.split(',')[0].toLowerCase()]:[]),
+    isi:[{h:'Deskripsi model',p:(m.desc||'Model 3D proyek '+m.name+'.')+' Model memuat '+mMeshes(m).length+' bagian geometri dan dibaca dari berkas '+(m.file||'IFC')+'.'},
+         {h:'Lokasi dan orientasi',p:'Koordinat '+m.lat.toFixed(5)+', '+m.lng.toFixed(5)+'; orientasi '+Math.round(m.rot)+' derajat dari utara; skala '+m.sc+'x terhadap satuan meter pada berkas.'},
+         {h:'Data teknis',list:['Dimensi kotak pembatas '+d.join(' x ')+' m (panjang x lebar x tinggi)','Jumlah bagian geometri '+mMeshes(m).length,'Klasifikasi usulan Level '+m.level+': '+LV[m.level]]}]};
+  addH(s,'Diajukan dari tab Model 3D oleh '+U().name);
+  S.subs.unshift(s);m.status='diajukan';m.sub=s.id;S.sub=s.id;
+  log('KONTRIBUSI','Mengajukan model 3D '+m.id+' sebagai '+s.id);
+  toast('Model diajukan. Koordinator akan menugaskan ahli.');
+  S.view='verifikasi';render();
+}
+function uploadIFC(f){
+  var st=$('#mIfcSt');
+  MBUSY='Membaca '+f.name+'...';if(st)st.textContent=MBUSY;
+  f.arrayBuffer().then(function(buf){return withTimeout(parseIFC(buf),120000).then(function(meshes){return {meshes:meshes,size:buf.byteLength}})}).then(function(r){
+    var mu=S.mu,ctr=MAP&&MAP.getCenter?MAP.getCenter():{lat:-6.2,lng:106.85};
+    var n=0;MODELS.forEach(function(m){n=Math.max(n,parseInt(m.id.slice(2),10))});
+    var m={id:'M-'+p2(n+1),name:(mu.name||f.name.replace(/\.ifc$/i,'')).trim(),kind:null,src:'ifc',file:f.name,proyek:mu.proyek.trim(),lat:ctr.lat,lng:ctr.lng,rot:0,sc:1,level:mu.level,status:'draf',km:[],by:S.uid,desc:'Model IFC unggahan ('+(r.size/1048576).toFixed(1)+' MB).',meshes:r.meshes};
+    MODELS.push(m);S.mu={name:'',proyek:'',level:mu.level};MBUSY='';S.mSel=m.id;S.mFocus=m.id;
+    log('MODEL','Mengunggah model IFC '+f.name+' ('+r.meshes.length+' bagian), klasifikasi Level '+m.level);
+    toast('Model dimuat. Tempatkan di peta lalu ajukan verifikasi.');
+    if(S.view==='model')render();
+  }).catch(function(e){MBUSY='Gagal membaca '+f.name+' ('+e.message+').';var s2=$('#mIfcSt');if(s2)s2.textContent=MBUSY});
+}
+
+/* ---------- suara, wawancara AI, dan berkas pada Kontribusi ---------- */
+var REC=null,RECT='';
+function SRC(){return window.SpeechRecognition||window.webkitSpeechRecognition}
+function stopVoice(){
+  if(REC){var r=REC;REC=null;try{r.onend=null;r.stop()}catch(e){}}
+  var i=$('#voiceInt');if(i)i.textContent='';
+}
+function syncVoiceUI(){
+  if(!document.querySelectorAll)return;
+  Array.prototype.forEach.call(document.querySelectorAll('[data-act="v-mic"]'),function(b){
+    var on=REC&&RECT===b.getAttribute('data-t');
+    b.textContent=on?'Berhenti merekam':(b.getAttribute('data-t')==='ivAns'?'Jawab dengan suara':'Rekam suara');
+    b.classList.toggle('rec',!!on);
+  });
+}
+function startVoice(target){
+  var f=S.kf;if(!f)return;
+  var C=SRC();
+  if(!C){toast('Peramban ini belum mendukung input suara. Gunakan Chrome atau Edge, atau ketik.');return}
+  if(f.level>=3){toast('Input suara dimatikan untuk klasifikasi Level 3 dan 4. Ketik saja.');return}
+  var was=REC&&RECT===target;
+  stopVoice();
+  if(was){syncVoiceUI();return}
+  var r=new C();r.lang='id-ID';r.continuous=true;r.interimResults=true;
+  REC=r;RECT=target;
+  r.onresult=function(e){
+    var fin='',itm='',k;
+    for(k=e.resultIndex;k<e.results.length;k++){var t=e.results[k][0].transcript;if(e.results[k].isFinal)fin+=t+' ';else itm+=t}
+    if(fin.trim()){
+      var add=fin.trim();if(!/[.!?]$/.test(add))add+='.';
+      f[target]=(f[target]?f[target].replace(/\s+$/,'')+' ':'')+add;
+      var ta=$(target==='narr'?'#kfNarr':'#ivAns');if(ta)ta.value=f[target];
+    }
+    var iv=$('#voiceInt');if(iv)iv.textContent=itm?'... '+itm:'';
+  };
+  r.onerror=function(e){
+    var er=e&&e.error;
+    if(er==='not-allowed'||er==='service-not-allowed'){toast('Izin mikrofon ditolak. Aktifkan di pengaturan situs.');stopVoice();syncVoiceUI()}
+    else if(er==='network'){toast('Layanan pengenal suara tidak terjangkau. Ketik saja.');stopVoice();syncVoiceUI()}
+    else if(er==='audio-capture'){toast('Mikrofon tidak ditemukan.');stopVoice();syncVoiceUI()}
+  };
+  r.onend=function(){if(REC===r){try{r.start()}catch(e){stopVoice();syncVoiceUI()}}};
+  try{r.start();log('KONTRIBUSI','Dikte suara dimulai (pengenal suara peramban)');syncVoiceUI()}catch(e){REC=null;toast('Tidak bisa memulai perekaman')}
+}
+function speak(t){
+  try{if(S.kf&&S.kf.iv&&S.kf.iv.tts&&window.speechSynthesis&&window.SpeechSynthesisUtterance){window.speechSynthesis.cancel();var u=new window.SpeechSynthesisUtterance(t);u.lang='id-ID';window.speechSynthesis.speak(u)}}catch(e){}
+}
+function bucketOf(narr){
+  var txt=narr.replace(/\s+/g,' ').trim(),bk={latar:[],masalah:[],tindakan:[],hasil:[],pelajaran:[]};
+  txt.replace(/([.!?])\s+/g,'$1\u0001').split('\u0001').map(function(x){return x.trim()}).filter(function(x){return x.length>8}).forEach(function(s,i){bk[catOf(s,i)].push(s)});
+  return bk;
+}
+function nextQ(f){
+  if(f.narr.trim().length<40&&f.iv.skip.indexOf('latar')<0)return {cat:'latar',q:'Mari mulai. Di proyek apa, kapan, dan apa yang terjadi?'};
+  var bk=bucketOf(f.narr),secs=SEC[f.type]||SEC.lesson,k;
+  for(k=0;k<secs.length;k++){var c=secs[k][1];if(!bk[c].length&&f.iv.skip.indexOf(c)<0)return {cat:c,q:MISSQ[c]}}
+  return null;
+}
+function ivAsk(f){
+  f.iv.cur=nextQ(f);
+  if(f.iv.cur)speak(f.iv.cur.q);
+  else{f.iv.on=false;doDraft(f);toast('Wawancara selesai. Draf disusun dari seluruh jawaban.')}
+}
+function doDraft(f){
+  var d=aiDraft(f.narr,f.type);
+  f.title=d.title;f.ringkasan=d.ringkasan;f.tags=d.tags.join(', ');f.isi=isiToText(d.isi);f.proyek=d.proyek;f.level=d.level;f.ack=false;
+  if(d.ctx){f.pek=d.ctx.pek;f.skala=d.ctx.skala;f.kond=d.ctx.kond}
+  f.ai={notes:d.notes,missing:d.missing};
+  log('KONTRIBUSI','AI menyusun draf dari cerita ('+f.narr.length+' karakter); belum diajukan');
+}
+function readCerita(file){
+  var st=$('#kfFileSt');
+  if(st)st.textContent='Membaca '+file.name+'...';
+  withTimeout(readKAKFile(file),30000).then(function(txt){
+    txt=(txt||'').replace(/\s+/g,' ').trim();
+    if(txt.length<30)throw new Error('tidak ada teks yang terbaca; kemungkinan PDF hasil pindai (butuh OCR)');
+    var f=S.kf;if(!f)return;
+    f.narr=(f.narr?f.narr.replace(/\s+$/,'')+'\n\n':'')+txt.slice(0,20000);
+    f.files.push({name:file.name,chars:txt.length});
+    log('KONTRIBUSI','Teks diekstrak dari '+file.name+' ('+txt.length.toLocaleString('id-ID')+' karakter)');
+    toast(file.name+' terbaca. Teksnya masuk ke kolom cerita.');
+    if(S.view==='kontribusi')render();
+  }).catch(function(e){var s2=$('#kfFileSt');if(s2)s2.textContent='Gagal membaca '+file.name+' ('+e.message+'). Tempel teksnya manual.'});
+}
+
+/* ---------- kontribusi dan verifikasi ---------- */
+var SUBST={draf:['Draf penulis','mute','○'],diajukan:['Menunggu penugasan ahli','info','◐'],verifikasi:['Diverifikasi ahli','info','◐'],perbaikan:['Perlu perbaikan','warn','!'],siap:['Siap disahkan','ok','✓'],terbit:['Disahkan dan terbit','ok','✓'],ditolak:['Ditolak','bad','✕']};
+var STEPS=['Diajukan','Penugasan ahli','Verifikasi ahli','Perbaikan penulis','Pengesahan'];
+var SUBORD=['perbaikan','diajukan','siap','verifikasi','draf','terbit','ditolak'];
+var TASKL={assign:'Tugaskan ahli',ratify:'Siap disahkan',vote:'Menunggu penilaian Anda',revise:'Perlu Anda perbaiki'};
+var MINX=2;
+var PFX={metode:'MK',lesson:'LL',inovasi:'IN',prosedur:'PR',peraturan:'PT',pustaka:'BA',model3d:'MD'};
+
+function uOf(id){return S.users.filter(function(u){return u.id===id})[0]}
+function nm(id){var u=uOf(id);return u?u.name:'(akun dihapus)'}
+function subById(id){return S.subs.filter(function(s){return s.id===id})[0]}
+function sbadge(s){var m=SUBST[s.status];return '<span class="st st-'+m[1]+'"><b aria-hidden="true">'+m[2]+'</b>'+m[0]+'</span>'}
+function isiText(isi){return isi.map(function(s){return s.h+' '+(s.p||'')+' '+(s.list?s.list.join(' '):'')}).join(' ')}
+function cloneIsi(isi){return JSON.parse(JSON.stringify(isi))}
+function bodyHTML(isi){
+  return isi.map(function(s){
+    var x='<h3>'+esc(s.h)+'</h3>';
+    if(s.p)x+='<p>'+esc(s.p)+'</p>';
+    if(s.list)x+=(s.ol?'<ol>':'<ul>')+s.list.map(function(l){return '<li>'+esc(l)+'</li>'}).join('')+(s.ol?'</ol>':'</ul>');
+    return x;
+  }).join('');
+}
+/* teks bebas -> bagian terstruktur: "## Judul bagian", "- butir", "1. langkah", selebihnya paragraf */
+function parseIsi(txt){
+  var out=[],cur=null;
+  String(txt).split('\n').forEach(function(line){
+    var l=line.trim();if(!l)return;
+    var m=l.match(/^##\s*(.+)$/);
+    if(m){cur={h:m[1]};out.push(cur);return}
+    if(!cur){cur={h:'Isi'};out.push(cur)}
+    var b=l.match(/^[-*]\s+(.+)$/),o=l.match(/^\d+[.)]\s+(.+)$/);
+    if(b||o){cur.list=cur.list||[];cur.list.push((b||o)[1]);if(o&&!b&&cur.list.length===1)cur.ol=true}
+    else cur.p=cur.p?cur.p+' '+l:l;
+  });
+  return out;
+}
+function isiToText(isi){
+  return isi.map(function(s){
+    var x='## '+s.h;
+    if(s.p)x+='\n'+s.p;
+    if(s.list)x+='\n'+s.list.map(function(l,i){return (s.ol?(i+1)+'. ':'- ')+l}).join('\n');
+    return x;
+  }).join('\n\n');
+}
+function nextRev(r){return /^[A-Y]$/.test(r)?String.fromCharCode(r.charCodeAt(0)+1):'A'}
+function nextId(type){
+  var n=0;
+  ITEMS.forEach(function(it){var m=it.id.match(/^KM-([A-Z]{2})-(\d+)$/);if(m&&m[1]===PFX[type])n=Math.max(n,parseInt(m[2],10))});
+  return 'KM-'+PFX[type]+'-'+p2(n+1).padStart(3,'0');
+}
+function nextSid(){var n=100;S.subs.forEach(function(s){n=Math.max(n,parseInt(s.id.slice(2),10))});return 'S-'+(n+1)}
+function myVote(s,uid){var v=s.votes[uid];return v&&v.round===s.round?v:null}
+function canSub(s){
+  var me=U();
+  if(R().acc[s.level]==='x'&&s.author!==me.id)return false;
+  return s.author===me.id||s.experts.indexOf(me.id)>-1||R().verify||s.status==='terbit';
+}
+function taskList(){
+  var me=U(),out=[],co=R().verify;
+  S.subs.forEach(function(s){
+    if(R().acc[s.level]==='x')return;
+    if(co&&s.author!==me.id){
+      if(s.status==='diajukan')out.push({s:s,k:'assign'});
+      if(s.status==='siap')out.push({s:s,k:'ratify'});
+    }
+    if(s.status==='verifikasi'&&s.experts.indexOf(me.id)>-1&&!myVote(s,me.id))out.push({s:s,k:'vote'});
+    if(s.author===me.id&&s.status==='perbaikan')out.push({s:s,k:'revise'});
+  });
+  return out;
+}
+function allowedLv(){return [1,2,3,4].filter(function(l){return R().acc[l]!=='x'})}
+function addC(s,by,kind,txt){s.comments.push({by:by,t:new Date(),kind:kind,round:s.round,txt:txt})}
+function addH(s,txt){s.hist.push({t:new Date(),txt:txt})}
+function splitTags(x){return String(x).split(',').map(function(t){return t.trim().toLowerCase()}).filter(Boolean)}
+
+/* ---- pemeriksaan kelengkapan (aturan sederhana, saran bukan keputusan) ---- */
+function qualityChecks(o){
+  var txt=isiText(o.isi),steps=0;
+  o.isi.forEach(function(s){if(s.list)steps+=s.list.length});
+  var c=[];
+  c.push({ok:o.title.trim().length>=10,must:true,t:'Judul jelas dan spesifik (minimal 10 karakter)'});
+  c.push({ok:o.ringkasan.trim().length>=40,must:true,t:'Ringkasan menjelaskan inti pengetahuan (minimal 40 karakter)'});
+  c.push({ok:o.isi.length>=2&&txt.length>=200,must:true,t:'Isi punya minimal dua bagian dan cukup rinci'});
+  c.push({ok:!!String(o.proyek||'').trim(),t:'Sumber proyek dan tahun tercantum'});
+  c.push({ok:/\d/.test(txt),t:'Ada angka terukur (waktu, biaya, volume, produktivitas)'});
+  c.push({ok:o.tags.length>=2,t:'Minimal dua kata kunci agar mudah dicari'});
+  if(o.type==='metode')c.push({ok:steps>=3,t:'Tahapan kerja dirinci minimal tiga langkah'});
+  if(o.type==='lesson')c.push({ok:/sebaiknya|harus|jangan|lain kali|pastikan|rekomendasi|pelajaran|disarankan/i.test(txt),t:'Ada rekomendasi atau pelajaran yang bisa dipakai ulang'});
+  c.push({ok:!/rp\s?\d|@|\b08\d{8,}\b/i.test(txt),t:'Tidak memuat nominal rupiah atau kontak pribadi (bila ada, tinjau klasifikasi)'});
+  return c;
+}
+
+/* ---- AI penyusun draf dari cerita (aturan sederhana, tanpa model bahasa) ---- */
+var CATS=[
+ ['pelajaran',/\b(sebaiknya|seharusnya|harus|jangan|lain kali|pelajaran|rekomendasi|disarankan|perlu|wajib|pastikan|siapkan)\b/i],
+ ['hasil',/\bhasil|\bberhasil|\bsehingga\b|\bhemat|\bmenghemat|\bmeningkat|\bberkurang|\d+([.,]\d+)?\s?(%|persen|hari|jam|menit|juta|miliar|m2|m3|orang)/i],
+ ['masalah',/\b(masalah|kendala|gagal|terlambat|retak|rusak|bocor|hambatan|keluhan|temuan|insiden|penyebab\w*|kurang|banjir|longsor|macet|tidak (bisa|dapat|sesuai))\b/i],
+ ['tindakan',/\b(kami|tim|lalu|kemudian|akhirnya|pertama|setelah itu|solusi|diganti|dipasang|dipakai|memakai|menggunakan|dilakukan|menambah|mengubah|melakukan|memasang|mengganti|menyetel|dicor|dibongkar|ditutup)\b/i]
+];
+var LATAR=/\b(proyek|lokasi|tahun|pada saat|ketika)\b|\b20\d\d\b/i;
+var SEC={
+ lesson:[['Latar belakang','latar'],['Kejadian dan masalah','masalah'],['Tindakan yang diambil','tindakan'],['Hasil','hasil'],['Pelajaran dan rekomendasi','pelajaran']],
+ metode:[['Konteks penerapan','latar'],['Tahapan kerja','tindakan',true],['Kendala dan mutu','masalah'],['Hasil dan produktivitas','hasil'],['Catatan penting','pelajaran']],
+ inovasi:[['Latar belakang','latar'],['Masalah awal','masalah'],['Gagasan dan penerapan','tindakan'],['Hasil dan manfaat','hasil'],['Saran penerapan ulang','pelajaran']],
+ prosedur:[['Tujuan dan ruang lingkup','latar'],['Tahapan','tindakan',true],['Risiko dan pengendalian','masalah'],['Indikator','hasil'],['Catatan','pelajaran']],
+ peraturan:[['Ringkasan ketentuan','latar'],['Hal yang dipersyaratkan','tindakan'],['Dampak ke proyek','masalah'],['Catatan','pelajaran'],['Catatan sumber','hasil']],
+ pustaka:[['Poin utama','tindakan'],['Relevansi untuk proyek','latar'],['Temuan','hasil'],['Catatan','pelajaran'],['Kendala','masalah']]
+};
+var MISSQ={latar:'Di proyek apa, kapan, dan dalam kondisi lapangan seperti apa?',masalah:'Apa masalah atau kendalanya, dan apa penyebabnya?',tindakan:'Apa yang dilakukan, langkah demi langkah?',hasil:'Apa hasilnya? Sertakan angka (waktu, biaya, volume, produktivitas).',pelajaran:'Apa saran untuk proyek berikutnya?'};
+var VOC=['bored pile','pile cap','beton massa','pelat lantai','dinding basement','basement','bekisting','retak','curing','perawatan beton','pengecoran','pompa beton','sprinkler','epoksi','sealant','girder','launching gantry','galian','dewatering','tanah lunak','smkk','k3','sensor','suhu','tender','produktivitas','ready mix','hujan','crane','tulangan','perancah'];
+var PEKRE=[['beton-massa',/beton massa|pile cap|suhu hidrasi/],['struktur-atas',/girder|jembatan|gantry|struktur atas/],['pondasi',/bored|pondasi|\bpile\b|tiang/],['galian',/galian|dewatering|turap|basement/]];
+function catOf(s,i){
+  if(i===0&&LATAR.test(s))return 'latar';
+  for(var k=0;k<CATS.length;k++)if(CATS[k][1].test(s))return CATS[k][0];
+  return LATAR.test(s)||i===0?'latar':'tindakan';
+}
+function aiDraft(narr,type){
+  var txt=narr.replace(/\s+/g,' ').trim(),low=txt.toLowerCase();
+  var sents=txt.replace(/([.!?])\s+/g,'$1\u0001').split('\u0001').map(function(x){return x.trim()}).filter(function(x){return x.length>8});
+  var bk={latar:[],masalah:[],tindakan:[],hasil:[],pelajaran:[]};
+  sents.forEach(function(s,i){bk[catOf(s,i)].push(s.replace(/[.!?]+$/,''))});
+  var secs=SEC[type]||SEC.lesson,isi=[],missing=[];
+  secs.forEach(function(d){
+    var arr=bk[d[1]];
+    if(!arr.length){missing.push(MISSQ[d[1]]);return}
+    var sec={h:d[0]};
+    if(d[2]&&arr.length>1){sec.list=arr;sec.ol=true}else sec.p=arr.join('. ')+'.';
+    isi.push(sec);
+  });
+  var pm=txt.match(/proyek\s+((?:[A-Z][\w\-]*\s?){1,5})/),ym=txt.match(/\b(20\d\d)\b/);
+  var proyek=(pm?pm[1].trim():'')+(ym?(pm?', ':'')+ym[1]:'');
+  var found=[];
+  VOC.concat(ITEMS.reduce(function(a,it){return a.concat(it.tags)},[])).forEach(function(w){
+    var p=low.indexOf(w);if(p>-1&&!found.some(function(f){return f.w===w}))found.push({w:w,p:p});
+  });
+  found.sort(function(a,b){return a.p-b.p});
+  var tags=found.map(function(f){return f.w}).slice(0,6);
+  var pre={lesson:'Lesson learned: ',metode:'Metode: ',inovasi:'Inovasi: ',prosedur:'Prosedur: ',peraturan:'Ringkasan peraturan: ',pustaka:'Ringkasan literatur: '}[type]||'';
+  var main=tags.slice(0,2).join(' dan ');
+  var title=pre+(main?main.charAt(0).toUpperCase()+main.slice(1):sents[0].split(' ').slice(0,6).join(' '));
+  var rk=(bk.latar[0]||sents[0])+'. '+(bk.hasil[0]||bk.masalah[0]||sents[1]||'')+'.';
+  if(rk.length>260)rk=rk.slice(0,257).replace(/\s+\S*$/,'')+'...';
+  var lv=/harga|margin|\bhps\b|nilai kontrak|penawaran|laba|strategi tender/i.test(txt)?3:/klien|pemilik pekerjaan|subkontraktor|produktivitas|biaya|\brap\b|rp\s?\d/i.test(txt)?2:(type==='peraturan'||type==='pustaka'||type==='prosedur')?1:2;
+  var al=allowedLv(),mx=al[al.length-1],notes=[];
+  var reason=lv===3?'memuat informasi komersial (harga, margin, atau strategi penawaran)':lv===2?'menyebut biaya, produktivitas, atau pihak lain':'tidak terlihat memuat data komersial';
+  if(lv>mx){notes.push('AI menyarankan Level '+lv+' ('+LV[lv]+') karena isinya '+reason+', tetapi peran Anda hanya dapat membuat sampai Level '+mx+'. Koordinator akan meninjau dan dapat menaikkan klasifikasi saat pengesahan.');lv=mx}
+  else notes.push('Saran klasifikasi Level '+lv+' ('+LV[lv]+') karena isinya '+reason+'. Anda dapat mengubahnya.');
+  if(al.indexOf(lv)<0)lv=mx;
+  var ctx=null;
+  if(type==='metode'){
+    var pk='pondasi';PEKRE.some(function(r){if(r[1].test(low)){pk=r[0];return true}});
+    ctx={pek:pk,kond:KONDS.filter(function(k){return k[1].test(low)}).map(function(k){return k[0]}),skala:'menengah'};
+  }
+  notes.unshift('Cerita dipecah menjadi '+sents.length+' kalimat lalu dipetakan ke bagian standar untuk jenis '+TYPES[type].toLowerCase()+'. Pemetaan memakai kata kunci, jadi bisa keliru; periksa setiap bagian.');
+  return {title:title,ringkasan:rk,tags:tags,isi:isi,proyek:proyek,level:lv,ctx:ctx,missing:missing,notes:notes};
+}
+var SAMPLE_LL='Pada proyek Gedung Contoh Tower B tahun 2025 kami mengecor pelat lantai 12 pada siang hari dengan suhu sekitar 34 derajat. Setelah dua hari muncul retak rambut pada permukaan pelat. Penyebabnya penguapan air terlalu cepat karena perawatan beton terlambat dipasang. Kami lalu menutup pelat dengan karung basah dan memasang sprinkler kabut, kemudian menginjeksi retakan dengan epoksi. Hasilnya retak tidak melebar dan perbaikan selesai dalam 3 hari dengan biaya sekitar Rp 18 juta. Sebaiknya pengecoran dijadwalkan sebelum pukul 10 pagi atau sesudah sore, dan perawatan harus dimulai maksimal 30 menit setelah finishing. Lain kali siapkan curing compound di lokasi sebelum cor.';
+var SAMPLE_MK='Pada proyek Pelabuhan Contoh tahun 2024 kami memasang bekisting modular untuk dinding basement setinggi 5 meter. Pertama kami menyetel perancah dan memasang panel bekisting bagian luar. Kemudian tulangan dipasang dan bekisting bagian dalam ditutup dengan tie rod. Setelah itu beton dicor bertahap per 1,5 meter menggunakan pompa beton. Bekisting dibongkar setelah 24 jam dan dibersihkan untuk dipakai ulang. Kendala yang muncul adalah kebocoran pada sambungan panel yang diatasi dengan sealant. Hasilnya produktivitas 45 meter persegi per hari dengan satu regu 8 orang. Pastikan toleransi sambungan panel dicek sebelum cor.';
+
+/* ---- pemilihan ahli (saran AI) ---- */
+function expertCands(s){
+  var txt=(s.title+' '+s.tags.join(' ')+' '+s.ringkasan+' '+isiText(s.isi)).toLowerCase();
+  return S.users.filter(function(u){
+    return u.ahli&&u.ahli.length&&u.status==='aktif'&&u.id!==s.author&&ROLES[u.role].acc[s.level]!=='x';
+  }).map(function(u){
+    var m=u.ahli.filter(function(k){return txt.indexOf(k)>-1});
+    var load=S.subs.filter(function(x){return x.status==='verifikasi'&&x.experts.indexOf(u.id)>-1}).length;
+    return {u:u,m:m,s:m.length*3-load};
+  }).sort(function(a,b){return b.s-a.s});
+}
+function getAssign(s){
+  if(!S.assign[s.id])S.assign[s.id]=expertCands(s).slice(0,MINX).map(function(x){return x.u.id});
+  return S.assign[s.id];
+}
+
+/* ---- form kontribusi ---- */
+function newForm(){return {sid:null,type:'lesson',title:'',level:2,proyek:'',narr:'',ringkasan:'',tags:'',isi:'',pek:'pondasi',skala:'menengah',kond:[],ai:null,ack:false,note:'',gapQ:'',files:[],iv:null,ivAns:''}}
+function formObj(f){return {type:f.type,title:f.title,ringkasan:f.ringkasan,tags:splitTags(f.tags),isi:parseIsi(f.isi),proyek:f.proyek}}
+function formFromSub(s){
+  return {sid:s.id,type:s.type,title:s.title,level:s.level,proyek:s.proyek||'',narr:'',ringkasan:s.ringkasan,tags:s.tags.join(', '),isi:isiToText(s.isi),pek:s.ctx?s.ctx.pek:'pondasi',skala:s.ctx?s.ctx.skala:'menengah',kond:s.ctx?s.ctx.kond.slice():[],ai:null,ack:false,note:'',gapQ:'',files:(s.lampiran||[]).slice(),iv:null,ivAns:''};
+}
+function cmThread(s){
+  if(!s.comments.length)return '<p class="hint">Belum ada komentar.</p>';
+  var KL={setuju:'Setuju',perbaikan:'Minta perbaikan',penulis:'Tanggapan penulis',koordinator:'Koordinator'};
+  return s.comments.map(function(c){
+    var u=uOf(c.by);
+    return '<div class="cm '+c.kind+'"><div class="by"><strong>'+esc(nm(c.by))+'</strong>'+(u?' &middot; '+esc(ROLES[u.role].name):'')+' &middot; putaran '+c.round+' &middot; '+(KL[c.kind]||'Komentar')+' &middot; '+fmtD(c.t)+'</div>'+esc(c.txt)+'</div>';
+  }).join('');
+}
+function ivHTML(f){
+  if(!f.iv||!f.iv.on||!f.iv.cur)return '';
+  return '<div class="ivbox"><strong>Wawancara AI</strong><p class="q">'+esc(f.iv.cur.q)+'</p><textarea id="ivAns" rows="3" placeholder="Jawab dengan mengetik atau tekan Jawab dengan suara" aria-label="Jawaban Anda">'+esc(f.ivAns)+'</textarea>'
+   +'<div class="actions" style="border:0;margin:8px 0 0;padding:0"><button class="btn'+(REC&&RECT==='ivAns'?' rec':'')+'" data-act="v-mic" data-t="ivAns">'+(REC&&RECT==='ivAns'?'Berhenti merekam':'Jawab dengan suara')+'</button><button class="btn primary" data-act="iv-send">Kirim jawaban</button><button class="btn" data-act="iv-skip">Lewati</button><button class="btn ghost" data-act="iv-stop">Selesai</button></div>'
+   +'<label class="switch" style="margin:8px 0 0"><input type="checkbox" id="ivTts"'+(f.iv.tts?' checked':'')+'><span>Bacakan pertanyaan dengan suara</span></label></div>';
+}
+function viewKontribusi(){
+  var f=S.kf||(S.kf=newForm()),al=allowedLv(),me=U();
+  if(al.indexOf(f.level)<0)f.level=al[al.length-1];
+  var to=Object.keys(TYPES).filter(function(k){return k!=='model3d'}).map(function(k){return '<option value="'+k+'"'+(f.type===k?' selected':'')+'>'+TYPES[k]+'</option>'}).join('');
+  var lo=al.map(function(l){return '<option value="'+l+'"'+(f.level===l?' selected':'')+'>Level '+l+': '+LV[l]+'</option>'}).join('');
+  var s0=f.sid?subById(f.sid):null;
+  var ai='';
+  if(f.ai){
+    ai='<div class="banner info" style="display:block"><strong>Draf disusun AI dari cerita Anda. Periksa dan sunting sebelum diajukan.</strong><ul style="margin:6px 0 0;padding-left:18px">'+f.ai.notes.map(function(n){return '<li>'+esc(n)+'</li>'}).join('')+'</ul>'
+      +(f.ai.missing.length?'<p style="margin:8px 0 2px"><strong>Yang belum diceritakan:</strong></p><ul style="margin:0;padding-left:18px">'+f.ai.missing.map(function(n){return '<li>'+esc(n)+'</li>'}).join('')+'</ul>':'')+'</div>';
+  }
+  var extra='';
+  if(f.type==='metode'){
+    var po=Object.keys(PEK).map(function(k){return '<option value="'+k+'"'+(f.pek===k?' selected':'')+'>'+PEK[k]+'</option>'}).join('');
+    var so=Object.keys(SKALA).map(function(k){return '<option value="'+k+'"'+(f.skala===k?' selected':'')+'>'+SKALA[k]+'</option>'}).join('');
+    var ko=Object.keys(KOND).map(function(k){return '<button type="button" class="toggle" data-act="k-kond" data-k="'+k+'" aria-pressed="'+(f.kond.indexOf(k)>-1)+'">'+KOND[k]+'</button>'}).join('');
+    extra='<div class="fields"><div class="field"><label for="kfPek">Jenis pekerjaan (untuk pencocokan tender)</label><select id="kfPek">'+po+'</select></div><div class="field"><label for="kfSkala">Skala proyek asal</label><select id="kfSkala">'+so+'</select></div></div><div class="field" style="margin-bottom:12px"><label>Kondisi lapangan</label><div class="toggles">'+ko+'</div></div>';
+  }
+  var ch=qualityChecks(formObj(f));
+  var chH='<ul class="checks">'+ch.map(function(c){return '<li class="'+(c.ok?'yes':'no')+'"><b aria-hidden="true">'+(c.ok?'✓':(c.must?'✕':'!'))+'</b><span>'+esc(c.t)+(c.must&&!c.ok?' <em>(wajib)</em>':'')+'</span></li>'}).join('')+'</ul>';
+  var rev='';
+  if(s0&&s0.status==='perbaikan')rev='<div class="banner warn" style="display:block"><strong>Anda merevisi '+s0.id+' (putaran '+s0.round+').</strong> Tanggapi komentar ahli di bawah, perbaiki isinya, lalu ajukan ulang.'+cmThread(s0)+'</div>';
+  var gap=f.gapQ?'<div class="banner ok">Topik yang dibutuhkan: '+esc(f.gapQ)+'</div>':'';
+  var mine=S.subs.filter(function(s){return s.author===me.id}).map(function(s){return subRow(s)}).join('')||'<div class="empty">Anda belum mengajukan kontribusi.</div>';
+  var gaps=S.gaps.map(function(g){return '<div class="gap"><span>'+esc(g.q)+'</span><span class="mono">'+g.n+'x <button class="chip" data-act="write-gap" data-q="'+esc(g.q)+'">Tulis KM</button></span></div>'}).join('');
+  $('#main').innerHTML='<h2>Kontribusi pengetahuan</h2><p class="lead">Ceritakan pengalaman Anda dengan kata-kata sendiri. AI membantu menyusunnya menjadi artikel terstruktur, Anda memeriksa dan menyuntingnya, lalu diajukan. Setiap KM wajib diverifikasi minimal '+MINX+' ahli sebelum terbit.</p>'
+   +gap+rev
+   +'<div class="cols"><div class="panel"><h2>1. Ceritakan</h2><p class="hint" style="margin:0 0 10px">Tulis seperti bercerita ke rekan: di mana, apa yang terjadi, apa yang dilakukan, hasilnya, dan saran Anda. Draf dibuat di dalam sistem; cerita tidak dikirim ke luar.</p>'
+   +'<div class="fields"><div class="field"><label for="kfType">Jenis pengetahuan</label><select id="kfType">'+to+'</select></div></div>'
+   +'<div class="field"><label for="kfNarr">Cerita atau catatan Anda</label><textarea id="kfNarr" rows="10" placeholder="Contoh: Pada proyek ... tahun ... kami ...">'+esc(f.narr)+'</textarea></div>'
+   +'<div class="actions" style="border:0;margin:10px 0 0;padding:0"><button class="btn primary" data-act="k-ai">Susun draf dengan AI</button><button class="btn" data-act="k-sample">Isi contoh cerita</button></div>'
+   +'<h3>Input lain</h3><div class="actions" style="border:0;margin:0;padding:0"><button class="btn'+(REC&&RECT==='narr'?' rec':'')+'" data-act="v-mic" data-t="narr">'+(REC&&RECT==='narr'?'Berhenti merekam':'Rekam suara')+'</button><button class="btn" data-act="iv-start">Wawancara AI</button><label class="btn" style="cursor:pointer">Unggah PDF, DOCX, atau TXT<input id="kfFile" type="file" accept=".pdf,.docx,.txt,.md" style="display:none"></label></div>'
+   +'<p class="hint"><span id="voiceInt"></span><span id="kfFileSt"></span></p>'
+   +(f.files.length?'<div class="files">'+f.files.map(function(x,i){return '<span class="chip">'+esc(x.name)+' <span class="mono">'+x.chars.toLocaleString('id-ID')+' karakter</span> <button class="btn sm ghost" data-act="k-rmfile" data-i="'+i+'" aria-label="Hapus lampiran" style="padding:0 6px">x</button></span>'}).join('')+'</div>':'')
+   +ivHTML(f)
+   +'<p class="hint">Dikte memakai pengenal suara bawaan peramban; di Chrome dan Edge audio umumnya diproses server penyedia peramban. Karena itu dimatikan untuk Level 3 dan 4. Teks PDF diekstrak di peramban Anda; PDF hasil pindai butuh OCR (versi produksi). Berkas PDF asli tidak disimpan di prototipe, hanya teks dan nama lampirannya.</p></div>'
+   +'<div class="panel"><h2>2. Periksa dan sunting</h2>'+ai
+   +'<div class="field" style="margin-bottom:12px"><label for="kfTitle">Judul</label><input id="kfTitle" type="text" value="'+esc(f.title)+'"></div>'
+   +'<div class="fields"><div class="field"><label for="kfLevel">Klasifikasi</label><select id="kfLevel">'+lo+'</select></div><div class="field"><label for="kfProyek">Sumber proyek dan tahun</label><input id="kfProyek" type="text" value="'+esc(f.proyek)+'" placeholder="Nama proyek, tahun"></div></div>'
+   +extra
+   +'<div class="field" style="margin-bottom:12px"><label for="kfRingk">Ringkasan</label><textarea id="kfRingk" rows="3">'+esc(f.ringkasan)+'</textarea></div>'
+   +'<div class="field" style="margin-bottom:12px"><label for="kfTags">Kata kunci (pisahkan dengan koma)</label><input id="kfTags" type="text" value="'+esc(f.tags)+'"></div>'
+   +'<div class="field" style="margin-bottom:6px"><label for="kfIsi">Isi. Awali bagian dengan ## Judul bagian; butir dengan - ; langkah dengan 1.</label><textarea id="kfIsi" rows="12" class="monoarea">'+esc(f.isi)+'</textarea></div>'
+   +'<h3>Pemeriksaan kelengkapan</h3>'+chH
+   +(s0&&s0.status==='perbaikan'?'<div class="field" style="margin:10px 0"><label for="kfNote">Catatan untuk ahli: apa yang Anda ubah?</label><textarea id="kfNote" rows="2">'+esc(f.note)+'</textarea></div>':'')
+   +'<label class="switch"><input type="checkbox" id="kfAck"'+(f.ack?' checked':'')+'><span>Saya sudah memeriksa seluruh isi, termasuk bagian yang disusun AI, dan isinya benar sesuai pengalaman saya.</span></label>'
+   +'<div class="actions" style="margin-top:8px"><button class="btn primary" data-act="k-submit">'+(s0&&s0.status==='perbaikan'?'Ajukan ulang ke ahli':'Ajukan untuk verifikasi')+'</button><button class="btn" data-act="k-save">Simpan draf</button><button class="btn ghost" data-act="k-clear">Kosongkan</button></div></div></div>'
+   +'<h3 class="secttl">Kontribusi saya</h3><div class="list">'+mine+'</div>'
+   +'<h3 class="secttl">Topik yang dibutuhkan</h3><div class="panel"><p class="hint" style="margin:0 0 8px">Celah pengetahuan dari pertanyaan yang tak terjawab dan dari analisis KAK. Pilih satu untuk mulai menulis.</p>'+gaps+'</div>';
+}
+function saveForm(submit){
+  var f=S.kf,me=U(),o=formObj(f);
+  if(o.title.trim().length<3){toast('Isi judul terlebih dahulu');return}
+  if(submit){
+    var must=qualityChecks(o).filter(function(c){return c.must&&!c.ok});
+    if(must.length){toast('Lengkapi dulu: '+must[0].t);return}
+    if(!f.ack){toast('Centang pernyataan bahwa Anda sudah memeriksa isinya');return}
+  }
+  var s=f.sid?subById(f.sid):null;
+  if(s&&s.author!==me.id)return;
+  if(!s){s={id:nextSid(),itemId:null,author:me.id,t:new Date(),status:'draf',round:1,experts:[],votes:{},comments:[],hist:[]};S.subs.unshift(s)}
+  s.type=f.type;s.title=o.title.trim();s.level=f.level;s.proyek=f.proyek.trim();s.ringkasan=o.ringkasan.trim();s.tags=o.tags;s.isi=o.isi;
+  s.ctx=f.type==='metode'?{pek:f.pek,kond:f.kond.slice(),skala:f.skala}:null;s.lampiran=f.files.slice();
+  if(submit){
+    if(s.status==='perbaikan'){
+      s.round++;s.status='verifikasi';
+      if(f.note.trim())addC(s,me.id,'penulis',f.note.trim());
+      addH(s,'Direvisi penulis; putaran '+s.round+' dikirim kembali ke ahli');
+      log('KONTRIBUSI','Revisi '+s.id+' diajukan ulang (putaran '+s.round+')');
+    }else{
+      s.status='diajukan';addH(s,'Diajukan oleh '+me.name);
+      log('KONTRIBUSI','Mengajukan '+s.id+': '+s.title);
+    }
+    stopVoice();S.kf=null;S.sub=s.id;S.view='verifikasi';
+    toast('Terkirim. Koordinator akan menugaskan minimal '+MINX+' ahli.');
+  }else{
+    log('KONTRIBUSI','Menyimpan draf '+s.id);toast('Draf disimpan');f.sid=s.id;
+  }
+  render();
+}
+function startReverify(id){
+  var it=BYID[id];if(!it||!R().verify||it.sub)return;
+  var au=S.users.filter(function(u){return it.owner.indexOf(u.name)===0})[0];
+  var s={id:nextSid(),itemId:id,type:it.type,title:it.title,level:it.level,proyek:it.proyek||'',ringkasan:it.ringkasan,tags:it.tags.slice(),isi:cloneIsi(it.isi),ctx:it.ctx,author:au?au.id:U().id,t:new Date(),status:'diajukan',round:1,experts:[],votes:{},comments:[],hist:[]};
+  addH(s,'Alur verifikasi ulang dimulai oleh '+U().name+' untuk '+id);
+  S.subs.unshift(s);it.sub=s.id;S.sub=s.id;
+  log('KONTRIBUSI','Verifikasi ulang '+id+' dimulai sebagai '+s.id);
+  render();
+}
+function publish(s){
+  var me=U(),au=uOf(s.author),it,note=(S.cd['cn-'+s.id]||'').trim(),lv=parseInt(S.cd['rl-'+s.id],10)||s.level;
+  if(allowedLv().indexOf(lv)<0)lv=s.level;
+  s.level=lv;
+  var ver=s.experts.map(nm);
+  if(s.itemId&&BYID[s.itemId]){
+    it=BYID[s.itemId];it.title=s.title;it.ringkasan=s.ringkasan;it.isi=s.isi;it.tags=s.tags;it.level=s.level;it.proyek=s.proyek;
+    if(s.ctx)it.ctx=s.ctx;it.rev=nextRev(it.rev);it.checks=[];delete it.sub;
+  }else{
+    it={id:nextId(s.type),type:s.type,title:s.title,level:s.level,rev:'A',owner:au?au.name+', '+au.jab:'-',unit:au?au.unit:'-',proyek:s.proyek,tags:s.tags,ctx:s.ctx,ringkasan:s.ringkasan,isi:s.isi,rel:[],checks:[]};
+    ITEMS.push(it);
+    if(au)au.contrib++;
+  }
+  if(s.modelId){it.modelId=s.modelId;var mo=modelById(s.modelId);if(mo){mo.status='terbit';mo.itemId=it.id;mo.km=mo.km||[];delete mo.sub}}
+  it.status='verified';it.exp=365;it.upd=0;it.ver=ver;
+  indexItem(it);
+  s.itemId=it.id;s.status='terbit';
+  if(note)addC(s,me.id,'koordinator',note);
+  addH(s,'Disahkan dan diterbitkan oleh '+me.name+' sebagai '+it.id+' Rev '+it.rev+', klasifikasi Level '+it.level);
+  delete S.cd['cn-'+s.id];
+  log('VERIFIKASI','Disahkan dan terbit: '+it.id+' (dari '+s.id+'), diverifikasi '+ver.join(' dan '));
+  toast('Terbit sebagai '+it.id);
+  render();
+}
+
+/* ---- tampilan ---- */
+function subRow(s,tag){
+  return '<button class="row'+(S.sub===s.id?' sel':'')+'" data-act="sub-open" data-id="'+s.id+'"><span class="meta"><span class="mono">'+s.id+(s.itemId&&s.status!=='terbit'?' &middot; pembaruan '+s.itemId:'')+'</span><span>'+TYPES[s.type]+'</span></span><span class="rt">'+esc(s.title)+'</span><span class="rs">Penulis: '+esc(nm(s.author))+' &middot; putaran '+s.round+(s.experts.length?' &middot; ahli: '+s.experts.map(nm).join(', '):'')+'</span><span class="chips">'+sbadge(s)+(tag?'<span class="st st-warn"><b aria-hidden="true">!</b>'+tag+'</span>':'')+meter(s.level)+'</span></button>';
+}
+function subDetailHTML(s){
+  var me=U(),isAuthor=s.author===me.id,co=R().verify,au=uOf(s.author);
+  var cur={draf:0,diajukan:1,verifikasi:2,perbaikan:3,siap:4,terbit:5,ditolak:-1}[s.status];
+  var h='<article class="doc"><button class="btn ghost back" data-act="sub-back">← Kembali ke daftar</button>'
+   +'<div class="kick"><span class="mono">'+s.id+'</span><span>'+TYPES[s.type]+'</span>'+sbadge(s)+'<span>putaran '+s.round+'</span></div>'
+   +'<h2 class="dt">'+esc(s.title)+'</h2>';
+  h+=s.status==='ditolak'?'<div class="banner bad">Pengajuan ini ditolak koordinator. Alasannya ada di komentar di bawah.</div>'
+    :'<ol class="stepper" aria-label="Tahap verifikasi">'+STEPS.map(function(x,i){return '<li class="'+(i<cur?'done':i===cur?'cur':'')+'">'+x+'</li>'}).join('')+'</ol>';
+  var tb=[['Penulis',esc(nm(s.author))],['Unit',au?esc(au.unit):'-'],['Sumber',s.proyek?esc(s.proyek):'-'],['Klasifikasi',meter(s.level)],['Diajukan',fmtD(s.t)],['Jenis',s.itemId&&s.status!=='terbit'?'Pembaruan '+s.itemId:'KM baru']];
+  h+='<dl class="tb">'+tb.map(function(r){return '<div><dt>'+r[0]+'</dt><dd>'+r[1]+'</dd></div>'}).join('')+'</dl><p>'+esc(s.ringkasan)+'</p>'+bodyHTML(s.isi);
+  if(s.tags.length)h+='<p class="hint">Kata kunci: '+s.tags.map(esc).join(', ')+'</p>';
+  if(s.lampiran&&s.lampiran.length)h+='<p class="hint">Lampiran sumber: '+s.lampiran.map(function(x){return esc(x.name)}).join(', ')+' (teks diekstrak; berkas asli tidak disimpan di prototipe)</p>';
+  if(s.modelId&&modelById(s.modelId))h+='<div class="actions" style="margin-top:8px"><button class="btn" data-act="model-open" data-id="'+s.modelId+'">Lihat model 3D di peta</button></div>';
+  if(s.status==='terbit'&&s.itemId&&BYID[s.itemId]){
+    var bi=BYID[s.itemId];
+    h+='<div class="banner ok" style="margin-top:10px"><span>Sudah terbit sebagai <span class="mono">'+bi.id+'</span> Rev '+esc(bi.rev)+'.</span>'+(can(bi)?'<button class="btn" data-act="open" data-id="'+bi.id+'">Buka di pustaka</button>':'')+'</div>';
+  }
+  h+='<h3>Pemeriksaan awal AI (saran, bukan keputusan)</h3><ul class="checks">'+qualityChecks(s).map(function(c){return '<li class="'+(c.ok?'yes':'no')+'"><b aria-hidden="true">'+(c.ok?'✓':'✕')+'</b><span>'+esc(c.t)+'</span></li>'}).join('')+'</ul>';
+  h+='<h3>Ahli verifikator <span class="hint" style="margin:0">(minimal '+MINX+', bukan penulis)</span></h3>';
+  if(s.experts.length){
+    h+='<ul class="top5">'+s.experts.map(function(id){
+      var v=myVote(s,id),u=uOf(id);
+      var st=v?(v.v==='setuju'?'<span class="st st-ok"><b aria-hidden="true">✓</b>Setuju</span>':'<span class="st st-warn"><b aria-hidden="true">!</b>Minta perbaikan</span>'):'<span class="st st-mute"><b aria-hidden="true">○</b>Belum menilai</span>';
+      return '<li><span><strong>'+esc(nm(id))+'</strong> <span class="hint">'+(u?esc(u.unit)+' &middot; keahlian: '+esc((u.ahli||[]).join(', ')):'')+'</span></span>'+st+'</li>';
+    }).join('')+'</ul>';
+  }else if(s.status==='diajukan'&&co&&!isAuthor){
+    var sel=getAssign(s),cands=expertCands(s);
+    h+='<p class="hint">Saran AI berdasarkan kecocokan keahlian terdaftar, beban tugas, dan hak akses ke level '+s.level+'. Penulis tidak bisa menjadi ahli. Pilih minimal '+MINX+'.</p><div class="match">'
+      +(cands.map(function(c){
+        var on=sel.indexOf(c.u.id)>-1;
+        return '<button class="opt'+(on?' sel':'')+'" data-act="exp-toggle" data-id="'+s.id+'" data-u="'+c.u.id+'" aria-pressed="'+on+'"><span class="score" title="Jumlah keahlian yang cocok">'+c.m.length+'</span><span><strong>'+esc(c.u.name)+'</strong> <span class="hint">'+esc(c.u.unit)+'</span><br><span class="why">'+(c.m.length?'Keahlian cocok: '+esc(c.m.join(', ')):'Tidak ada kata kunci yang cocok')+'</span></span></button>';
+      }).join('')||'<div class="empty">Tidak ada ahli yang memenuhi syarat untuk level ini.</div>')
+      +'</div><div class="actions" style="border:0;margin:8px 0 0;padding:0"><button class="btn primary" data-act="do-assign" data-id="'+s.id+'">Tugaskan '+sel.length+' ahli</button></div>';
+  }else{
+    h+='<p class="hint">'+(s.status==='diajukan'?(isAuthor&&co?'Anda penulisnya; koordinator lain yang menugaskan ahli.':'Menunggu koordinator verifikasi menugaskan ahli.'):'Belum ada ahli ditugaskan.')+'</p>';
+  }
+  if(s.status==='verifikasi'&&s.experts.indexOf(me.id)>-1&&!myVote(s,me.id)){
+    h+='<div class="panel" style="margin-top:12px"><h3 style="margin-top:0">Penilaian Anda</h3><textarea id="vc-'+s.id+'" rows="3" placeholder="Komentar untuk penulis. Wajib bila Anda meminta perbaikan." aria-label="Komentar penilaian">'+esc(S.cd['vc-'+s.id]||'')+'</textarea><div class="actions" style="border:0;margin:8px 0 0;padding:0"><button class="btn ok" data-act="do-vote" data-id="'+s.id+'" data-v="setuju">Setuju</button><button class="btn" data-act="do-vote" data-id="'+s.id+'" data-v="perbaikan">Minta perbaikan</button></div></div>';
+  }
+  if(isAuthor&&(s.status==='perbaikan'||s.status==='draf')){
+    h+='<div class="actions"><button class="btn primary" data-act="k-edit" data-id="'+s.id+'">'+(s.status==='perbaikan'?'Revisi dan ajukan ulang':'Lanjutkan sunting')+'</button></div>';
+  }
+  var live=['diajukan','verifikasi','perbaikan','siap'].indexOf(s.status)>-1;
+  if(co&&!isAuthor&&live){
+    h+='<div class="panel" style="margin-top:12px"><h3 style="margin-top:0">Koordinator verifikasi</h3>';
+    if(s.status==='siap'){
+      var lo=allowedLv().map(function(l){return '<option value="'+l+'"'+((parseInt(S.cd['rl-'+s.id],10)||s.level)===l?' selected':'')+'>Level '+l+': '+LV[l]+'</option>'}).join('');
+      h+='<p class="hint" style="margin:0 0 8px">Semua '+s.experts.length+' ahli setuju. Penulis tidak boleh mengesahkan karyanya sendiri.</p><div class="field" style="max-width:320px;margin-bottom:8px"><label for="rl-'+s.id+'">Klasifikasi akhir</label><select id="rl-'+s.id+'">'+lo+'</select></div>';
+    }
+    h+='<textarea id="cn-'+s.id+'" rows="2" placeholder="Catatan koordinator (wajib bila menolak)" aria-label="Catatan koordinator">'+esc(S.cd['cn-'+s.id]||'')+'</textarea><div class="actions" style="border:0;margin:8px 0 0;padding:0">'
+      +(s.status==='siap'?'<button class="btn ok" data-act="do-publish" data-id="'+s.id+'">Sahkan dan terbitkan</button>':'')
+      +'<button class="btn" data-act="do-reject" data-id="'+s.id+'">Tolak pengajuan</button></div></div>';
+  }
+  h+='<h3>Komentar dan tanggapan</h3>'+cmThread(s);
+  h+='<h3>Riwayat</h3><ul class="top5">'+s.hist.slice().reverse().map(function(x){return '<li><span>'+esc(x.txt)+'</span><span class="mono">'+fmtD(x.t)+'</span></li>'}).join('')+'</ul>';
+  return h+'</article>';
+}
+function viewVerif(){
+  var co=R().verify,tasks=taskList(),tid={};
+  tasks.forEach(function(t){tid[t.s.id]=t.k});
+  var mine=tasks.map(function(t){return subRow(t.s,TASKL[t.k])}).join('')||'<div class="empty">Tidak ada tugas untuk Anda saat ini.</div>';
+  var rest=S.subs.filter(function(s){return canSub(s)&&!tid[s.id]}).sort(function(a,b){return SUBORD.indexOf(a.status)-SUBORD.indexOf(b.status)});
+  var restH=rest.map(function(s){return subRow(s)}).join('')||'<div class="empty">Belum ada pengajuan lain.</div>';
+  var q=queue().map(function(it){
+    var act=it.sub?'<button class="btn" data-act="sub-open" data-id="'+it.sub+'">Dalam alur '+it.sub+'</button>':(co?'<button class="btn ok" data-act="rv-start" data-id="'+it.id+'">Mulai alur verifikasi</button>':'<button class="btn" disabled>Koordinator yang memulai</button>');
+    return '<div class="qcard"><div class="meta mono">'+it.id+' &middot; '+TYPES[it.type]+'</div><h3>'+esc(it.title)+'</h3><div class="chips">'+badge(it)+meter(it.level)+'<span class="hint" style="margin:0">Pemilik: '+esc(it.owner)+'</span></div><div class="actions" style="margin-top:8px;padding-top:10px">'+act+'<button class="btn ghost" data-act="open" data-id="'+it.id+'">Buka dokumen</button></div></div>';
+  }).join('')||'<div class="empty">Tidak ada KM yang perlu verifikasi ulang pada level akses peran ini.</div>';
+  var s=S.sub&&subById(S.sub);
+  if(s&&!canSub(s)){S.sub=null;s=null}
+  $('#main').innerHTML='<h2>Verifikasi</h2><p class="lead">Setiap KM baru atau pembaruan diperiksa minimal '+MINX+' ahli yang ditugaskan koordinator. Ahli memberi komentar, penulis memperbaiki sampai semua ahli setuju, lalu koordinator mengesahkan dan menerbitkan. AI hanya menyiapkan pemeriksaan awal dan menyarankan ahli.'+(co?'':' Masuk sebagai Reviewer untuk menjadi koordinator, atau sebagai ahli (mis. Wulan Sari, Bagas Pratama) untuk menilai.')+'</p>'
+   +'<div class="split '+(s?'has-detail':'no-detail')+'" id="split"><div class="list"><h3 style="margin-top:0">Tugas saya ('+tasks.length+')</h3>'+mine+'<h3>'+(co?'Semua pengajuan':'Pengajuan yang melibatkan Anda')+'</h3>'+restH+'<h3>KM yang perlu verifikasi ulang atau belum terbit</h3>'+q+'</div>'
+   +'<div class="detail">'+(s?subDetailHTML(s):'<div class="placeholder">Pilih pengajuan untuk melihat isi, ahli yang ditugaskan, komentar, dan riwayatnya.</div>')+'</div></div>';
+}
+
+/* ---------- keamanan dan audit ---------- */
+function accCellHTML(r,l,curRole){
+  var a=ROLES[r].acc[l],cls=r===curRole?'cur ':'';
+  if(a==='x')return '<td class="'+cls+'n">Tidak terlihat</td>';
+  if(a==='d')return '<td class="'+cls+'y">Lihat + unduh</td>';
+  if(a==='a')return '<td class="'+cls+'a">Lihat + unduh dengan persetujuan</td>';
+  return '<td class="'+cls+'y">Lihat saja</td>';
+}
+function viewSec(){
+  var keys=Object.keys(ROLES),u=U();
+  var head='<tr><th>Level</th>'+keys.map(function(k){return '<th class="'+(k===u.role?'cur':'')+'">'+ROLES[k].name+'</th>'}).join('')+'</tr>';
+  var rows=[1,2,3,4].map(function(l){return '<tr><td>'+meter(l)+'</td>'+keys.map(function(k){return accCellHTML(k,l,u.role)}).join('')+'</tr>'}).join('');
+  var lg=S.log.map(function(e){
+    var c=e.tone==='bad'?'bad':(e.act==='UNDUH'||e.act==='VERIFIKASI'||e.act==='KONTRIBUSI'||e.act==='MODEL')?'ok':(e.act==='AJUKAN'||e.act==='OFFBOARDING'||e.act==='ADMIN'||e.act==='PENUGASAN')?'warn':'';
+    return '<tr><td class="mono" style="white-space:nowrap">'+fmtT(e.t)+'</td><td>'+esc(e.who)+'</td><td><span class="act '+c+'">'+e.act+'</span></td><td>'+esc(e.detail)+'</td></tr>';
+  }).join('');
+  $('#main').innerHTML='<h2>Keamanan dan audit</h2><p class="lead">Terbuka untuk dibaca, ketat untuk diambil, dan semuanya tercatat. Kolom yang disorot adalah peran pengguna yang sedang aktif.</p>'
+   +'<h3 style="margin-top:0">Matriks hak akses</h3><div class="scroll"><table class="tbl"><thead>'+head+'</thead><tbody>'+rows+'</tbody></table></div>'
+   +'<h3>Coba kontrolnya</h3><div class="sim"><button class="btn" data-act="bulk">Simulasi: 40 dokumen dibuka dalam semenit</button><button class="btn" data-act="resign-self">'+(u.status==='resign'?'Batalkan simulasi pengunduran diri':'Simulasi: HR menandai pengunduran diri saya')+'</button></div>'
+   +'<p class="hint" style="margin-top:-8px;margin-bottom:14px">Atau buka '+S.pol.maxOpens+' dokumen berbeda dalam satu menit di tab Cari untuk memicu pembatas yang sama. Batasnya diatur admin di Pengaturan akses.</p>'
+   +'<h3>Log audit</h3><div class="scroll"><table class="tbl"><thead><tr><th>Waktu</th><th>Pengguna</th><th>Aksi</th><th>Rincian</th></tr></thead><tbody>'+lg+'</tbody></table></div>';
+}
+
+/* ---------- pengguna (admin) ---------- */
+function userRows(){
+  var f=S.uf,q=f.q.trim().toLowerCase();
+  var us=S.users.filter(function(u){
+    if(f.role!=='all'&&u.role!==f.role)return false;
+    if(f.st!=='all'&&u.status!==f.st)return false;
+    if(q&&(u.name+' '+u.nip+' '+u.email+' '+u.unit+' '+u.jab).toLowerCase().indexOf(q)<0)return false;
+    return true;
+  });
+  if(!us.length)return '<tr><td colspan="8" class="n">Tidak ada pengguna yang cocok.</td></tr>';
+  return us.map(function(u){
+    var self=u.id===S.uid;
+    var roleSel='<select id="ur-'+u.id+'" aria-label="Peran '+esc(u.name)+'"'+(self?' disabled title="Anda tidak dapat mengubah peran sendiri"':'')+'>'+Object.keys(ROLES).map(function(k){return '<option value="'+k+'"'+(u.role===k?' selected':'')+'>'+ROLES[k].name+'</option>'}).join('')+'</select>';
+    var acts=self?'<span class="hint" style="margin:0">Akun Anda</span>':
+      '<div class="acts"><button class="btn sm" data-act="u-toggle" data-id="'+u.id+'">'+(u.status==='nonaktif'?'Aktifkan':'Nonaktifkan')+'</button>'
+      +(u.status==='nonaktif'?'':'<button class="btn sm" data-act="u-resign" data-id="'+u.id+'">'+(u.status==='resign'?'Batal resign':'Tandai resign')+'</button>')
+      +'<button class="btn sm" data-act="u-mfa" data-id="'+u.id+'"'+(u.mfa?'':' disabled')+'>Reset MFA</button></div>';
+    var last=u.status==='nonaktif'?'Dicabut':(u.last===0?'Hari ini':u.last+' hari lalu');
+    return '<tr><td><strong>'+esc(u.name)+'</strong><br><span class="mono">'+u.nip+'</span> &middot; '+esc(u.email)+'</td><td>'+esc(u.unit)+'<br><span class="hint" style="margin:0">'+esc(u.jab)+'</span></td><td>'+roleSel+'</td><td>'+userStatusBadge(u)+'</td><td>'+(u.mfa?'<span class="st st-ok"><b aria-hidden="true">✓</b>Terpasang</span>':'<span class="st st-warn"><b aria-hidden="true">!</b>Belum</span>')+'</td><td>'+last+'</td><td class="mono">'+u.opens+' buka<br>'+u.searches+' cari<br>'+u.dls+' unduh<br>'+u.asks+' tanya</td><td>'+acts+'</td></tr>';
+  }).join('');
+}
+function viewUsers(){
+  var ro='<option value="all">Semua peran</option>'+Object.keys(ROLES).map(function(k){return '<option value="'+k+'"'+(S.uf.role===k?' selected':'')+'>'+ROLES[k].name+'</option>'}).join('');
+  var so=[['all','Semua status'],['aktif','Aktif'],['resign','Masa resign'],['nonaktif','Nonaktif']].map(function(o){return '<option value="'+o[0]+'"'+(S.uf.st===o[0]?' selected':'')+'>'+o[1]+'</option>'}).join('');
+  var un=UNITS.map(function(x){return '<option>'+x+'</option>'}).join('');
+  var rn=Object.keys(ROLES).map(function(k){return '<option value="'+k+'">'+ROLES[k].name+'</option>'}).join('');
+  $('#main').innerHTML='<h2>Pengguna</h2><p class="lead">Database akun pengguna. Pada sistem nyata daftar ini disinkronkan dari direktori perusahaan (misalnya Entra ID atau HRIS), sehingga akun yang dinonaktifkan di sana otomatis kehilangan akses di sini.</p>'
+   +'<div class="toolbar"><input id="uq" type="search" placeholder="Cari nama, ID, email, unit..." value="'+esc(S.uf.q)+'" aria-label="Cari pengguna"><select id="ufRole" aria-label="Peran">'+ro+'</select><select id="ufSt" aria-label="Status">'+so+'</select></div>'
+   +'<div class="scroll"><table class="tbl"><thead><tr><th>Pengguna</th><th>Unit dan jabatan</th><th>Peran</th><th>Status</th><th>MFA</th><th>Login terakhir</th><th>Aktivitas 30 hari</th><th>Tindakan</th></tr></thead><tbody id="utbody">'+userRows()+'</tbody></table></div>'
+   +'<p class="hint">Nonaktif: seluruh akses dicabut dan sesi dihentikan. Masa resign: tetap bisa membaca sesuai peran, tetapi hak unduh dicabut dan pemantauan diperketat.</p>'
+   +'<div class="panel" style="margin-top:18px"><h2>Tambah pengguna</h2><div class="fields"><div class="field"><label for="nName">Nama lengkap</label><input id="nName" type="text"></div><div class="field"><label for="nEmail">Email perusahaan</label><input id="nEmail" type="email" placeholder="nama@contoh.co.id"></div><div class="field"><label for="nUnit">Unit</label><select id="nUnit">'+un+'</select></div><div class="field"><label for="nJab">Jabatan</label><input id="nJab" type="text"></div><div class="field"><label for="nRole">Peran</label><select id="nRole">'+rn+'</select></div></div><button class="btn primary" data-act="u-add">Tambah pengguna</button><p class="hint">Pengguna baru wajib mendaftarkan MFA saat login pertama.</p></div>';
+}
+
+/* ---------- pengaturan akses (admin) ---------- */
+function viewAkses(){
+  var keys=Object.keys(ROLES);
+  var head='<tr><th>Level</th>'+keys.map(function(k){return '<th>'+ROLES[k].name+'</th>'}).join('')+'</tr>';
+  var rows=[1,2,3,4].map(function(l){
+    return '<tr><td>'+meter(l)+'</td>'+keys.map(function(k){
+      var opts=l<=2?['x','v','d']:['x','v','a'];
+      var locked=ROLES[k].admin&&l>=3;
+      var sel='<select id="ac-'+k+'-'+l+'" aria-label="'+ROLES[k].name+', '+LV[l]+'"'+(locked?' disabled title="Pemisahan tugas: admin tidak membaca data Sensitif dan Rahasia"':'')+'>'+opts.map(function(o){return '<option value="'+o+'"'+(ROLES[k].acc[l]===o?' selected':'')+'>'+ACC_LABEL[o]+'</option>'}).join('')+'</select>';
+      return '<td>'+sel+'</td>';
+    }).join('')+'</tr>';
+  }).join('');
+  var vrow='<tr><td><strong>Koordinator verifikasi</strong></td>'+keys.map(function(k){return '<td><label class="switch" style="margin:0"><input type="checkbox" id="vf-'+k+'"'+(ROLES[k].verify?' checked':'')+'> Ya</label></td>'}).join('')+'</tr>';
+  var arow='<tr><td><strong>Dokumen terlihat</strong></td>'+keys.map(function(k){var n=ITEMS.filter(function(it){return ROLES[k].acc[it.level]!=='x'}).length;return '<td class="n">'+n+' dari '+ITEMS.length+'</td>'}).join('')+'</tr>';
+  var mo=[10,15,30,60].map(function(n){return '<option value="'+n+'"'+(S.pol.maxOpens===n?' selected':'')+'>'+n+' dokumen per menit</option>'}).join('');
+  $('#main').innerHTML='<h2>Pengaturan akses</h2><p class="lead">Atur apa yang boleh dilihat dan diunduh setiap peran untuk tiap level klasifikasi. Perubahan langsung berlaku di seluruh aplikasi dan tercatat di log audit.</p>'
+   +'<div class="scroll"><table class="tbl"><thead>'+head+'</thead><tbody>'+rows+vrow+arow+'</tbody></table></div>'
+   +'<p class="hint">Level Sensitif dan Rahasia tidak bisa diberi unduh langsung; paling jauh dengan persetujuan. Admin Sistem dikunci tanpa akses ke Sensitif dan Rahasia agar pengelola sistem tidak otomatis bisa membaca data paling bernilai.</p>'
+   +'<div class="grid2" style="margin-top:18px"><div class="panel"><h2>Kebijakan keamanan</h2>'
+   +'<div class="field" style="margin-bottom:12px"><label for="pMax">Batas pembukaan dokumen sebelum dianggap akses massal</label><select id="pMax">'+mo+'</select></div>'
+   +'<label class="switch"><input type="checkbox" id="pBlock"'+(S.pol.autoBlock?' checked':'')+'><span>Bekukan unduhan otomatis saat pola akses massal terdeteksi. Bila dimatikan, sistem hanya mencatat dan memberi peringatan.</span></label>'
+   +'<label class="switch"><input type="checkbox" id="pWm"'+(S.pol.wm?' checked':'')+'><span>Watermark dinamis (nama, ID, waktu) pada tampilan dan unduhan.</span></label>'
+   +'<label class="switch"><input type="checkbox" checked disabled><span>MFA wajib untuk semua pengguna (terkunci).</span></label></div>'
+   +'<div class="panel"><h2>Bawaan</h2><p class="hint" style="margin:0 0 10px">Kembalikan matriks hak akses dan kebijakan ke pengaturan awal prototipe.</p><button class="btn" data-act="acc-reset">Atur ulang ke bawaan</button></div></div>';
+}
+
+function render(){
+  destroyModelView();if(S.view!=='kontribusi')stopVoice();
+  if(!tabList().some(function(t){return t[0]===S.view}))S.view='dashboard';
+  renderWho();renderBanners();renderTabs();
+  var v=S.view;
+  if(v==='dashboard')viewDash();
+  else if(v==='cari')viewCari();
+  else if(v==='kak')viewKAK();
+  else if(v==='tender')viewTender();
+  else if(v==='ai')viewAI();
+  else if(v==='verifikasi')viewVerif();
+  else if(v==='kontribusi')viewKontribusi();
+  else if(v==='model')viewModel();
+  else if(v==='pengguna')viewUsers();
+  else if(v==='akses')viewAkses();
+  else viewSec();
+}
+
+/* ---------- aksi ---------- */
+function triggerMass(detail){
+  log('PERINGATAN',detail+(S.pol.autoBlock?': unduhan dibekukan sementara dan keamanan informasi diberi tahu':': dicatat dan keamanan informasi diberi tahu (pembekuan otomatis dimatikan)'),'bad');
+  if(S.pol.autoBlock)S.blocked=true;
+}
+function openDoc(id){
+  var it=BYID[id];if(!it||!can(it))return;
+  var now=Date.now();
+  S.opens=S.opens.filter(function(t){return now-t<60000});S.opens.push(now);
+  S.sel=id;S.dl=null;it.views++;U().opens++;
+  log('BUKA',it.id+' '+it.title);
+  if(S.opens.length>=S.pol.maxOpens&&!S.blocked){
+    triggerMass(S.pol.maxOpens+' dokumen dibuka dalam 60 detik');
+    toast('Pola akses massal terdeteksi.');
+  }
+  if(S.view!=='cari'){S.view='cari';S.q='';S.fType='all';S.fStatus='all'}
+  render();
+  var d=$('#detail');if(d&&d.scrollIntoView)d.scrollIntoView({block:'nearest'});
+}
+function selNode(node){
+  try{var r=document.createRange();r.selectNodeContents(node);var s=window.getSelection();s.removeAllRanges();s.addRange(r)}catch(e){}
+}
+function adminLog(d){log('ADMIN',d)}
+function markUse(id,k){
+  var it=BYID[id];if(!it||!can(it))return;
+  var key=S.uid+'|'+id+'|'+k;
+  if(S.mark[key]){toast('Sudah Anda catat sebelumnya');return}
+  S.mark[key]=true;
+  if(k==='t')it.useT++;else it.useP++;
+  log('PAKAI',id+' dipakai untuk '+(k==='t'?'tender':'pelaksanaan'));
+  toast('Tercatat: dipakai untuk '+(k==='t'?'tender':'pelaksanaan'));
+}
+
+document.addEventListener('click',function(e){
+  var t=e.target.closest('[data-act]');if(!t)return;
+  var a=t.getAttribute('data-act'),id=t.getAttribute('data-id');
+  if(a==='nav'){S.view=t.getAttribute('data-v');render();return}
+  if(a==='open'){openDoc(id);return}
+  if(a==='back'){S.sel=null;updateCari();return}
+  if(a==='cat'){S.fType=t.getAttribute('data-type');S.q='';S.fStatus='all';S.sel=null;S.view='cari';render();return}
+  if(a==='dl'){
+    var it=BYID[id];if(!it||dlMode(it)!=='ok')return;
+    S.dl={id:id,t:new Date()};U().dls++;
+    log('UNDUH',it.id+(S.pol.wm?' dengan watermark '+U().name+' / '+U().nip:' tanpa watermark (dimatikan admin)'));
+    toast('Unduhan dicatat');
+    updateCari();return;
+  }
+  if(a==='req'){S.req[id]=true;log('AJUKAN','Permintaan unduh '+id+' ke pemilik data dan keamanan informasi');toast('Permintaan terkirim ke pemilik data');updateCari();return}
+  if(a==='kond'){var k=t.getAttribute('data-k'),i=S.tender.kond.indexOf(k);if(i>-1)S.tender.kond.splice(i,1);else S.tender.kond.push(k);S.tender.pick=null;S.tender.fromKak=false;viewTender();return}
+  if(a==='pick'){S.tender.pick=id;log('TENDER','Menyusun draf dari '+id);viewTender();return}
+  if(a==='copy'){
+    var tx=$('#draftText');if(!tx)return;
+    if(S.tender.pick)markUse(S.tender.pick,'t');
+    var done=function(){toast('Draf disalin')};
+    var fail=function(){selNode(tx);toast('Teks dipilih, salin dengan Ctrl+C')};
+    try{navigator.clipboard.writeText(tx.textContent).then(done,fail)}catch(err){fail()}
+    return;
+  }
+  if(a==='ask'){ask(t.getAttribute('data-q'));return}
+  if(a==='model-open'){S.mSel=id;S.mFocus=id;S.view='model';render();return}
+  if(a==='m-sel'){selectModel(id);return}
+  if(a==='m-zoom'){var mz=modelById(id);if(mz&&MAP)MAP.setView([mz.lat,mz.lng],17);return}
+  if(a==='m-place'){
+    if(!MAP){toast('Peta belum termuat');return}
+    PLACING=!PLACING;
+    var pb=$('#mPlaceBtn');if(pb)pb.textContent=PLACING?'Klik titik di peta... (batal: klik lagi)':'Tempatkan dengan klik di peta';
+    var pn=$('#mPlaceNote');if(pn)pn.textContent=PLACING?'Mode penempatan aktif: klik lokasi di peta.':'';
+    return;
+  }
+  if(a==='m-submit'){submitModel(modelById(id));return}
+  if(a==='v-reset'&&GLV){GLV.reset();return}
+  if(a==='v-atas'&&GLV){GLV.view('atas');return}
+  if(a==='v-depan'&&GLV){GLV.view('depan');return}
+  if(a==='v-samping'&&GLV){GLV.view('samping');return}
+  if(a==='v-mic'){startVoice(t.getAttribute('data-t'));return}
+  if(a==='k-rmfile'){S.kf.files.splice(parseInt(t.getAttribute('data-i'),10),1);render();return}
+  if(a==='iv-start'){
+    var fi=S.kf;stopVoice();
+    fi.iv={on:true,skip:[],tts:fi.iv?fi.iv.tts:false,cur:null};fi.ivAns='';
+    ivAsk(fi);
+    if(fi.iv&&fi.iv.cur)log('KONTRIBUSI','Wawancara AI dimulai');
+    render();return;
+  }
+  if(a==='iv-send'||a==='iv-skip'){
+    var fv=S.kf;if(!fv||!fv.iv||!fv.iv.cur)return;
+    var ans=(fv.ivAns||'').trim();
+    if(a==='iv-send'){
+      if(ans.length<3){toast('Tulis atau ucapkan jawaban dulu');return}
+      if(!/[.!?]$/.test(ans))ans+='.';
+      fv.narr=(fv.narr?fv.narr.replace(/\s+$/,'')+' ':'')+ans;
+    }
+    fv.iv.skip.push(fv.iv.cur.cat);fv.ivAns='';stopVoice();
+    ivAsk(fv);render();return;
+  }
+  if(a==='iv-stop'){if(S.kf)S.kf.iv=null;stopVoice();render();return}
+  if(a==='use-t'||a==='use-p'){markUse(id,a==='use-t'?'t':'p');updateCari();return}
+  if(a==='write-gap'){S.kf=newForm();S.kf.title=t.getAttribute('data-q');S.kf.gapQ=t.getAttribute('data-q');S.view='kontribusi';render();return}
+  if(a==='k-kond'){var kk=t.getAttribute('data-k'),ki=S.kf.kond.indexOf(kk);if(ki>-1)S.kf.kond.splice(ki,1);else S.kf.kond.push(kk);render();return}
+  if(a==='k-sample'){var f0=S.kf||(S.kf=newForm());if(f0.type!=='metode')f0.type='lesson';f0.narr=f0.type==='metode'?SAMPLE_MK:SAMPLE_LL;render();return}
+  if(a==='k-ai'){
+    var f1=S.kf;
+    if(f1.narr.trim().length<80){toast('Ceritakan lebih panjang (minimal beberapa kalimat)');return}
+    stopVoice();doDraft(f1);
+    toast('Draf AI siap. Periksa dan sunting.');render();return;
+  }
+  if(a==='k-save'){saveForm(false);return}
+  if(a==='k-submit'){saveForm(true);return}
+  if(a==='k-clear'){S.kf=newForm();render();return}
+  if(a==='k-edit'){var se=subById(id);if(!se||se.author!==U().id)return;S.kf=formFromSub(se);S.view='kontribusi';render();return}
+  if(a==='sub-open'){S.sub=id;S.view='verifikasi';render();return}
+  if(a==='sub-back'){S.sub=null;render();return}
+  if(a==='rv-start'){startReverify(id);return}
+  if(a==='exp-toggle'){
+    var sx=subById(id);if(!sx||!R().verify)return;
+    var as=getAssign(sx),ui=t.getAttribute('data-u'),xi=as.indexOf(ui);
+    if(xi>-1)as.splice(xi,1);else as.push(ui);
+    render();return;
+  }
+  if(a==='do-assign'){
+    var sa=subById(id);if(!sa||!R().verify||sa.author===U().id||sa.status!=='diajukan')return;
+    var sel=getAssign(sa).filter(function(x){return x!==sa.author});
+    if(sel.length<MINX){toast('Pilih minimal '+MINX+' ahli');return}
+    sa.experts=sel.slice();sa.status='verifikasi';sa.votes={};
+    addH(sa,'Koordinator '+U().name+' menugaskan '+sel.map(nm).join(' dan ')+' sebagai ahli');
+    log('PENUGASAN',sa.id+': ahli '+sel.map(nm).join(', '));
+    toast(sel.length+' ahli ditugaskan');render();return;
+  }
+  if(a==='do-vote'){
+    var sv=subById(id),mv=U();
+    if(!sv||sv.status!=='verifikasi'||sv.experts.indexOf(mv.id)<0||myVote(sv,mv.id))return;
+    var v=t.getAttribute('data-v'),ct=(S.cd['vc-'+id]||'').trim();
+    if(v==='perbaikan'&&ct.length<5){toast('Tulis komentar perbaikan untuk penulis');return}
+    sv.votes[mv.id]={v:v,round:sv.round};
+    addC(sv,mv.id,v==='setuju'?'setuju':'perbaikan',ct||'Setuju tanpa catatan.');
+    delete S.cd['vc-'+id];
+    log('VERIFIKASI',sv.id+': '+(v==='setuju'?'setuju':'meminta perbaikan'));
+    if(sv.experts.every(function(x){return myVote(sv,x)})){
+      var any=sv.experts.some(function(x){return myVote(sv,x).v==='perbaikan'});
+      sv.status=any?'perbaikan':'siap';
+      addH(sv,any?'Semua ahli sudah menilai: dikembalikan ke penulis untuk perbaikan':'Semua ahli setuju: menunggu pengesahan koordinator');
+    }
+    toast('Penilaian tercatat');render();return;
+  }
+  if(a==='do-publish'){
+    var sp=subById(id);
+    if(!sp||!R().verify||sp.author===U().id||sp.status!=='siap'||sp.experts.length<MINX)return;
+    publish(sp);return;
+  }
+  if(a==='do-reject'){
+    var sr=subById(id),rt=(S.cd['cn-'+id]||'').trim();
+    if(!sr||!R().verify||sr.author===U().id)return;
+    if(rt.length<5){toast('Tulis alasan penolakan');return}
+    sr.status='ditolak';addC(sr,U().id,'koordinator','Ditolak: '+rt);addH(sr,'Ditolak oleh '+U().name);
+    if(sr.itemId&&BYID[sr.itemId])delete BYID[sr.itemId].sub;
+    if(sr.modelId&&modelById(sr.modelId)){var mr=modelById(sr.modelId);mr.status='draf';delete mr.sub}
+    delete S.cd['cn-'+id];
+    log('VERIFIKASI','Menolak '+sr.id);toast('Pengajuan ditolak');render();return;
+  }
+  if(a==='bulk'){
+    log('BUKA','40 dokumen dibuka dalam 52 detik (batas '+S.pol.maxOpens+' per menit)');
+    triggerMass('Pola akses massal');
+    render();return;
+  }
+  if(a==='unblock'){S.blocked=false;S.opens=[];log('PERINGATAN','Pembekuan dicabut oleh admin keamanan setelah verifikasi ke pengguna','ok');render();return}
+  if(a==='resign-self'){
+    var me=U();me.status=me.status==='resign'?'aktif':'resign';
+    log('OFFBOARDING',me.status==='resign'?'HR menandai masa pengunduran diri: hak unduh dicabut, pemantauan diperketat':'Simulasi pengunduran diri dibatalkan');
+    render();return;
+  }
+  /* KAK */
+  if(a==='kak-sample'){S.kakText=SAMPLE_KAK;S.kakName='Contoh KAK (fiktif)';var ta=$('#kakText');if(ta)ta.value=SAMPLE_KAK;runKAK(S.kakName);return}
+  if(a==='kak-run'){runKAK(S.kakName);return}
+  if(a==='kak-clear'){S.kakText='';S.kakName='';S.kak=null;var ta2=$('#kakText');if(ta2)ta2.value='';var st=$('#kakStatus');if(st)st.textContent='';var fi=$('#kakFile');if(fi)fi.value='';renderKAKRes();return}
+  if(a==='kak-tender'){
+    var r=S.kak&&S.kak.res;if(!r)return;
+    if(r.pek)S.tender.pek=r.pek;
+    S.tender.kond=r.kond.slice();
+    if(r.skala)S.tender.skala=r.skala;
+    S.tender.pick=null;S.tender.fromKak=true;
+    log('KAK','Kondisi dari KAK diteruskan ke Susun tender');
+    S.view='tender';render();return;
+  }
+  if(a==='kak-gaps'){
+    var r2=S.kak&&S.kak.res,added=0;if(!r2)return;
+    r2.reqs.forEach(function(q){
+      if(q.cov!=='gap')return;
+      var label=q.label+' (dari KAK)';
+      var ex=S.gaps.filter(function(g){return g.q===label})[0];
+      if(ex)ex.n++;else{S.gaps.unshift({q:label,n:1});added++}
+    });
+    log('KAK',added+' celah baru dicatat ke daftar topik');
+    toast(added+' celah dicatat ke daftar topik');renderTabs();return;
+  }
+  /* admin */
+  if(a==='u-toggle'||a==='u-resign'||a==='u-mfa'){
+    if(!R().admin)return;
+    var u=S.users.filter(function(x){return x.id===id})[0];if(!u||u.id===S.uid)return;
+    if(a==='u-toggle'){u.status=u.status==='nonaktif'?'aktif':'nonaktif';adminLog((u.status==='nonaktif'?'Menonaktifkan akun ':'Mengaktifkan akun ')+u.name+(u.status==='nonaktif'?': akses dan sesi dicabut':''))}
+    if(a==='u-resign'){u.status=u.status==='resign'?'aktif':'resign';adminLog((u.status==='resign'?'Menandai masa resign: ':'Membatalkan tanda resign: ')+u.name)}
+    if(a==='u-mfa'){u.mfa=false;adminLog('Reset MFA '+u.name+': wajib mendaftar ulang saat login berikutnya')}
+    render();return;
+  }
+  if(a==='u-add'){
+    if(!R().admin)return;
+    var nmv=$('#nName').value.trim(),em=$('#nEmail').value.trim();
+    if(!nmv||!/^\S+@\S+\.\S+$/.test(em)){toast('Isi nama dan email yang valid');return}
+    var nu=U0('u'+(S.users.length+1+Math.floor(Math.random()*1000)),nmv,String(S.nextNip++),$('#nRole').value,$('#nUnit').value,$('#nJab').value.trim()||'Staf','aktif',false,0,0,0,0,0,0);
+    nu.email=em;S.users.push(nu);
+    adminLog('Menambah pengguna '+nu.name+' sebagai '+ROLES[nu.role].name);
+    toast('Pengguna ditambahkan');render();return;
+  }
+  if(a==='acc-reset'){
+    if(!R().admin)return;
+    var cur=ROLES.admin;ROLES=defaultRoles();S.pol={maxOpens:15,wm:true,autoBlock:true};
+    adminLog('Matriks hak akses dan kebijakan diatur ulang ke bawaan');
+    if(S.sel&&!can(BYID[S.sel]))S.sel=null;
+    toast('Diatur ulang ke bawaan');render();return;
+  }
+});
+
+var searchTick;
+var FMAP={kfNarr:'narr',kfTitle:'title',kfProyek:'proyek',kfRingk:'ringkasan',kfTags:'tags',kfIsi:'isi',kfNote:'note',ivAns:'ivAns'};
+document.addEventListener('input',function(e){
+  var id=e.target.id;
+  if(id==='q'){
+    S.q=e.target.value;updateCari();
+    clearTimeout(searchTick);
+    if(S.q.trim().length>=3)searchTick=setTimeout(function(){U().searches++},1200);
+  }
+  else if(id==='uq'){S.uf.q=e.target.value;$('#utbody').innerHTML=userRows()}
+  else if(id==='kakText'){S.kakText=e.target.value}
+  else if(S.kf&&FMAP[id]){S.kf[FMAP[id]]=e.target.value}
+  else if(id.indexOf('vc-')===0||id.indexOf('cn-')===0){S.cd[id]=e.target.value}
+  else if(id==='mRot'){
+    var mr=modelById(S.mSel);if(mr&&canEditModel(mr)){mr.rot=parseFloat(e.target.value)||0;var rv=$('#mRotV');if(rv)rv.textContent=Math.round(mr.rot);refreshPlacement(mr)}
+  }
+  else if(id==='muName'){S.mu.name=e.target.value}
+  else if(id==='muProy'){S.mu.proyek=e.target.value}
+});
+document.addEventListener('change',function(e){
+  var id=e.target.id||'',val=e.target.value;
+  if(id==='userSel'){
+    S.uid=val;S.dl=null;S.opens=[];S.blocked=false;
+    if(S.sel&&!can(BYID[S.sel]))S.sel=null;
+    if(S.tender.pick&&!can(BYID[S.tender.pick]))S.tender.pick=null;
+    U().last=0;
+    log('MASUK','Beralih ke akun '+U().name+' (simulasi); sesi SSO + MFA');
+    render();
+  }
+  else if(id==='fType'){S.fType=val;updateCari()}
+  else if(id==='fStatus'){S.fStatus=val;updateCari()}
+  else if(id==='tPek'){S.tender.pek=val;S.tender.pick=null;S.tender.fromKak=false;viewTender()}
+  else if(id==='tSk'){S.tender.skala=val;S.tender.pick=null;S.tender.fromKak=false;viewTender()}
+  else if(id==='ufRole'){S.uf.role=val;$('#utbody').innerHTML=userRows()}
+  else if(id==='ufSt'){S.uf.st=val;$('#utbody').innerHTML=userRows()}
+  else if(id.indexOf('ur-')===0&&R().admin){
+    var u=S.users.filter(function(x){return 'ur-'+x.id===id})[0];if(!u||u.id===S.uid)return;
+    var old=ROLES[u.role].name;u.role=val;
+    adminLog('Mengubah peran '+u.name+': '+old+' menjadi '+ROLES[val].name);
+    toast('Peran diubah');render();
+  }
+  else if(id.indexOf('ac-')===0&&R().admin){
+    var p=id.split('-');var rk=p[1],lv=parseInt(p[2],10);
+    ROLES[rk].acc[lv]=val;
+    adminLog('Hak akses '+ROLES[rk].name+' untuk level '+LV[lv]+': '+ACC_LABEL[val]);
+    if(S.sel&&!can(BYID[S.sel]))S.sel=null;
+    toast('Hak akses diperbarui');render();
+  }
+  else if(id.indexOf('vf-')===0&&R().admin){
+    var rk2=id.slice(3);ROLES[rk2].verify=e.target.checked;
+    adminLog('Wewenang koordinator verifikasi '+ROLES[rk2].name+': '+(e.target.checked?'diberikan':'dicabut'));
+    render();
+  }
+  else if(id==='pMax'&&R().admin){S.pol.maxOpens=parseInt(val,10);adminLog('Batas akses massal diubah menjadi '+val+' dokumen per menit');toast('Kebijakan diperbarui')}
+  else if(id==='pBlock'&&R().admin){S.pol.autoBlock=e.target.checked;adminLog('Pembekuan otomatis '+(e.target.checked?'dinyalakan':'dimatikan'));toast('Kebijakan diperbarui')}
+  else if(id==='pWm'&&R().admin){S.pol.wm=e.target.checked;adminLog('Watermark dinamis '+(e.target.checked?'dinyalakan':'dimatikan'));toast('Kebijakan diperbarui')}
+  else if(id==='kfType'&&S.kf){S.kf.type=val;render()}
+  else if(id==='kfLevel'&&S.kf){S.kf.level=parseInt(val,10)}
+  else if(id==='kfPek'&&S.kf){S.kf.pek=val}
+  else if(id==='kfSkala'&&S.kf){S.kf.skala=val}
+  else if(id==='kfAck'&&S.kf){S.kf.ack=e.target.checked}
+  else if(id.indexOf('rl-')===0){S.cd[id]=val}
+  else if(id==='kfFile'&&S.kf){var kf=e.target.files&&e.target.files[0];if(kf)readCerita(kf)}
+  else if(id==='ivTts'&&S.kf&&S.kf.iv){S.kf.iv.tts=e.target.checked}
+  else if(id==='muLv'){S.mu.level=parseInt(val,10)}
+  else if(id==='mIfc'){var fm=e.target.files&&e.target.files[0];if(fm)uploadIFC(fm)}
+  else if(id==='mLat'||id==='mLng'){
+    var mm=modelById(S.mSel),nv=parseFloat(val);
+    if(mm&&canEditModel(mm)&&isFinite(nv)){if(id==='mLat'&&Math.abs(nv)<=85)mm.lat=nv;if(id==='mLng'&&Math.abs(nv)<=180)mm.lng=nv;refreshPlacement(mm);if(MAP)MAP.setView([mm.lat,mm.lng],MAP.getZoom?MAP.getZoom():17)}
+  }
+  else if(id==='kakFile'){
+    var f=e.target.files&&e.target.files[0];if(!f)return;
+    var st=$('#kakStatus');
+    if(st)st.textContent='Membaca '+f.name+'...';
+    withTimeout(readKAKFile(f),25000).then(function(txt){
+      if(!txt||txt.trim().length<30)throw new Error('teks tidak terbaca');
+      S.kakText=txt;S.kakName=f.name;
+      var ta=$('#kakText');if(ta)ta.value=txt;
+      var st2=$('#kakStatus');if(st2)st2.textContent=f.name+' terbaca ('+txt.length.toLocaleString('id-ID')+' karakter)';
+      runKAK(f.name);
+    }).catch(function(err){
+      var st3=$('#kakStatus');if(st3)st3.textContent='Gagal membaca '+f.name+' ('+err.message+'). Tempel teksnya di kolom di bawah.';
+    });
+  }
+});
+document.addEventListener('submit',function(e){
+  if(e.target.id==='aiForm'){e.preventDefault();ask($('#aiq').value)}
+});
+
+log('MASUK','Sesi dimulai lewat SSO dengan MFA (simulasi)');
+render();
+})();
+</script>
+
+</body>
+</html>
